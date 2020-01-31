@@ -1,3 +1,17 @@
+#Folders
+.gradle/*
+.settings/*
+bin/*
+build/*
+eclipse/*
+run/*
+
+#Specific Files
+gradlew_build.bat
+gradlew_setupdecomp.bat
+
+
+
 # Compiled class file
 *.class
 
@@ -21,3 +35,4 @@
 
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
+

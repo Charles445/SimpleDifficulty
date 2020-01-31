@@ -1,0 +1,19 @@
+{
+    "type": "forge:ore_shaped",
+    "pattern":
+    [
+        "MM",
+		"MM"
+    ],
+    "key":
+    {
+        "M":
+        {
+            "item": "#MAGMA_CHUNK"
+        }
+    },
+    "result":
+    {
+        "item": "minecraft:magma"
+    }
+}

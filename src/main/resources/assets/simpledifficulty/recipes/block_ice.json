@@ -1,0 +1,19 @@
+{
+    "type": "forge:ore_shaped",
+    "pattern":
+    [
+        "MM",
+		"MM"
+    ],
+    "key":
+    {
+        "M":
+        {
+            "item": "#ICE_CHUNK"
+        }
+    },
+    "result":
+    {
+        "item": "minecraft:ice"
+    }
+}

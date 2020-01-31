@@ -1,0 +1,26 @@
+{
+    "type": "forge:ore_shaped",
+    "pattern":
+    [
+        " L ",
+        "LLL",
+        "WWW"
+    ],
+    "key":
+    {
+        "W":
+        {
+            "type": "forge:ore_dict",
+            "ore": "plankWood"
+        },
+        "L":
+        {
+            "type": "forge:ore_dict",
+            "ore": "logWood"
+        }
+    },
+    "result":
+    {
+        "item": "simpledifficulty:campfire"
+    }
+}

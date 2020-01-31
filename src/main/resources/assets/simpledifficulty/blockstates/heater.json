@@ -1,0 +1,7 @@
+{
+	"forge_marker": 1,
+    "variants": {
+        "enabled=true": { "model": "simpledifficulty:heater_enabled"},
+        "enabled=false": { "model": "simpledifficulty:heater_disabled"}
+    }
+}

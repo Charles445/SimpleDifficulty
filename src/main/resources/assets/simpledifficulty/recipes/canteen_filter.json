@@ -1,0 +1,22 @@
+{
+    "type": "simpledifficulty:canteen_charcoal_recipe",
+    "ingredients":[
+    {
+        "item": "simpledifficulty:canteen",
+        "data": 32767
+    },
+    {
+        "item": "#CHARCOAL_FILTER"
+    }],
+    "result":
+    {
+        "type": "minecraft:item_nbt",
+        "item": "simpledifficulty:canteen",
+        "count": 1,
+        "data": 3,
+        "nbt":
+        {
+            "CanteenType": 0
+        }
+    }
+}

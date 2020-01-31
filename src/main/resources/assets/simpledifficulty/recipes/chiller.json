@@ -1,0 +1,30 @@
+{
+    "type": "forge:ore_shaped",
+    "pattern":
+    [
+        "C C",
+		"CSC",
+		"SRS"
+    ],
+    "key":
+    {
+        "C":
+        {
+            "item": "#ICE_CHUNK"
+        },
+		"S":
+		{
+			"type": "forge:ore_dict",
+            "ore": "cobblestone"
+		},
+		"R":
+		{
+			"type": "forge:ore_dict",
+            "ore": "dustRedstone"
+		}
+    },
+    "result":
+    {
+        "item": "simpledifficulty:chiller"
+    }
+}

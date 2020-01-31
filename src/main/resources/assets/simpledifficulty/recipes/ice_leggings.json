@@ -1,0 +1,20 @@
+{
+    "type": "forge:ore_shaped",
+    "pattern":
+    [
+        "SSS",
+        "S S",
+        "S S"
+    ],
+    "key":
+    {
+        "S":
+        {
+            "item": "#ICE_CHUNK"
+        }
+    },
+    "result":
+    {
+        "item": "simpledifficulty:ice_leggings"
+    }
+}

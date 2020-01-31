@@ -1,0 +1,34 @@
+{
+    "parent": "item/generated",
+    "textures": {
+        "layer0": "simpledifficulty:items/thermometer_00"
+    },
+    "overrides": [
+        { "predicate": { "temperature": 0.00 }, "model": "simpledifficulty:item/thermometer" },
+        { "predicate": { "temperature": 0.02 }, "model": "simpledifficulty:item/thermometer_01" },
+		{ "predicate": { "temperature": 0.06 }, "model": "simpledifficulty:item/thermometer_02" },
+		{ "predicate": { "temperature": 0.10 }, "model": "simpledifficulty:item/thermometer_03" },
+		{ "predicate": { "temperature": 0.14 }, "model": "simpledifficulty:item/thermometer_04" },
+		{ "predicate": { "temperature": 0.18 }, "model": "simpledifficulty:item/thermometer_05" },
+		{ "predicate": { "temperature": 0.22 }, "model": "simpledifficulty:item/thermometer_06" },
+		{ "predicate": { "temperature": 0.26 }, "model": "simpledifficulty:item/thermometer_07" },
+		{ "predicate": { "temperature": 0.29 }, "model": "simpledifficulty:item/thermometer_08" },
+		{ "predicate": { "temperature": 0.33 }, "model": "simpledifficulty:item/thermometer_09" },
+		{ "predicate": { "temperature": 0.37 }, "model": "simpledifficulty:item/thermometer_10" },
+		{ "predicate": { "temperature": 0.41 }, "model": "simpledifficulty:item/thermometer_11" },
+		{ "predicate": { "temperature": 0.45 }, "model": "simpledifficulty:item/thermometer_12" },
+		{ "predicate": { "temperature": 0.48 }, "model": "simpledifficulty:item/thermometer_13" },
+		{ "predicate": { "temperature": 0.53 }, "model": "simpledifficulty:item/thermometer_14" },
+		{ "predicate": { "temperature": 0.57 }, "model": "simpledifficulty:item/thermometer_15" },
+		{ "predicate": { "temperature": 0.60 }, "model": "simpledifficulty:item/thermometer_16" },
+		{ "predicate": { "temperature": 0.64 }, "model": "simpledifficulty:item/thermometer_17" },
+		{ "predicate": { "temperature": 0.68 }, "model": "simpledifficulty:item/thermometer_18" },
+		{ "predicate": { "temperature": 0.72 }, "model": "simpledifficulty:item/thermometer_19" },
+		{ "predicate": { "temperature": 0.76 }, "model": "simpledifficulty:item/thermometer_20" },
+		{ "predicate": { "temperature": 0.80 }, "model": "simpledifficulty:item/thermometer_21" },
+		{ "predicate": { "temperature": 0.84 }, "model": "simpledifficulty:item/thermometer_22" },
+		{ "predicate": { "temperature": 0.88 }, "model": "simpledifficulty:item/thermometer_23" },
+		{ "predicate": { "temperature": 0.92 }, "model": "simpledifficulty:item/thermometer_24" },
+		{ "predicate": { "temperature": 0.96 }, "model": "simpledifficulty:item/thermometer_25" }
+    ]
+}

@@ -1,0 +1,14 @@
+{
+    "type": "forge:ore_shapeless",
+    "ingredients": [{"item": "#SUGAR"},{"item": "#PURIFIED_WATER_BOTTLE"},
+    {
+        "item": "minecraft:golden_carrot"
+    }
+    
+    ],
+    "result":
+    {
+        "item": "simpledifficulty:juice",
+        "data": 6
+    }
+}

@@ -1,0 +1,26 @@
+{
+    "type": "forge:ore_shaped",
+    "pattern":
+    [
+        " G ",
+        "GRG",
+        " G "
+    ],
+    "key":
+    {
+        "G":
+        {
+            "type": "forge:ore_dict",
+            "ore": "blockGlass"
+        },
+        "R":
+        {
+            "type": "forge:ore_dict",
+            "ore": "dustRedstone"
+        }
+    },
+    "result":
+    {
+        "item": "simpledifficulty:thermometer"
+    }
+}

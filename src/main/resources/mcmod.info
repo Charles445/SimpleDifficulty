@@ -1,0 +1,16 @@
+[
+{
+  "modid": "simpledifficulty",
+  "name": "SimpleDifficulty",
+  "description": "Mod that adds temperature and thirst mechanics based on Tough As Nails",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "url": "",
+  "updateUrl": "",
+  "authorList": ["Charles445"],
+  "credits": "",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": []
+}
+]
