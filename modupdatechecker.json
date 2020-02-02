@@ -1,0 +1,12 @@
+{
+	"homepage": "https://www.curseforge.com/minecraft/mc-mods/simpledifficulty/files",
+	"promos": {
+		"1.12.2-latest":        "0.1.2",
+		"1.12.2-recommended":   "0.1.2"
+	},
+	"1.12.2": {
+		"0.1.2": "Dummy update to test out the update checker",
+		"0.1.1": "Update Checker, Mod Compatibility, Configurable mod water temperatures",
+		"0.1.0": "Initial Release"
+	}
+}
