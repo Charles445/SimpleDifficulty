@@ -18,6 +18,7 @@ import com.charles445.simpledifficulty.util.WorldUtil;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.IItemPropertyGetter;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -273,12 +274,9 @@ public class ItemThermometer extends Item
 			@SideOnly(Side.CLIENT)
 			private float calculateTemperature(World world, Entity entity)
 			{
-				float newDestTemperature = TemperatureUtil.clampTemperature(TemperatureUtil.getWorldTemperature(world, WorldUtil.getSidedBlockPos(world,entity)));
-				float tempRange = (float)(TemperatureEnum.BURNING.getUpperBound() - TemperatureEnum.FREEZING.getLowerBound() + 1);
-				
-				return newDestTemperature / tempRange;
+				int tempRange = TemperatureEnum.BURNING.getUpperBound() - TemperatureEnum.FREEZING.getLowerBound() + 1;
+				return (float)WorldUtil.calculateClientWorldEntityTemperature(world, entity) / (float)tempRange;
 			}
-			
 		});
 	}
 }

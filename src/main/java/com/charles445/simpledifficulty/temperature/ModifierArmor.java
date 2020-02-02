@@ -4,7 +4,7 @@ import com.charles445.simpledifficulty.api.SDEnchantments;
 import com.charles445.simpledifficulty.api.temperature.TemperatureUtil;
 import com.charles445.simpledifficulty.config.JsonConfig;
 import com.charles445.simpledifficulty.config.ModConfig;
-import com.charles445.simpledifficulty.config.json.ArmorTemperature;
+import com.charles445.simpledifficulty.config.json.JsonTemperature;
 
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.player.EntityPlayer;
@@ -49,7 +49,7 @@ public class ModifierArmor extends ModifierBase
 		}
 		
 		//ArmorTemperature
-		ArmorTemperature armorInfo = JsonConfig.armorTemperatures.get(stack.getItem().getRegistryName().toString());
+		JsonTemperature armorInfo = JsonConfig.armorTemperatures.get(stack.getItem().getRegistryName().toString());
 		if(armorInfo!=null)
 		{
 			sum += armorInfo.temperature;

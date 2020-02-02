@@ -8,7 +8,7 @@ import com.google.gson.annotations.SerializedName;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.IBlockState;
 
-public class BlockTemperature
+public class JsonPropertyTemperature
 {
 	@SerializedName("properties")
 	public Map<String,String> properties;
@@ -16,7 +16,7 @@ public class BlockTemperature
 	@SerializedName("temperature")
 	public float temperature;
 	
-	public BlockTemperature(float temperature, PropertyValue ... props)
+	public JsonPropertyTemperature(float temperature, PropertyValue ... props)
 	{
 		this.temperature = temperature;
 		this.properties = new HashMap<String,String>();

@@ -2,12 +2,12 @@ package com.charles445.simpledifficulty.config.json;
 
 import com.google.gson.annotations.SerializedName;
 
-public class ArmorTemperature
+public class JsonTemperature
 {
 	@SerializedName("temperature")
 	public float temperature;
 	
-	public ArmorTemperature(float temperature)
+	public JsonTemperature(float temperature)
 	{
 		this.temperature = temperature;
 	}

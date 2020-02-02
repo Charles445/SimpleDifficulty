@@ -1,5 +1,7 @@
 package com.charles445.simpledifficulty.util;
 
+import com.charles445.simpledifficulty.api.temperature.TemperatureEnum;
+import com.charles445.simpledifficulty.api.temperature.TemperatureUtil;
 import com.charles445.simpledifficulty.debug.DebugUtil;
 
 import net.minecraft.entity.Entity;
@@ -43,5 +45,10 @@ public class WorldUtil
 			//Default
 			return entity.getPosition();
 		}
+	}
+	
+	public static int calculateClientWorldEntityTemperature(World world, Entity entity)
+	{
+		return TemperatureUtil.clampTemperature(TemperatureUtil.getWorldTemperature(world, WorldUtil.getSidedBlockPos(world,entity)));
 	}
 }

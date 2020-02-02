@@ -21,14 +21,15 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 	modid = SimpleDifficulty.MODID, 
 	name = SimpleDifficulty.NAME, 
 	version = SimpleDifficulty.VERSION,
-	acceptedMinecraftVersions = "[1.12]"
+	acceptedMinecraftVersions = "[1.12]",
+	updateJSON = "https://raw.githubusercontent.com/Charles445/SimpleDifficulty/master/modupdatechecker.json"
 	
 )
 public class SimpleDifficulty 
 {
 	public static final String MODID = "simpledifficulty";
 	public static final String NAME = "SimpleDifficulty";
-	public static final String VERSION = "0.1.0";
+	public static final String VERSION = "0.1.1";
 	
 	@Mod.Instance(SimpleDifficulty.MODID)
 	public static SimpleDifficulty instance;

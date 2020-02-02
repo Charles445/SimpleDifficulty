@@ -247,6 +247,10 @@ public class ModConfig
 		@Config.Name("EnableThermometer")
 		public boolean enableThermometer = true;
 		
+		@Config.Comment("Whether thermometers in your inventory will display on your HUD")
+		@Config.Name("HUDThermometer")
+		public boolean hudThermometer = true;
+		
 		@Config.Comment("Client config debug")
 		@Config.Name("ClientConfigDebug")
 		public boolean clientdebug = false;
@@ -299,6 +303,7 @@ public class ModConfig
 		ClientConfig.instance.put(ClientOptions.DRAW_THIRST_SATURATION, client.drawThirstSaturation);
 		ClientConfig.instance.put(ClientOptions.ENABLE_THERMOMETER, client.enableThermometer);
 		ClientConfig.instance.put(ClientOptions.ALTERNATE_TEMP, client.alternateTemp);
+		ClientConfig.instance.put(ClientOptions.HUD_THERMOMETER, client.hudThermometer);
 		ClientConfig.instance.put(ClientOptions.DEBUG, client.clientdebug);
 		
 	}

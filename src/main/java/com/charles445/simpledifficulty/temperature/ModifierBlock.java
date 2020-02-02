@@ -1,7 +1,7 @@
 package com.charles445.simpledifficulty.temperature;
 
 import com.charles445.simpledifficulty.config.JsonConfig;
-import com.charles445.simpledifficulty.config.json.BlockTemperature;
+import com.charles445.simpledifficulty.config.json.JsonPropertyTemperature;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -35,7 +35,7 @@ public class ModifierBlock extends ModifierBase
 					final IBlockState blockstate = world.getBlockState(blockpos);
 					final Block block = blockstate.getBlock();
 					
-					BlockTemperature tempInfo = JsonConfig.blockTemperatures.get(block.getRegistryName().toString());
+					JsonPropertyTemperature tempInfo = JsonConfig.blockTemperatures.get(block.getRegistryName().toString());
 					if(tempInfo!=null)
 					{
 						float blockTemp = tempInfo.temperature;

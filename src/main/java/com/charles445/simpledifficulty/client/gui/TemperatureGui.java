@@ -1,8 +1,11 @@
 package com.charles445.simpledifficulty.client.gui;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 
 import com.charles445.simpledifficulty.api.SDCapabilities;
+import com.charles445.simpledifficulty.api.SDItems;
 import com.charles445.simpledifficulty.api.config.ClientConfig;
 import com.charles445.simpledifficulty.api.config.ClientOptions;
 import com.charles445.simpledifficulty.api.config.QuickConfig;
@@ -11,13 +14,18 @@ import com.charles445.simpledifficulty.api.temperature.TemperatureEnum;
 import com.charles445.simpledifficulty.api.temperature.TemperatureUtil;
 import com.charles445.simpledifficulty.debug.DebugUtil;
 import com.charles445.simpledifficulty.util.RenderUtil;
+import com.charles445.simpledifficulty.util.WorldUtil;
 
+import ibxm.Player;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.World;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -30,7 +38,6 @@ public class TemperatureGui
 	private int updateCounter = 0;
 	private final Random rand = new Random();
 	public static final ResourceLocation ICONS = new ResourceLocation("simpledifficulty:textures/gui/icons.png");
-	
 	//Position on the icons sheet
 	private static final int texturepos_X = 0;
 	private static final int texturepos_Y = 32;
@@ -48,6 +55,13 @@ public class TemperatureGui
 	private static final int texturepos_Y_alt_BG = 96;
 	private int alternateTemperature = 0;
 	
+	private int worldThermometerTemperature = 0;
+	private boolean hasThermometer = false;
+	private static final int texturepos_X_therm = 0;
+	private static final int texturepos_Y_therm = 192;
+	private static final int thermometer_per_row = 8;
+	private static final int textureWidthTherm = 16;
+	private static final int textureHeightTherm = 16;
 	
 	@SubscribeEvent
 	public void onPreRenderGameOverlay(RenderGameOverlayEvent.Pre event)
@@ -74,6 +88,8 @@ public class TemperatureGui
 	private void renderTemperatureIcon(int width, int height, int temperature)
 	{
 		GlStateManager.enableBlend();
+		
+		// ---
 		
 		TemperatureEnum tempEnum = TemperatureUtil.getTemperatureEnum(temperature);
 		
@@ -231,6 +247,20 @@ public class TemperatureGui
 			RenderUtil.drawTexturedModalRect(x, y, texturepos_X + ovrXOffset, texturepos_Y + ovrYOffset, textureWidth, textureHeight);
 		}
 		
+		//Thermometer
+		
+		if(hasThermometer && ClientConfig.instance.getBoolean(ClientOptions.HUD_THERMOMETER) && ClientConfig.instance.getBoolean(ClientOptions.ENABLE_THERMOMETER))
+		{
+			int therm_position = worldThermometerTemperature - TemperatureEnum.FREEZING.getLowerBound();
+			
+			int therm_x = (therm_position % thermometer_per_row)*textureWidthTherm + texturepos_X_therm;
+			int therm_y = (therm_position / thermometer_per_row)*textureHeightTherm + texturepos_Y_therm;
+			
+			
+			//TODO configure where this thing draws
+			
+			RenderUtil.drawTexturedModalRect(x, y - 18, therm_x, therm_y, textureWidthTherm, textureHeightTherm);
+		}
 		// - - -
 		
 		
@@ -262,10 +292,27 @@ public class TemperatureGui
 					}
 				//}
 					
-				if(updateCounter % 15 == 12 && QuickConfig.isTemperatureEnabled() && ClientConfig.instance.getBoolean(ClientOptions.ALTERNATE_TEMP))
+				if(updateCounter % 15 == 12 && QuickConfig.isTemperatureEnabled())
 				{
 					if(minecraftInstance.player != null)
-						alternateTemperature = TemperatureUtil.clampTemperature(TemperatureUtil.getPlayerTargetTemperature(minecraftInstance.player));
+					{
+						EntityPlayer player = minecraftInstance.player;
+						World world = player.getEntityWorld();
+						
+						if(ClientConfig.instance.getBoolean(ClientOptions.ALTERNATE_TEMP))
+						{
+							alternateTemperature = TemperatureUtil.clampTemperature(TemperatureUtil.getPlayerTargetTemperature(player));
+						}
+						
+						if(ClientConfig.instance.getBoolean(ClientOptions.HUD_THERMOMETER) && ClientConfig.instance.getBoolean(ClientOptions.ENABLE_THERMOMETER))
+						{
+							
+							worldThermometerTemperature = TemperatureUtil.clampTemperature((int)WorldUtil.calculateClientWorldEntityTemperature(world, player));
+							
+							//TODO Verify this is how you're supposed to check for items in player inventory
+							hasThermometer = player.inventory.hasItemStack(new ItemStack(SDItems.thermometer));
+						}
+					}
 				}
 			}
 		}
