@@ -88,23 +88,24 @@ public class JsonConfigInternal
 	{
 		//Process JSON
 		
-		JsonConfig.armorTemperatures = processJson("armorTemperatures.json", JsonConfig.armorTemperatures, new TypeToken<Map<String, JsonTemperature>>(){}.getType(), jsonDirectory);
-		JsonConfig.fluidTemperatures = processJson("fluidTemperatures.json", JsonConfig.fluidTemperatures, new TypeToken<Map<String, JsonTemperature>>(){}.getType(), jsonDirectory);
-		materialTemperature = processJson("materialTemperature.json", materialTemperature, new TypeToken<MaterialTemperature>(){}.getType(), jsonDirectory);
-		JsonConfig.consumableTemperature = processJson("consumableTemperature.json", JsonConfig.consumableTemperature, new TypeToken<Map<String, List<JsonConsumableTemperature>>>(){}.getType(), jsonDirectory);
-		JsonConfig.consumableThirst = processJson("consumableThirst.json", JsonConfig.consumableThirst, new TypeToken<Map<String, List<JsonConsumableThirst>>>(){}.getType(), jsonDirectory);
+		JsonConfig.armorTemperatures = processJson(JsonFileName.armorTemperatures.get(), JsonConfig.armorTemperatures, JsonTypeToken.get(JsonFileName.armorTemperatures), jsonDirectory);
+		JsonConfig.fluidTemperatures = processJson(JsonFileName.fluidTemperatures.get(), JsonConfig.fluidTemperatures, JsonTypeToken.get(JsonFileName.fluidTemperatures), jsonDirectory);
+		materialTemperature = processJson(JsonFileName.materialTemperature.get(), materialTemperature, JsonTypeToken.get(JsonFileName.materialTemperature), jsonDirectory);
+		JsonConfig.consumableTemperature = processJson(JsonFileName.consumableTemperature.get(), JsonConfig.consumableTemperature, JsonTypeToken.get(JsonFileName.consumableTemperature), jsonDirectory);
+		JsonConfig.consumableThirst = processJson(JsonFileName.consumableThirst.get(), JsonConfig.consumableThirst, JsonTypeToken.get(JsonFileName.consumableThirst), jsonDirectory);
 		
 		//blockTemperatures migration (legacy support for 0.1.0 and 0.1.1)
 		//TODO once enough versions have passed, get rid of this whole thing and just leave it as what's in the try block (but with processJson instead)
 		
 		try
 		{
-			JsonConfig.blockTemperatures = processUncaughtJson("blockTemperatures.json", JsonConfig.blockTemperatures, new TypeToken<Map<String, List<JsonPropertyTemperature>>>(){}.getType(), jsonDirectory);
+			JsonConfig.blockTemperatures = processUncaughtJson(JsonFileName.blockTemperatures.get(), JsonConfig.blockTemperatures, JsonTypeToken.get(JsonFileName.blockTemperatures), jsonDirectory);
 		}
 		catch(Exception e)
 		{
 			//Attempt to read old format "<String, JsonPropertyTemperature>"
 			Map<String, JsonPropertyTemperature> dummyBlockTemperatures = new HashMap<String, JsonPropertyTemperature>();
+			//Manually created since it's legacy support
 			dummyBlockTemperatures = processJson("blockTemperatures.json", dummyBlockTemperatures, new TypeToken<Map<String, JsonPropertyTemperature>>(){}.getType(), jsonDirectory);
 			if(!dummyBlockTemperatures.isEmpty())
 			{
@@ -120,7 +121,7 @@ public class JsonConfigInternal
 				
 				try
 				{
-					manuallyWriteToJson("blockTemperatures.json", JsonConfig.blockTemperatures, new TypeToken<Map<String, List<JsonPropertyTemperature>>>(){}.getType(), jsonDirectory);
+					manuallyWriteToJson(JsonFileName.blockTemperatures.get(), JsonConfig.blockTemperatures, JsonTypeToken.get(JsonFileName.blockTemperatures), jsonDirectory);
 				}
 				catch (Exception e1)
 				{
@@ -128,6 +129,37 @@ public class JsonConfigInternal
 					jsonErrors.add("config/simpledifficulty/blockTemperatures.json is in an old format. Please delete it!");
 				}
 			}
+		}
+	}
+	
+	public static String manuallyExportAll()
+	{
+		File jsonDirectory = SimpleDifficulty.jsonDirectory;
+		
+		try
+		{
+			manuallyWriteToJson(JsonFileName.armorTemperatures.get(), JsonConfig.armorTemperatures, JsonTypeToken.get(JsonFileName.armorTemperatures), jsonDirectory);
+			manuallyWriteToJson(JsonFileName.blockTemperatures.get(), JsonConfig.blockTemperatures, JsonTypeToken.get(JsonFileName.blockTemperatures), jsonDirectory);
+			manuallyWriteToJson(JsonFileName.consumableTemperature.get(), JsonConfig.consumableTemperature, JsonTypeToken.get(JsonFileName.consumableTemperature), jsonDirectory);
+			manuallyWriteToJson(JsonFileName.consumableThirst.get(), JsonConfig.consumableThirst, JsonTypeToken.get(JsonFileName.consumableThirst), jsonDirectory);
+			manuallyWriteToJson(JsonFileName.fluidTemperatures.get(), JsonConfig.fluidTemperatures, JsonTypeToken.get(JsonFileName.fluidTemperatures), jsonDirectory);
+			manuallyWriteToJson(JsonFileName.materialTemperature.get(), materialTemperature, JsonTypeToken.get(JsonFileName.materialTemperature), jsonDirectory);
+			
+			
+			/*
+			armorTemperatures
+			blockTemperatures
+			consumableTemperature
+			consumableThirst
+			fluidTemperatures
+			materialTemperature
+			*/
+			return "Successfully exported SimpleDifficulty configuration to JSON";
+		} 
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			return "Export to JSON FAILED! See log for details.";
 		}
 	}
 	

@@ -3,6 +3,7 @@ package com.charles445.simpledifficulty.compat;
 import javax.annotation.Nullable;
 
 import com.charles445.simpledifficulty.SimpleDifficulty;
+import com.charles445.simpledifficulty.api.SDCompatibility;
 import com.charles445.simpledifficulty.api.temperature.ITemperatureModifier;
 import com.charles445.simpledifficulty.api.temperature.TemperatureRegistry;
 
@@ -29,7 +30,7 @@ public class CompatController
 	@Nullable
 	public static Object newCompatObject(String modid, String clazzpath)
 	{
-		if(Loader.isModLoaded(modid))
+		if(Loader.isModLoaded(modid) && !SDCompatibility.disabledCompletely.contains(modid))
 		{
 			try
 			{

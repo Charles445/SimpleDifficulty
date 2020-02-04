@@ -47,4 +47,18 @@ public class JsonPropertyTemperature
 		
 		return true;
 	}
+	
+	public boolean matchesDescribedProperties(JsonPropertyValue... props)
+	{
+		if(props.length != properties.keySet().size())
+			return false;
+		
+		for(JsonPropertyValue prop : props)
+		{
+			if(!properties.containsKey(prop.property))
+				return false;
+		}
+		
+		return true;
+	}
 }

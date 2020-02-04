@@ -21,4 +21,9 @@ public class JsonConsumableTemperature
 	{
 		return metadata == -1 || metadata == 32767 || metadata == stack.getMetadata();
 	}
+	
+	public boolean matches(int meta)
+	{
+		return metadata == -1 || metadata == 32767 || metadata == meta;
+	}
 }

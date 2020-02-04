@@ -7,7 +7,7 @@ public class TemperatureRegistry
 	/**
 	 * Map of modifiers that the temperature system uses.
 	 * <br>
-	 * It is recommended to add modifiers with {@link #registerModifier(ITemperatureModifier) registerModifier
+	 * It is recommended to add modifiers with {@link #registerModifier(ITemperatureModifier) registerModifier}
 	 * <br>
 	 */
 	public static LinkedHashMap<String, ITemperatureModifier> modifiers = new LinkedHashMap<String, ITemperatureModifier>();

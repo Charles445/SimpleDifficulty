@@ -1,8 +1,11 @@
 package com.charles445.simpledifficulty.compat;
 
+import com.charles445.simpledifficulty.api.SDCompatibility;
 import com.charles445.simpledifficulty.api.config.JsonConfig;
 import com.charles445.simpledifficulty.api.config.json.JsonPropertyTemperature;
 import com.charles445.simpledifficulty.api.config.json.JsonPropertyValue;
+
+import net.minecraftforge.fml.common.Loader;
 
 public class JsonCompatDefaults
 {
@@ -16,19 +19,21 @@ public class JsonCompatDefaults
 		populateSimpleCampfire();
 	}
 	
-	//NOTE
-	//Currently, adding anything that would overlap (or have multiple states) will not work here
-	//Needs to be handled manually (only relevant to blockstate or metadata related things at the moment)
-	
 	//Biomes O' Plenty
 	private void populateBiomesOPlenty()
 	{
+		if(!canUseMod("biomesoplenty"))
+			return;
+		
 		addFluidTemperature("hot_spring_water", 3.0f);
 	}
 	
 	//Lycanites Mobs
 	private void populateLycanitesMobs()
 	{
+		if(!canUseMod("lycanitesmobs"))
+			return;
+		
 		addBlockTemperature("lycanitesmobs:purelava", 12.5f);
 		
 		//TODO considering adding the ooze to actually chill the surrounding area
@@ -38,6 +43,9 @@ public class JsonCompatDefaults
 	//Simple Camp Fire
 	private void populateSimpleCampfire()
 	{
+		if(!canUseMod("campfire"))
+			return;
+		
 		addBlockTemperature("campfire:campfire", 7.0f);
 	}
 	
@@ -48,23 +56,23 @@ public class JsonCompatDefaults
 	
 	private void addBlockTemperature(String registryName, float temperature, JsonPropertyValue... properties)
 	{
-		if(!JsonConfig.blockTemperatures.containsKey(registryName))
-		{
-			JsonConfig.registerBlockTemperature(registryName, temperature, properties);
-		}
+		JsonConfig.registerBlockTemperature(registryName, temperature, properties);
+		
 	}
 	
 	private void addFluidTemperature(String fluidName, float temperature)
 	{
-		if(!JsonConfig.fluidTemperatures.containsKey(fluidName))
-		{
-			JsonConfig.registerFluidTemperature(fluidName, temperature);
-		}
+		JsonConfig.registerFluidTemperature(fluidName, temperature);
 	}
 	
 	//
 	// Utility
 	//
+	
+	private boolean canUseMod(String modid)
+	{
+		return (Loader.isModLoaded(modid) && !SDCompatibility.disabledDefaultJson.contains(modid));
+	}
 	
 	private JsonPropertyTemperature propTemp(float temp)
 	{
