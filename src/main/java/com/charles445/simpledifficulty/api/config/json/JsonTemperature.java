@@ -1,4 +1,4 @@
-package com.charles445.simpledifficulty.config.json;
+package com.charles445.simpledifficulty.api.config.json;
 
 import com.google.gson.annotations.SerializedName;
 

@@ -11,21 +11,22 @@ import com.charles445.simpledifficulty.capability.TemperatureStorage;
 import com.charles445.simpledifficulty.capability.ThirstCapability;
 import com.charles445.simpledifficulty.capability.ThirstStorage;
 import com.charles445.simpledifficulty.compat.CompatController;
-import com.charles445.simpledifficulty.config.JsonConfig;
+import com.charles445.simpledifficulty.config.JsonConfigInternal;
 import com.charles445.simpledifficulty.config.ModConfig;
 import com.charles445.simpledifficulty.handler.BlockHandler;
 import com.charles445.simpledifficulty.handler.CapabilityHandler;
 import com.charles445.simpledifficulty.handler.ConfigHandler;
 import com.charles445.simpledifficulty.handler.MiscHandler;
+import com.charles445.simpledifficulty.handler.TemperatureHandler;
 import com.charles445.simpledifficulty.handler.ThirstHandler;
 import com.charles445.simpledifficulty.temperature.ModifierAltitude;
 import com.charles445.simpledifficulty.temperature.ModifierArmor;
 import com.charles445.simpledifficulty.temperature.ModifierBiome;
-import com.charles445.simpledifficulty.temperature.ModifierBlock;
+import com.charles445.simpledifficulty.temperature.ModifierBlocksTiles;
 import com.charles445.simpledifficulty.temperature.ModifierDefault;
 import com.charles445.simpledifficulty.temperature.ModifierSnow;
 import com.charles445.simpledifficulty.temperature.ModifierSprint;
-import com.charles445.simpledifficulty.temperature.ModifierTileEntities;
+import com.charles445.simpledifficulty.temperature.ModifierTemporary;
 import com.charles445.simpledifficulty.temperature.ModifierTime;
 import com.charles445.simpledifficulty.temperature.ModifierWet;
 import com.charles445.simpledifficulty.util.internal.TemperatureUtilInternal;
@@ -59,6 +60,7 @@ public abstract class CommonProxy implements IProxy
 		MinecraftForge.EVENT_BUS.register(new CapabilityHandler());
 		MinecraftForge.EVENT_BUS.register(new ConfigHandler());
 		MinecraftForge.EVENT_BUS.register(new MiscHandler());
+		MinecraftForge.EVENT_BUS.register(new TemperatureHandler());
 		MinecraftForge.EVENT_BUS.register(new ThirstHandler());
 		
 		//Populate TemperatureRegistry
@@ -66,19 +68,25 @@ public abstract class CommonProxy implements IProxy
 		TemperatureRegistry.registerModifier(new ModifierAltitude());
 		TemperatureRegistry.registerModifier(new ModifierArmor());
 		TemperatureRegistry.registerModifier(new ModifierBiome());
-		TemperatureRegistry.registerModifier(new ModifierBlock());
-		TemperatureRegistry.registerModifier(new ModifierTileEntities());
+		TemperatureRegistry.registerModifier(new ModifierBlocksTiles());
 		TemperatureRegistry.registerModifier(new ModifierSnow());
 		TemperatureRegistry.registerModifier(new ModifierSprint());
+		TemperatureRegistry.registerModifier(new ModifierTemporary());
 		TemperatureRegistry.registerModifier(new ModifierTime());
 		TemperatureRegistry.registerModifier(new ModifierWet());
+	}
+	
+	@Override
+	public void init()
+	{
+		
 	}
 	
 	@Override
 	public void postInit()
 	{
 		//Setup JSON Configurations
-		JsonConfig.init(SimpleDifficulty.jsonDirectory);
+		JsonConfigInternal.init(SimpleDifficulty.jsonDirectory);
 		
 		//Setup Mod Compatibility
 		CompatController.setup();

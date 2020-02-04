@@ -161,6 +161,31 @@ public class ModConfig
 			@Config.RangeInt
 			public int enchantmentTemperature = 1;
 			
+			@Config.Comment("Heater Temperature Change - Strength of heaters / chillers")
+			@Config.Name("HeaterTemperature")
+			@Config.RangeInt(min=-1000000, max=1000000)
+			public int heaterTemperature = 10;
+			
+			@Config.Comment("Heater Full Power Range - Distance where a heater / chiller starts to lose strength")
+			@Config.Name("HeaterFullPowerRange")
+			@Config.RangeDouble(min=0, max=50)
+			public double heaterFullPowerRange = 16;
+			
+			@Config.Comment("Heater Max Range - Distance where a heater / chiller has no effect")
+			@Config.Name("HeaterMaxRange")
+			@Config.RangeDouble(min=0, max=50)
+			public double heaterMaxRange = 32;
+			
+			@Config.Comment("Stacking Temperature - Whether multiple blocks in a vicinity should combine their effect")
+			@Config.Name("StackingTemperature")
+			public boolean stackingTemperature = true;
+			
+			@Config.Comment("Stacking Temperature Limit - How much more extreme block temperature can be from stacking temperature")
+			@Config.Name("StackingTemperatureLimit")
+			@Config.RangeDouble(min=0, max = 1000000)
+			public float stackingTemperatureLimit = 3;
+			
+					
 			public static class SDCFGSereneSeasons
 			{
 				//Serene Seasons

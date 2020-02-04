@@ -1,6 +1,7 @@
 package com.charles445.simpledifficulty.temperature;
 
 import com.charles445.simpledifficulty.api.temperature.ITemperatureModifier;
+import com.charles445.simpledifficulty.api.temperature.TemperatureEnum;
 import com.charles445.simpledifficulty.config.ModConfig;
 
 import net.minecraft.entity.player.EntityPlayer;
@@ -11,13 +12,40 @@ import net.minecraft.world.biome.Biome;
 
 public abstract class ModifierBase implements ITemperatureModifier
 {	
-	//TODO consider altitude and biome merging? It'd be heavily reliant on vanilla though
+	//Trying to mentally organize the modifiers to determine which ones should be unique and which ones should override others
+	
+	/* --
+	 * Unique World Modifiers (Ambience, Intangible Environment, Natural)
+	 * 
+	 * Altitude
+	 * Biome
+	 * Default
+	 * Season
+	 * Snow
+	 * Time
+	 * Wet
+	 * --
+	 * Proximity World Modifiers (Blocks, Tile Entities, Unnatural, Radiates Heat)
+	 * 
+	 * Proximity (Blocks, Tile Entities)
+	 * --
+	 * Unique Player Modifiers (Armor, Items, Effects, State)
+	 * 
+	 * Armor
+	 * Sprint
+	 * Temporary
+	 * --
+	 */
+	
+	
 	
 	private final String name;
+	protected final float defaultTemperature;
 	
 	protected ModifierBase(String name)
 	{
 		this.name=name;
+		this.defaultTemperature = (TemperatureEnum.NORMAL.getUpperBound() + TemperatureEnum.COLD.getUpperBound()) / 2;
 	}
 	
 	@Override

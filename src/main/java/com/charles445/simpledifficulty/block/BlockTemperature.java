@@ -31,7 +31,7 @@ public class BlockTemperature extends BlockContainer
 		this.temperature = temperature;
 	}
 	
-	public float getActiveTemperature()
+	public float getActiveTemperatureMult()
 	{
 		return temperature;
 	}

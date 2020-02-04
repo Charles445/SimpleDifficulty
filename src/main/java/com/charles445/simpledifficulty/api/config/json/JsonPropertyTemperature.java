@@ -1,4 +1,4 @@
-package com.charles445.simpledifficulty.config.json;
+package com.charles445.simpledifficulty.api.config.json;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -16,11 +16,11 @@ public class JsonPropertyTemperature
 	@SerializedName("temperature")
 	public float temperature;
 	
-	public JsonPropertyTemperature(float temperature, PropertyValue ... props)
+	public JsonPropertyTemperature(float temperature, JsonPropertyValue ... props)
 	{
 		this.temperature = temperature;
 		this.properties = new HashMap<String,String>();
-		for(PropertyValue prop : props)
+		for(JsonPropertyValue prop : props)
 		{
 			properties.put(prop.property, prop.value);
 		}

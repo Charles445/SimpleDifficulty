@@ -1,8 +1,12 @@
 package com.charles445.simpledifficulty.handler;
 
+import java.util.List;
+
 import com.charles445.simpledifficulty.api.SDCapabilities;
 import com.charles445.simpledifficulty.api.SDPotions;
+import com.charles445.simpledifficulty.api.config.JsonConfig;
 import com.charles445.simpledifficulty.api.config.QuickConfig;
+import com.charles445.simpledifficulty.api.config.json.JsonConsumableThirst;
 import com.charles445.simpledifficulty.api.thirst.IThirstCapability;
 import com.charles445.simpledifficulty.api.thirst.ThirstEnum;
 import com.charles445.simpledifficulty.api.thirst.ThirstUtil;
@@ -38,6 +42,9 @@ public class ThirstHandler
 	@SubscribeEvent
 	public void onLivingEntityUseItemFinish(LivingEntityUseItemEvent.Finish event)
 	{
+		if(!QuickConfig.isThirstEnabled())
+			return;
+		
 		if(event.getEntityLiving() instanceof EntityPlayer)
 		{
 			EntityPlayer player = (EntityPlayer)event.getEntityLiving();
@@ -82,9 +89,24 @@ public class ThirstHandler
 				if(potionType.getEffects().isEmpty())
 				*/
 			}
-			
-			//TODO custom stuff? API stuff?
-			
+			else
+			{
+				//JSON
+				List<JsonConsumableThirst> consumableList = JsonConfig.consumableThirst.get(stack.getItem().getRegistryName().toString());
+				if(consumableList!=null)
+				{
+					for(JsonConsumableThirst jct : consumableList)
+					{
+						if(jct==null)
+							continue;
+						if(jct.matches(stack))
+						{
+							ThirstUtil.takeDrink(player, jct.amount, jct.saturation, jct.thirstyChance);
+							break;
+						}
+					}
+				}
+			}
 		}
 	}
 	

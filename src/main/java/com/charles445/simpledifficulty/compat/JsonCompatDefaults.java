@@ -1,12 +1,8 @@
 package com.charles445.simpledifficulty.compat;
 
-import static com.charles445.simpledifficulty.config.JsonConfig.armorTemperatures;
-import static com.charles445.simpledifficulty.config.JsonConfig.blockTemperatures;
-import static com.charles445.simpledifficulty.config.JsonConfig.fluidTemperatures;
-
-import com.charles445.simpledifficulty.config.json.JsonPropertyTemperature;
-import com.charles445.simpledifficulty.config.json.JsonTemperature;
-import com.charles445.simpledifficulty.config.json.PropertyValue;
+import com.charles445.simpledifficulty.api.config.JsonConfig;
+import com.charles445.simpledifficulty.api.config.json.JsonPropertyTemperature;
+import com.charles445.simpledifficulty.api.config.json.JsonPropertyValue;
 
 public class JsonCompatDefaults
 {
@@ -20,16 +16,20 @@ public class JsonCompatDefaults
 		populateSimpleCampfire();
 	}
 	
+	//NOTE
+	//Currently, adding anything that would overlap (or have multiple states) will not work here
+	//Needs to be handled manually (only relevant to blockstate or metadata related things at the moment)
+	
 	//Biomes O' Plenty
 	private void populateBiomesOPlenty()
 	{
-		fluidTemperatures.put("hot_spring_water", temperature(3.0f));
+		addFluidTemperature("hot_spring_water", 3.0f);
 	}
 	
 	//Lycanites Mobs
 	private void populateLycanitesMobs()
 	{
-		blockTemperatures.put("lycanitesmobs:purelava", propTemp(15.0f));
+		addBlockTemperature("lycanitesmobs:purelava", 12.5f);
 		
 		//TODO considering adding the ooze to actually chill the surrounding area
 		//That could be fun
@@ -38,27 +38,57 @@ public class JsonCompatDefaults
 	//Simple Camp Fire
 	private void populateSimpleCampfire()
 	{
-		blockTemperatures.put("campfire:campfire", propTemp(7.0f));
+		addBlockTemperature("campfire:campfire", 7.0f);
 	}
 	
 	
+	//
+	// API
+	//
 	
-	//Utility
-	
-	private JsonTemperature temperature(float temp)
+	private void addBlockTemperature(String registryName, float temperature, JsonPropertyValue... properties)
 	{
-		return new JsonTemperature(temp);
+		if(!JsonConfig.blockTemperatures.containsKey(registryName))
+		{
+			JsonConfig.registerBlockTemperature(registryName, temperature, properties);
+		}
 	}
+	
+	private void addFluidTemperature(String fluidName, float temperature)
+	{
+		if(!JsonConfig.fluidTemperatures.containsKey(fluidName))
+		{
+			JsonConfig.registerFluidTemperature(fluidName, temperature);
+		}
+	}
+	
+	//
+	// Utility
+	//
 	
 	private JsonPropertyTemperature propTemp(float temp)
 	{
 		return new JsonPropertyTemperature(temp);
 	}
 	
-	private JsonPropertyTemperature propTemp(float temp, PropertyValue... props)
+	private JsonPropertyTemperature propTemp(float temp, JsonPropertyValue... props)
 	{
 		return new JsonPropertyTemperature(temp, props);
 	}
 	
+	/*
+	//Old stuff
 	
+	//Adding without overriding (in case a mod adds their own default)
+	private <T> void put(final Map<String, T> map, String str, final T obj)
+	{
+		if(!map.containsKey(str))
+			map.put(str, obj);
+	}
+	
+	private JsonTemperature temperature(float temp)
+	{
+		return new JsonTemperature(temp);
+	}
+	*/
 }

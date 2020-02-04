@@ -1,14 +1,19 @@
 package com.charles445.simpledifficulty.handler;
 
 import com.charles445.simpledifficulty.SimpleDifficulty;
+import com.charles445.simpledifficulty.config.JsonConfigInternal;
 import com.charles445.simpledifficulty.config.ModConfig;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ConfigHandler
 {
@@ -46,6 +51,16 @@ public class ConfigHandler
 				ModConfig.sendLocalClientConfigToAPI();
 				ModConfig.sendLocalServerConfigToAPI();
 			}
+		}
+	}
+	
+	@SubscribeEvent
+	@SideOnly(Side.CLIENT)
+	public void onPlayerJoin(PlayerEvent.PlayerLoggedInEvent event)
+	{
+		for(String s : JsonConfigInternal.jsonErrors)
+		{
+			event.player.sendMessage(new TextComponentString(s));
 		}
 	}
 }

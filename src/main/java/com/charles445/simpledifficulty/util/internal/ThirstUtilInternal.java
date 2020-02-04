@@ -131,12 +131,13 @@ public class ThirstUtilInternal implements IThirstUtil
 			
 			//In TAN, any drink with a hydration higher than 0.5f will be more beneficial to you if you drink it when you're not as thirsty
 			
-			//In this mod, saturation is half as powerful and capped at 1.0f
-			//Because of that, there is also no need to check the player's current thirst level
-			//There should be no saturation advantageous time to drink anything
-			//Safety checks are done in addThirstSaturation itself
+			//In this mod, there's no saturation advantageous time to drink anything
 			
-			capability.addThirstSaturation(Math.min(1.0f, saturation) * thirst);
+			
+			capability.addThirstSaturation(saturation);
+			
+			//Old
+			//capability.addThirstSaturation(Math.min(1.0f, saturation) * thirst);
 			
 			//Test for dirtiness
 			if(dirtyChance != 0.0f && player.world.rand.nextFloat() < dirtyChance)
@@ -156,7 +157,7 @@ public class ThirstUtilInternal implements IThirstUtil
 	@Override
 	public void takeDrink(EntityPlayer player, ThirstEnum type)
 	{
-		takeDrink(player, type.getThirst(), type.getSaturation(), type.getDirtyChance());
+		takeDrink(player, type.getThirst(), type.getSaturation(), type.getThirstyChance());
 	}
 	
 	@Override

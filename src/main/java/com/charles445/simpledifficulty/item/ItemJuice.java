@@ -88,16 +88,16 @@ public class ItemJuice extends ItemDrinkBase
 	
 	public static enum JuiceEnum
 	{
-		APPLE(				8,	0.8f),	//6.4
-		BEETROOT(			10,	0.8f),	//8
-		CACTUS(				9,	0.3f),	//2.7
-		CARROT(				8,	0.6f),	//4.8
-		CHORUS_FRUIT(		12,	0.6f),	//7.2
-		GOLDEN_APPLE(		20,	1.0f),	//20
-		GOLDEN_CARROT(		14,	1.0f),	//14
-		GOLDEN_MELON(		16,	1.0f),	//16
-		MELON(				8,	0.5f),	//4
-		PUMPKIN(			7,	0.7f);	//4.9
+		APPLE(				8,	6.4f),
+		BEETROOT(			10,	8.0f),
+		CACTUS(				9,	2.7f),
+		CARROT(				8,	4.8f),
+		CHORUS_FRUIT(		12,	7.2f),
+		GOLDEN_APPLE(		20,	20.0f),
+		GOLDEN_CARROT(		14,	14.0f),
+		GOLDEN_MELON(		16,	16.0f),
+		MELON(				8,	4.0f),
+		PUMPKIN(			7,	4.9f);
 		
 		private int thirst;
 		private float saturation;

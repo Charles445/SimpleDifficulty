@@ -21,6 +21,6 @@ public class ItemPurifiedWaterBottle extends ItemDrinkBase
 	@Override
 	public float getDirtyChance(ItemStack stack)
 	{
-		return ThirstEnum.PURIFIED.getDirtyChance();
+		return ThirstEnum.PURIFIED.getThirstyChance();
 	}
 }

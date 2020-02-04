@@ -17,7 +17,6 @@ public class ClientProxy extends CommonProxy
 	@Override
 	public void preInit() 
 	{
-		SimpleDifficulty.logger.debug("SimpleDifficulty Client Proxy preInit");
 		super.preInit();
 		MinecraftForge.EVENT_BUS.register(new TemperatureGui());
 		MinecraftForge.EVENT_BUS.register(new ThirstGui());
@@ -25,9 +24,14 @@ public class ClientProxy extends CommonProxy
 	}
 	
 	@Override
+	public void init()
+	{
+		super.init();
+	}
+	
+	@Override
 	public void postInit()
 	{
-		SimpleDifficulty.logger.debug("SimpleDifficulty Client Proxy postInit");
 		super.postInit();
 	}
 

@@ -32,8 +32,8 @@ public class RegisterBlocks
 			campfire = registerAs("campfire", new BlockCampfire(), registry);
 			rainCollector = registerAs("rain_collector", new BlockRainCollector(), registry);
 			
-			heater = registerAs("heater", new BlockTemperature(10.0f), registry);
-			chiller = registerAs("chiller", new BlockTemperature(-10.0f), registry);
+			heater = registerAs("heater", new BlockTemperature(1.0f), registry);
+			chiller = registerAs("chiller", new BlockTemperature(-1.0f), registry);
 			
 			//Tile Entities
 			GameRegistry.registerTileEntity(TileEntityTemperature.class, new ResourceLocation(SimpleDifficulty.MODID,"temperatureChanged"));

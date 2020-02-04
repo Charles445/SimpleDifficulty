@@ -1,10 +1,10 @@
 package com.charles445.simpledifficulty.temperature;
 
 import com.charles445.simpledifficulty.api.SDEnchantments;
+import com.charles445.simpledifficulty.api.config.JsonConfig;
+import com.charles445.simpledifficulty.api.config.json.JsonTemperature;
 import com.charles445.simpledifficulty.api.temperature.TemperatureUtil;
-import com.charles445.simpledifficulty.config.JsonConfig;
 import com.charles445.simpledifficulty.config.ModConfig;
-import com.charles445.simpledifficulty.config.json.JsonTemperature;
 
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.player.EntityPlayer;

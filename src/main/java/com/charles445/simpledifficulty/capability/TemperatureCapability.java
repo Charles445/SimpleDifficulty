@@ -1,5 +1,8 @@
 package com.charles445.simpledifficulty.capability;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import com.charles445.simpledifficulty.api.SDPotions;
 import com.charles445.simpledifficulty.api.config.ServerConfig;
 import com.charles445.simpledifficulty.api.config.ServerOptions;
@@ -8,8 +11,10 @@ import com.charles445.simpledifficulty.api.temperature.ITemperatureModifier;
 import com.charles445.simpledifficulty.api.temperature.TemperatureEnum;
 import com.charles445.simpledifficulty.api.temperature.TemperatureRegistry;
 import com.charles445.simpledifficulty.api.temperature.TemperatureUtil;
+import com.charles445.simpledifficulty.api.temperature.TemporaryModifier;
 import com.charles445.simpledifficulty.config.ModConfig;
 import com.charles445.simpledifficulty.debug.DebugUtil;
+import com.google.common.collect.ImmutableMap;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.potion.PotionEffect;
@@ -22,11 +27,15 @@ public class TemperatureCapability implements ITemperatureCapability
 	private int temperature = 12;
 	private int ticktimer = 0;
 	
+	private Map<String, TemporaryModifier> temporaryModifiers = new HashMap<String, TemporaryModifier>();
+	
 	//Unsaved data
 	private int oldtemperature = 0;
 	private int updatetimer = 500; //Update immediately first time around
 	private int targettemp = 0;
 	private int debugtimer = 0;
+	private boolean manualDirty = false;
+	private int oldmodifiersize = 0;
 
 	@Override
 	public int getTemperatureLevel()
@@ -133,6 +142,33 @@ public class TemperatureCapability implements ITemperatureCapability
 				}
 			}
 		}
+		
+		//I hope this isn't an expensive or leaky operation
+		//There's probably a better way to do this but I'm worried about concurrency, as always
+		Map<String, TemporaryModifier> tweaks = new HashMap<String, TemporaryModifier>();
+		
+		int modifierSize = temporaryModifiers.size();
+		
+		for(Map.Entry<String, TemporaryModifier> entry : temporaryModifiers.entrySet())
+		{	
+			TemporaryModifier tm = entry.getValue();
+			
+			if(tm.duration > 0)
+			{
+				tweaks.put(entry.getKey(), new TemporaryModifier(tm.temperature, tm.duration - 1));
+			}
+		}
+		
+		temporaryModifiers.clear();
+		temporaryModifiers.putAll(tweaks);
+		tweaks.clear();
+		
+		if(oldmodifiersize != temporaryModifiers.size())
+		{
+			this.manualDirty = true;
+		}
+		
+		oldmodifiersize = temporaryModifiers.size();
 	}
 	
 	private void debugRoutine(EntityPlayer player, World world)
@@ -174,18 +210,42 @@ public class TemperatureCapability implements ITemperatureCapability
 	@Override
 	public boolean isDirty()
 	{
-		return this.temperature!=this.oldtemperature;
+		return manualDirty || this.temperature!=this.oldtemperature;
 	}
 
 	@Override
 	public void setClean()
 	{
 		this.oldtemperature = this.temperature;
+		this.manualDirty = false;
 	}
 
 	@Override
 	public TemperatureEnum getTemperatureEnum()
 	{
 		return TemperatureUtil.getTemperatureEnum(getTemperatureLevel());
+	}
+
+	@Override
+	public ImmutableMap<String, TemporaryModifier> getTemporaryModifiers()
+	{
+		return ImmutableMap.copyOf(temporaryModifiers);
+	}
+
+	@Override
+	public void setTemporaryModifier(String name, float temp, int duration)
+	{
+		if(this.temporaryModifiers.containsKey(name))
+		{
+			//Reset
+			this.manualDirty = true;
+		}
+		this.temporaryModifiers.put(name, new TemporaryModifier(temp, duration));
+	}
+	
+	@Override
+	public void clearTemporaryModifiers()
+	{
+		this.temporaryModifiers.clear();
 	}
 }

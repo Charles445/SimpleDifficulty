@@ -6,6 +6,7 @@ import javax.annotation.Nullable;
 
 import com.charles445.simpledifficulty.SimpleDifficulty;
 import com.charles445.simpledifficulty.api.SDCapabilities;
+import com.charles445.simpledifficulty.api.config.QuickConfig;
 import com.charles445.simpledifficulty.api.thirst.IThirstCapability;
 import com.charles445.simpledifficulty.api.thirst.ThirstEnum;
 import com.charles445.simpledifficulty.api.thirst.ThirstEnumBlockPos;
@@ -122,7 +123,7 @@ public class ItemCanteen extends ItemDrinkBase
 		if(!isCanteenEmpty(stack))
 		{
 			IThirstCapability capability = SDCapabilities.getThirstData(player);
-			if(capability.isThirsty())
+			if(capability.isThirsty() || !QuickConfig.isThirstEnabled())
 			{
 				player.setActiveHand(hand);
 				//DebugUtil.messageAll("itemdamage is not maxdamage ActionResult SUCCESS");
@@ -205,7 +206,7 @@ public class ItemCanteen extends ItemDrinkBase
 		if(type>=ThirstEnum.values().length)
 			return 0.0f;
 		
-		return ThirstEnum.values()[type].getDirtyChance();
+		return ThirstEnum.values()[type].getThirstyChance();
 	}
 	
 	private void createTag(ItemStack stack)

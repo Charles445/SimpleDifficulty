@@ -1,6 +1,11 @@
 package com.charles445.simpledifficulty.item;
 
+import java.util.List;
+
 import com.charles445.simpledifficulty.api.SDCapabilities;
+import com.charles445.simpledifficulty.api.config.JsonConfig;
+import com.charles445.simpledifficulty.api.config.QuickConfig;
+import com.charles445.simpledifficulty.api.config.json.JsonConsumableThirst;
 import com.charles445.simpledifficulty.api.thirst.IThirstCapability;
 import com.charles445.simpledifficulty.api.thirst.ThirstUtil;
 import com.charles445.simpledifficulty.capability.ThirstCapability;
@@ -50,6 +55,9 @@ public abstract class ItemDrinkBase extends Item
 	{
 		ItemStack stack = player.getHeldItem(hand);
 		
+		if(!QuickConfig.isThirstEnabled())
+			return new ActionResult(EnumActionResult.SUCCESS, stack);
+		
 		IThirstCapability capability = SDCapabilities.getThirstData(player);
 		if(capability.isThirsty())
 		{
@@ -67,7 +75,29 @@ public abstract class ItemDrinkBase extends Item
 			return stack;
 		
 		EntityPlayer player = (EntityPlayer)entityLiving;
-		ThirstUtil.takeDrink(player, this.getThirstLevel(stack), this.getSaturationLevel(stack), this.getDirtyChance(stack));
+		
+		List<JsonConsumableThirst> jctList = JsonConfig.consumableThirst.get(this.getRegistryName().toString());
+		
+		boolean override = false;
+		
+		if(jctList!=null)
+		{
+			for(JsonConsumableThirst jct : jctList)
+			{
+				if(jct==null)
+					continue;
+				
+				if(jct.matches(stack))
+				{
+					override = true;
+					break;
+				}
+			}
+		}
+
+		if(!override)
+			ThirstUtil.takeDrink(player, this.getThirstLevel(stack), this.getSaturationLevel(stack), this.getDirtyChance(stack));
+		
 		this.runSecondaryEffect(player, stack);
 		return new ItemStack(Items.GLASS_BOTTLE);
 	}

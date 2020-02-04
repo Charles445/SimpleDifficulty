@@ -53,7 +53,7 @@ public class MessageDrinkWater implements IMessage
 						
 						//Enum now has important values
 						
-						ThirstUtil.takeDrink(player, result.getThirst(), result.getSaturation(), result.getDirtyChance());
+						ThirstUtil.takeDrink(player, result.getThirst(), result.getSaturation(), result.getThirstyChance());
 						
 					});
 				}
