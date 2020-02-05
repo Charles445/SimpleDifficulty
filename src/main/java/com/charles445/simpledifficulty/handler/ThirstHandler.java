@@ -3,6 +3,7 @@ package com.charles445.simpledifficulty.handler;
 import java.util.List;
 
 import com.charles445.simpledifficulty.api.SDCapabilities;
+import com.charles445.simpledifficulty.api.SDCompatibility;
 import com.charles445.simpledifficulty.api.SDPotions;
 import com.charles445.simpledifficulty.api.config.JsonConfig;
 import com.charles445.simpledifficulty.api.config.QuickConfig;
@@ -10,9 +11,12 @@ import com.charles445.simpledifficulty.api.config.json.JsonConsumableThirst;
 import com.charles445.simpledifficulty.api.thirst.IThirstCapability;
 import com.charles445.simpledifficulty.api.thirst.ThirstEnum;
 import com.charles445.simpledifficulty.api.thirst.ThirstUtil;
+import com.charles445.simpledifficulty.compat.ModNames;
 import com.charles445.simpledifficulty.config.ModConfig;
+import com.charles445.simpledifficulty.debug.DebugUtil;
 import com.charles445.simpledifficulty.network.MessageDrinkWater;
 import com.charles445.simpledifficulty.network.PacketHandler;
+import com.charles445.simpledifficulty.util.OreDictUtil;
 import com.charles445.simpledifficulty.util.internal.ThirstUtilInternal;
 
 import net.minecraft.entity.Entity;
@@ -31,6 +35,7 @@ import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.player.AttackEntityEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.world.BlockEvent;
+import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 public class ThirstHandler
@@ -38,6 +43,8 @@ public class ThirstHandler
 	//
 	// Drink Attempt Events
 	//
+	
+	private final boolean harvestcraftLoaded = Loader.isModLoaded(ModNames.HARVESTCRAFT);
 	
 	//Both Sides
 	@SubscribeEvent
@@ -57,7 +64,6 @@ public class ThirstHandler
 			
 			ItemStack stack = event.getItem();
 			
-			
 			if(stack.getItem().equals(Items.POTIONITEM))
 			{
 				PotionType potionType = PotionUtils.getPotionFromItem(stack);
@@ -72,40 +78,62 @@ public class ThirstHandler
 						if(potionType.equals(PotionTypes.WATER) || potionType.equals(PotionTypes.AWKWARD) || potionType.equals(PotionTypes.MUNDANE) || potionType.equals(PotionTypes.THICK))
 						{
 							ThirstUtil.takeDrink(player, ThirstEnum.NORMAL);
+							return;
 						}
 						else if(!potionType.equals(PotionTypes.EMPTY))
 						{
 							ThirstUtil.takeDrink(player, ThirstEnum.POTION);
+							return;
 						}
 					}
 					else if(SDPotions.potionTypes.containsValue(potionType))
 					{
 						ThirstUtil.takeDrink(player, ThirstEnum.POTION);
+						return;
 					}
 				}
 				
-				
-				/*
-				PotionType potionType = PotionUtils.getPotionFromItem(stack);
-				if(potionType.getEffects().isEmpty())
-				*/
+				//Mod potion, do nothing
+				return;
 			}
-			else
+			
+			//JSON
+			List<JsonConsumableThirst> consumableList = JsonConfig.consumableThirst.get(stack.getItem().getRegistryName().toString());
+			if(consumableList!=null)
 			{
-				//JSON
-				List<JsonConsumableThirst> consumableList = JsonConfig.consumableThirst.get(stack.getItem().getRegistryName().toString());
-				if(consumableList!=null)
+				for(JsonConsumableThirst jct : consumableList)
 				{
-					for(JsonConsumableThirst jct : consumableList)
+					if(jct==null)
+						continue;
+					if(jct.matches(stack))
 					{
-						if(jct==null)
-							continue;
-						if(jct.matches(stack))
-						{
-							ThirstUtil.takeDrink(player, jct.amount, jct.saturation, jct.thirstyChance);
-							break;
-						}
+						ThirstUtil.takeDrink(player, jct.amount, jct.saturation, jct.thirstyChance);
+						return;
 					}
+				}
+			}
+			
+			//MOD COMPAT
+			//For broader use cases like harvestcraft
+			
+			//23k with just loaded and disabled completely, every single time
+			//The stack getitem getregistryname getresourcedomain runs ten times faster on anything not mod specific
+			//So now it takes 2k every single time, way better
+			//I'll be using this system for any further compatibility things like this, probably
+			
+			if(harvestcraftLoaded && stack.getItem().getRegistryName().getResourceDomain().equals(ModNames.HARVESTCRAFT) && !SDCompatibility.disabledCompletely.contains(ModNames.HARVESTCRAFT))
+			{
+				if(OreDictUtil.isOre(OreDictUtil.listAlljuice, stack))
+				{
+					ThirstUtil.takeDrink(player, ModConfig.server.compatibility.harvestcraft.juiceThirst, (float)ModConfig.server.compatibility.harvestcraft.juiceSaturation, (float)ModConfig.server.compatibility.harvestcraft.juiceThirstyChance);
+				}
+				else if(OreDictUtil.isOre(OreDictUtil.listAllsmoothie, stack))
+				{
+					ThirstUtil.takeDrink(player, ModConfig.server.compatibility.harvestcraft.smoothieThirst, (float)ModConfig.server.compatibility.harvestcraft.smoothieSaturation, (float)ModConfig.server.compatibility.harvestcraft.smoothieThirstyChance);
+				}
+				else if(OreDictUtil.isOre(OreDictUtil.listAllsoda, stack))
+				{
+					ThirstUtil.takeDrink(player, ModConfig.server.compatibility.harvestcraft.sodaThirst, (float)ModConfig.server.compatibility.harvestcraft.sodaSaturation, (float)ModConfig.server.compatibility.harvestcraft.sodaThirstyChance);
 				}
 			}
 		}

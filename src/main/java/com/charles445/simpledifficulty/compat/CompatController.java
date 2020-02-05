@@ -32,21 +32,27 @@ public class CompatController
 		//Create compatibility objects
 		Object auwDynamicModifier = newCompatObject(ModNames.AUW, compatMod + "AUWDynamicModifier");
 		Object auwModifier = newCompatObject(ModNames.AUW, compatMod + "AUWModifier");
+		Object harvestFestivalModifier = newCompatObject(ModNames.HARVESTFESTIVAL, compatMod + "HarvestFestivalModifier");
 		Object sereneSeasonsModifier = newCompatObject(ModNames.SERENESEASONS, compatMod + "SereneSeasonsModifier");
 		
-		
-		
-		if(sereneSeasonsModifier instanceof ITemperatureModifier)
-		{
-			SimpleDifficulty.logger.info("Serene Seasons Modifier Enabled");
-			TemperatureRegistry.registerModifier((ITemperatureModifier)sereneSeasonsModifier);
-		}
 		
 		if(auwDynamicModifier instanceof ITemperatureDynamicModifier && auwModifier instanceof ITemperatureModifier)
 		{
 			SimpleDifficulty.logger.info("Armor Underwear Modifiers Enabled");
 			TemperatureRegistry.registerDynamicModifier((ITemperatureDynamicModifier)auwDynamicModifier);
 			TemperatureRegistry.registerModifier((ITemperatureModifier)auwModifier);
+		}
+		
+		if(harvestFestivalModifier instanceof ITemperatureModifier)
+		{
+			SimpleDifficulty.logger.info("Harvest Festival Modifier Enabled");
+			TemperatureRegistry.registerModifier((ITemperatureModifier)harvestFestivalModifier);
+		}
+		
+		if(sereneSeasonsModifier instanceof ITemperatureModifier)
+		{
+			SimpleDifficulty.logger.info("Serene Seasons Modifier Enabled");
+			TemperatureRegistry.registerModifier((ITemperatureModifier)sereneSeasonsModifier);
 		}
 	}
 	

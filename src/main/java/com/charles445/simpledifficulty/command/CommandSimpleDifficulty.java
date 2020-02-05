@@ -43,18 +43,21 @@ public class CommandSimpleDifficulty extends CommandBase
 			"loadDefaultModConfig"
 	});
 	
-	private final String commandUsage = 
-			  "help <command>\n"
-			+ "exportJson\n"
-			+ "reloadJson\n"
-			+ "addArmor <temperature>\n"
-			+ "addBlock <temperature>\n"
-			+ "addConsumableTemperature <group> <temperature> <duration>\n"
-			+ "addConsumableThirst <amount> <saturation> <thirstyChance>\n"
-			+ "addFluid <temperature>\n"
-			+ "addHeldItem <temperature>\n"
-			+ "loadDefaultModConfig <modid>";
+	private final String commandUsage = "/simpledifficulty help";
 	
+	
+	private final String listOfCommands = 
+			  "   help <command>\n"
+			+ "   exportJson\n"
+			+ "   reloadJson\n"
+			+ "   addArmor <temperature>\n"
+			+ "   addBlock <temperature>\n"
+			+ "   addConsumableTemperature <group> <temperature> <duration>\n"
+			+ "   addConsumableThirst <amount> <saturation> <thirstyChance>\n"
+			+ "   addFluid <temperature>\n"
+			+ "   addHeldItem <temperature>\n"
+			+ "   loadDefaultModConfig <modid>";
+
 	private final String warn_notPlayerAdmin = "You do not have permission, or are not a player ingame!";
 	private final String warn_invalidArgs = "Invalid Arguments";
 	private final String warn_noItem = "Not holding an item!";
@@ -131,7 +134,7 @@ public class CommandSimpleDifficulty extends CommandBase
 	{
 		if(args.length<2)
 		{
-			message(sender, "/simpledifficulty help <command> \n(Replace <command> with a simpledifficulty command name)");
+			message(sender, "/simpledifficulty help <command> \n(Replace <command> with a simpledifficulty command name)\n"+listOfCommands);
 			return;
 		}
 		

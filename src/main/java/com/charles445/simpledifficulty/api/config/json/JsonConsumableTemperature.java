@@ -4,8 +4,8 @@ import net.minecraft.item.ItemStack;
 
 public class JsonConsumableTemperature
 {
-	public String group;
 	public int metadata;
+	public String group;
 	public float temperature;
 	public int duration;
 	

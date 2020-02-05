@@ -31,6 +31,8 @@ public class ModConfig
 	
 	//TODO Lang
 	
+	//TODO Is it possible to migrate these to separate files w/o breaking it all completely?
+	
 	public static class SDCFGServerConfig
 	{
 		@Config.Comment("Built-in mod compatibility options")
@@ -86,12 +88,22 @@ public class ModConfig
 			@Config.Name("Armor Underwear")
 			public final SDCFGArmorUnderwear auw = new SDCFGArmorUnderwear();
 			
+			@Config.Comment("Pam's HarvestCraft Configurations")
+			@Config.Name("Pam's HarvestCraft")
+			public final SDCFGHarvestCraft harvestcraft = new SDCFGHarvestCraft();
+			
+			@Config.Comment("Harvest Festival Configurations")
+			@Config.Name("Harvest Festival")
+			public final SDCFGHarvestFestival harvestfestival = new SDCFGHarvestFestival();
+			
 			@Config.Comment("Serene Seasons Configurations")
 			@Config.Name("Serene Seasons")
 			public final SDCFGSereneSeasons sereneseasons = new SDCFGSereneSeasons();
 			
 			public static class SDCFGArmorUnderwear
 			{
+				//Armor Underwear
+				
 				@Config.Comment("Enable Armor Underwear - Built-In Compatibility")
 				@Config.Name("EnableArmorUnderwear")
 				public boolean enableAUW = true;
@@ -122,11 +134,78 @@ public class ModConfig
 				public double linerMultiplier = 1.0d;
 			}
 			
+			public static class SDCFGHarvestCraft
+			{
+				@Config.Comment("Enable Harvest Craft - Built-In Compatibility")
+				@Config.Name("EnableHarvestCraft")
+				public boolean enableHarvestCraft = true;
+				
+				@Config.Comment("Juice Thirst")
+				@Config.Name("JuiceThirst")
+				public int juiceThirst = 6;
+				
+				@Config.Comment("Juice Saturation")
+				@Config.Name("JuiceSaturation")
+				public double juiceSaturation = 5.0d;
+				
+				@Config.Comment("Juice Thirsty Chance")
+				@Config.Name("JuiceThirstyChance")
+				public double juiceThirstyChance = 0.0d;
+				
+				@Config.Comment("Smoothie Thirst")
+				@Config.Name("SmoothieThirst")
+				public int smoothieThirst = 9;
+				
+				@Config.Comment("Smoothie Saturation")
+				@Config.Name("SmoothieSaturation")
+				public double smoothieSaturation = 7.0d;
+				
+				@Config.Comment("Smoothie Thirsty Chance")
+				@Config.Name("SmoothieThirstyChance")
+				public double smoothieThirstyChance = 0.0d;
+				
+				@Config.Comment("Soda Thirst")
+				@Config.Name("SodaThirst")
+				public int sodaThirst = 9;
+				
+				@Config.Comment("Soda Saturation")
+				@Config.Name("SodaSaturation")
+				public double sodaSaturation = 7.0d;
+				
+				@Config.Comment("Soda Thirsty Chance")
+				@Config.Name("SodaThirstyChance")
+				public double sodaThirstyChance = 0.0d;
+			}
+			
+			public static class SDCFGHarvestFestival
+			{
+				//Harvest Festival
+				
+				@Config.Comment("Enable Harvest Festival - Built-In Compatibility")
+				@Config.Name("EnableHarvestFestival")
+				public boolean enableHarvestFestival = true;
+				
+				@Config.Comment("Season Winter - Temperature change during the Harvest Festival season")
+				@Config.Name("SeasonWinter")
+				public int seasonWinter = -10;
+				
+				@Config.Comment("Season Spring - Temperature change during the Harvest Festival season")
+				@Config.Name("SeasonSpring")
+				public int seasonSpring = 0;
+				
+				@Config.Comment("Season Summer - Temperature change during the Harvest Festival season")
+				@Config.Name("SeasonSummer")
+				public int seasonSummer = 4;
+				
+				@Config.Comment("Season Autumn - Temperature change during the Harvest Festival season")
+				@Config.Name("SeasonAutumn")
+				public int seasonAutumn = 0;
+
+			}
+			
 			public static class SDCFGSereneSeasons
 			{
 				//Serene Seasons
-				//Not synchronized with clients
-				//TODO it should be
 				
 				@Config.Comment("Enable Serene Seasons - Built-In Compatibility")
 				@Config.Name("EnableSereneSeasons")

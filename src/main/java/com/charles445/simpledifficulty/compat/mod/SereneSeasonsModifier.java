@@ -1,6 +1,5 @@
 package com.charles445.simpledifficulty.compat.mod;
 
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 import com.charles445.simpledifficulty.SimpleDifficulty;
@@ -19,11 +18,11 @@ public class SereneSeasonsModifier extends ModifierBase
 	
 	//Those measurements were without the underground effect applied
 	
-	Class SeasonHelper;
-	Class ISeasonState;
-	Class SubSeason;
-	Method getSeasonState;
-	Method getSubSeason;
+	private Class SeasonHelper;
+	private Class ISeasonState;
+	private Class SubSeason;
+	private Method getSeasonState;
+	private Method getSubSeason;
 	private boolean enabled;
 	
 	public SereneSeasonsModifier()
@@ -40,7 +39,7 @@ public class SereneSeasonsModifier extends ModifierBase
 			getSubSeason = ISeasonState.getDeclaredMethod("getSubSeason");
 			
 			enabled = true;
-
+			
 			//Safety check to avoid bad casting later
 			if(!SubSeason.isEnum())
 			{
@@ -50,7 +49,7 @@ public class SereneSeasonsModifier extends ModifierBase
 			
 			
 		}
-		catch (ClassNotFoundException | NoSuchMethodException | SecurityException e)
+		catch (Exception e)
 		{
 			SimpleDifficulty.logger.error("ModifierSeason reflection failed! Serene Seasons compatibility is now disabled!",e);
 			enabled = false;
@@ -67,6 +66,9 @@ public class SereneSeasonsModifier extends ModifierBase
 				//Object seasonState = getSeasonState.invoke(null, world);
 				//Object subSeason = getSubSeason.invoke(ISeasonState.cast(seasonState));
 				//switch(((Enum)subSeason).name())
+				
+				//The cast doesn't seem necessary, but I'll do it to stay organized
+				
 				switch(((Enum)getSubSeason.invoke(ISeasonState.cast(getSeasonState.invoke(null, world)))).name())
 				{
 					case "EARLY_AUTUMN": 	return applyUndergroundEffect((float)ModConfig.server.compatibility.sereneseasons.seasonEarlyAutumn, world, pos);
@@ -85,7 +87,7 @@ public class SereneSeasonsModifier extends ModifierBase
 						return 0.0f;
 				}
 			}
-			catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e)
+			catch (Exception e)
 			{
 				SimpleDifficulty.logger.error("ModifierSeason reflection failed during getWorldInfluence! Serene Seasons compatibility is now disabled!",e);
 				enabled = false;
