@@ -1,18 +1,18 @@
-package com.charles445.simpledifficulty.temperature;
+package com.charles445.simpledifficulty.compat.mod;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 import com.charles445.simpledifficulty.SimpleDifficulty;
 import com.charles445.simpledifficulty.config.ModConfig;
+import com.charles445.simpledifficulty.temperature.ModifierBase;
 
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class ModifierSeason extends ModifierBase
+public class SereneSeasonsModifier extends ModifierBase
 {
 	//Mod Compatibility: Serene Seasons
-	
 	
 	//Hard Dependency = 2k to 6k ns, very quick
 	//Reflection = 4k to 12k ns, still very quick
@@ -26,9 +26,9 @@ public class ModifierSeason extends ModifierBase
 	Method getSubSeason;
 	private boolean enabled;
 	
-	public ModifierSeason()
+	public SereneSeasonsModifier()
 	{
-		super("Season");
+		super("SereneSeasons");
 		
 		try
 		{
@@ -60,7 +60,7 @@ public class ModifierSeason extends ModifierBase
 	public float getWorldInfluence(World world, BlockPos pos)
 	{
 		//SeasonHelper.getSeasonState(world).getSubSeason();
-		if(enabled && world.provider.isSurfaceWorld())
+		if(enabled && world.provider.isSurfaceWorld() && ModConfig.server.compatibility.sereneseasons.enableSereneSeasons)
 		{
 			try
 			{
@@ -69,18 +69,18 @@ public class ModifierSeason extends ModifierBase
 				//switch(((Enum)subSeason).name())
 				switch(((Enum)getSubSeason.invoke(ISeasonState.cast(getSeasonState.invoke(null, world)))).name())
 				{
-					case "EARLY_AUTUMN": 	return applyUndergroundEffect((float)ModConfig.server.temperature.sereneseasons.seasonEarlyAutumn, world, pos);
-					case "EARLY_SPRING": 	return applyUndergroundEffect((float)ModConfig.server.temperature.sereneseasons.seasonEarlySpring, world, pos);
-					case "EARLY_SUMMER": 	return applyUndergroundEffect((float)ModConfig.server.temperature.sereneseasons.seasonEarlySummer, world, pos);
-					case "EARLY_WINTER": 	return applyUndergroundEffect((float)ModConfig.server.temperature.sereneseasons.seasonEarlyWinter, world, pos);
-					case "LATE_AUTUMN": 	return applyUndergroundEffect((float)ModConfig.server.temperature.sereneseasons.seasonLateAutumn, world, pos);
-					case "LATE_SPRING": 	return applyUndergroundEffect((float)ModConfig.server.temperature.sereneseasons.seasonLateSpring, world, pos); 
-					case "LATE_SUMMER":  	return applyUndergroundEffect((float)ModConfig.server.temperature.sereneseasons.seasonLateSummer, world, pos);
-					case "LATE_WINTER":  	return applyUndergroundEffect((float)ModConfig.server.temperature.sereneseasons.seasonLateWinter, world, pos);
-					case "MID_AUTUMN":  	return applyUndergroundEffect((float)ModConfig.server.temperature.sereneseasons.seasonMidAutumn, world, pos);
-					case "MID_SPRING":  	return applyUndergroundEffect((float)ModConfig.server.temperature.sereneseasons.seasonMidSpring, world, pos);
-					case "MID_SUMMER":  	return applyUndergroundEffect((float)ModConfig.server.temperature.sereneseasons.seasonMidSummer, world, pos);
-					case "MID_WINTER":  	return applyUndergroundEffect((float)ModConfig.server.temperature.sereneseasons.seasonMidWinter, world, pos);
+					case "EARLY_AUTUMN": 	return applyUndergroundEffect((float)ModConfig.server.compatibility.sereneseasons.seasonEarlyAutumn, world, pos);
+					case "EARLY_SPRING": 	return applyUndergroundEffect((float)ModConfig.server.compatibility.sereneseasons.seasonEarlySpring, world, pos);
+					case "EARLY_SUMMER": 	return applyUndergroundEffect((float)ModConfig.server.compatibility.sereneseasons.seasonEarlySummer, world, pos);
+					case "EARLY_WINTER": 	return applyUndergroundEffect((float)ModConfig.server.compatibility.sereneseasons.seasonEarlyWinter, world, pos);
+					case "LATE_AUTUMN": 	return applyUndergroundEffect((float)ModConfig.server.compatibility.sereneseasons.seasonLateAutumn, world, pos);
+					case "LATE_SPRING": 	return applyUndergroundEffect((float)ModConfig.server.compatibility.sereneseasons.seasonLateSpring, world, pos); 
+					case "LATE_SUMMER":  	return applyUndergroundEffect((float)ModConfig.server.compatibility.sereneseasons.seasonLateSummer, world, pos);
+					case "LATE_WINTER":  	return applyUndergroundEffect((float)ModConfig.server.compatibility.sereneseasons.seasonLateWinter, world, pos);
+					case "MID_AUTUMN":  	return applyUndergroundEffect((float)ModConfig.server.compatibility.sereneseasons.seasonMidAutumn, world, pos);
+					case "MID_SPRING":  	return applyUndergroundEffect((float)ModConfig.server.compatibility.sereneseasons.seasonMidSpring, world, pos);
+					case "MID_SUMMER":  	return applyUndergroundEffect((float)ModConfig.server.compatibility.sereneseasons.seasonMidSummer, world, pos);
+					case "MID_WINTER":  	return applyUndergroundEffect((float)ModConfig.server.compatibility.sereneseasons.seasonMidWinter, world, pos);
 					default:
 						return 0.0f;
 				}

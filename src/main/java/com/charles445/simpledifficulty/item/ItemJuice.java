@@ -1,6 +1,7 @@
 package com.charles445.simpledifficulty.item;
 
 import com.charles445.simpledifficulty.SimpleDifficulty;
+import com.charles445.simpledifficulty.config.ModConfig;
 
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
@@ -22,9 +23,8 @@ public class ItemJuice extends ItemDrinkBase
 	@Override
 	public void runSecondaryEffect(EntityPlayer player, ItemStack stack)
 	{
-		//TODO consider if this is a good idea and make configurable
 		JuiceEnum type = getEnumForStack(stack);
-		if(type == JuiceEnum.GOLDEN_APPLE)
+		if(type == JuiceEnum.GOLDEN_APPLE && ModConfig.server.miscellaneous.goldenAppleJuiceEffect)
 		{
 			player.addPotionEffect(new PotionEffect(MobEffects.REGENERATION, 100, 1));
 			player.addPotionEffect(new PotionEffect(MobEffects.ABSORPTION, 2400, 0));

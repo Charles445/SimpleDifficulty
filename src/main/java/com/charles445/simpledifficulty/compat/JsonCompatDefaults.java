@@ -20,33 +20,36 @@ public class JsonCompatDefaults
 	}
 	
 	//Biomes O' Plenty
-	private void populateBiomesOPlenty()
+	private boolean populateBiomesOPlenty()
 	{
 		if(!canUseMod("biomesoplenty"))
-			return;
+			return false;
 		
 		addFluidTemperature("hot_spring_water", 3.0f);
+		return true;
 	}
 	
 	//Lycanites Mobs
-	private void populateLycanitesMobs()
+	private boolean populateLycanitesMobs()
 	{
 		if(!canUseMod("lycanitesmobs"))
-			return;
+			return false;
 		
 		addBlockTemperature("lycanitesmobs:purelava", 12.5f);
 		
 		//TODO considering adding the ooze to actually chill the surrounding area
 		//That could be fun
+		return true;
 	}
 	
 	//Simple Camp Fire
-	private void populateSimpleCampfire()
+	private boolean populateSimpleCampfire()
 	{
 		if(!canUseMod("campfire"))
-			return;
+			return false;
 		
 		addBlockTemperature("campfire:campfire", 7.0f);
+		return true;
 	}
 	
 	

@@ -56,7 +56,11 @@ public abstract class ItemDrinkBase extends Item
 		ItemStack stack = player.getHeldItem(hand);
 		
 		if(!QuickConfig.isThirstEnabled())
+		{
+			//Don't restrict drinking if thirst is disabled
+			player.setActiveHand(hand);
 			return new ActionResult(EnumActionResult.SUCCESS, stack);
+		}
 		
 		IThirstCapability capability = SDCapabilities.getThirstData(player);
 		if(capability.isThirsty())

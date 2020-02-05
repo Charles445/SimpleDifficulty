@@ -1,5 +1,6 @@
 package com.charles445.simpledifficulty.util.internal;
 
+import com.charles445.simpledifficulty.api.temperature.ITemperatureDynamicModifier;
 import com.charles445.simpledifficulty.api.temperature.ITemperatureModifier;
 import com.charles445.simpledifficulty.api.temperature.ITemperatureUtil;
 import com.charles445.simpledifficulty.api.temperature.TemperatureEnum;
@@ -32,6 +33,11 @@ public class TemperatureUtilInternal implements ITemperatureUtil
 			sum += modifier.getWorldInfluence(world, pos);
 			sum += modifier.getPlayerInfluence(player);
 		}
+		for(ITemperatureDynamicModifier dynmodifier : TemperatureRegistry.dynamicModifiers.values())
+		{
+			sum = dynmodifier.applyDynamicWorldInfluence(world, pos, sum);
+			sum = dynmodifier.applyDynamicPlayerInfluence(player, sum);
+		}
 		return (int)sum;
 	}
 	
@@ -44,6 +50,11 @@ public class TemperatureUtilInternal implements ITemperatureUtil
 		{
 			sum += modifier.getWorldInfluence(world, pos);
 		}
+		for(ITemperatureDynamicModifier dynmodifier : TemperatureRegistry.dynamicModifiers.values())
+		{
+			sum = dynmodifier.applyDynamicWorldInfluence(world, pos, sum);
+		}
+		
 		return (int)sum;
 	}
 	

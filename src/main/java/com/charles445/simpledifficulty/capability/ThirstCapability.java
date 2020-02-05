@@ -6,6 +6,7 @@ import com.charles445.simpledifficulty.api.SDCapabilities;
 import com.charles445.simpledifficulty.api.config.ServerConfig;
 import com.charles445.simpledifficulty.api.config.ServerOptions;
 import com.charles445.simpledifficulty.api.thirst.IThirstCapability;
+import com.charles445.simpledifficulty.config.ModConfig;
 import com.charles445.simpledifficulty.debug.DebugUtil;
 import com.charles445.simpledifficulty.util.DamageUtil;
 
@@ -32,6 +33,8 @@ public class ThirstCapability implements IThirstCapability
 	@Override
 	public void tickUpdate(EntityPlayer player, World world, TickEvent.Phase phase)
 	{
+		//This currently only runs on the server, which is very convenient
+		
 		//Allowing sprinting, for now, I don't see a reliable way to actually disable player sprinting
 		//Stop sprinting when thirsty (same as hunger)
 		if(phase == TickEvent.Phase.START)
@@ -64,20 +67,20 @@ public class ThirstCapability implements IThirstCapability
 		if(moveDistance>0)
 		{
 			//Manage exhaustion
-			float moveSensitivity = 0.01f;
+			float moveSensitivity = (float)ModConfig.server.thirst.thirstBaseMovement;
 			if(player.isInWater() || player.isInsideOfMaterial(Material.WATER))
 			{
-				moveSensitivity = 0.015F;
+				moveSensitivity = (float)ModConfig.server.thirst.thirstSwimmingMovement;
 			}
 			else if(player.onGround)
 			{
 				if(player.isSprinting())
 				{
-					moveSensitivity = 0.1f;
+					moveSensitivity = (float)ModConfig.server.thirst.thirstSprintingMovement;
 				}
 				else
 				{
-					moveSensitivity = 0.01f;
+					moveSensitivity = (float)ModConfig.server.thirst.thirstWalkingMovement;
 				}
 			}
 			//Sensitive to every hundredth of a block, so multiply by 1/100
@@ -86,10 +89,10 @@ public class ThirstCapability implements IThirstCapability
 		}
 		
 		//Process exhaustion to determine whether to make thirsty
-		if(this.getThirstExhaustion() > 4.0f)
+		if(this.getThirstExhaustion() > (float)ModConfig.server.thirst.thirstExhaustionLimit)
 		{
 			//Exhausted, do a thirst tick
-			this.addThirstExhaustion(-4.0f);
+			this.addThirstExhaustion(-1.0f * (float)ModConfig.server.thirst.thirstExhaustionLimit);
 			
 			if(this.getThirstSaturation() > 0.0f)
 			{

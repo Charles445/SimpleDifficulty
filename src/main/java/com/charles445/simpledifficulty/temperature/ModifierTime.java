@@ -58,7 +58,7 @@ public class ModifierTime extends ModifierBase
 		//Would result in 0 to 1.25
 		//So instead, result in 0 to 0.25, and then add 1.0f to get 1 to 1.25
 		
-		float biomeMultiplier = 1.0f + (Math.abs(normalizeToPlusMinus(getTempForBiome(world.getBiome(pos)))) * (ModConfig.server.temperature.timeBiomeMultiplier - 1.0f));
+		float biomeMultiplier = 1.0f + (Math.abs(normalizeToPlusMinus(getTempForBiome(world.getBiome(pos)))) * ((float)ModConfig.server.temperature.timeBiomeMultiplier - 1.0f));
 		
 		//Underground effect and result
 		return applyUndergroundEffect(timetemperature * biomeMultiplier, world, pos);

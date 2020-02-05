@@ -3,6 +3,7 @@ package com.charles445.simpledifficulty.potion;
 import com.charles445.simpledifficulty.api.SDCapabilities;
 import com.charles445.simpledifficulty.api.thirst.IThirstCapability;
 import com.charles445.simpledifficulty.capability.ThirstCapability;
+import com.charles445.simpledifficulty.config.ModConfig;
 
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -41,7 +42,7 @@ public class PotionThirsty extends PotionBase
 		{
 			EntityPlayer player = (EntityPlayer)entityLivingBaseIn;
 			IThirstCapability capability = SDCapabilities.getThirstData(player);
-			capability.addThirstExhaustion(0.025f * (1 + amplifier));
+			capability.addThirstExhaustion((float)ModConfig.server.thirst.thirstyStrength * (1 + amplifier));
 		}
 	}
 

@@ -158,7 +158,7 @@ public class JsonConfigInternal
 		} 
 		catch (Exception e)
 		{
-			e.printStackTrace();
+			SimpleDifficulty.logger.error("Export to JSON Failure Details", e);
 			return "Export to JSON FAILED! See log for details.";
 		}
 	}

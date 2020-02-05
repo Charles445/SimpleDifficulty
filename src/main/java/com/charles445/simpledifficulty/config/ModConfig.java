@@ -33,6 +33,10 @@ public class ModConfig
 	
 	public static class SDCFGServerConfig
 	{
+		@Config.Comment("Built-in mod compatibility options")
+		@Config.Name("Compatibility")
+		public final SDCFGCompatibility compatibility = new SDCFGCompatibility();
+		
 		@Config.Comment("Miscellaneous gameplay configurations")
 		@Config.Name("Miscellaneous")
 		public final SDCFGMiscellaneous miscellaneous = new SDCFGMiscellaneous();
@@ -40,6 +44,10 @@ public class ModConfig
 		@Config.Comment("Temperature related configurations")
 		@Config.Name("Temperature")
 		public final SDCFGTemperature temperature = new SDCFGTemperature();
+		
+		@Config.Comment("Thirst related configurations")
+		@Config.Name("Thirst")
+		public final SDCFGThirst thirst = new SDCFGThirst();
 		
 		///
 		/// Server Options
@@ -72,125 +80,57 @@ public class ModConfig
 		@Config.Name("DebugMode")
 		public boolean debug = false;
 		
-		public static class SDCFGMiscellaneous
+		public static class SDCFGCompatibility
 		{
-			//Not synchronized with clients
-			
-			@Config.Comment("Whether Ice Blocks drop Ice Chunks")
-			@Config.Name("IceDropsChunks")
-			public boolean iceDropsChunks = true;
-			
-			@Config.Comment("Whether Magma Blocks drop Magma Chunks")
-			@Config.Name("MagmaDropsChunks")
-			public boolean magmaDropsChunks = true;
-		}
-		
-		public static class SDCFGTemperature
-		{
-			//Not synchronized with clients
-			//TODO it probably should be though, because of thermometers and such
+			@Config.Comment("Armor Underwear Configurations")
+			@Config.Name("Armor Underwear")
+			public final SDCFGArmorUnderwear auw = new SDCFGArmorUnderwear();
 			
 			@Config.Comment("Serene Seasons Configurations")
 			@Config.Name("Serene Seasons")
 			public final SDCFGSereneSeasons sereneseasons = new SDCFGSereneSeasons();
 			
-			@Config.Comment("Altitude Temperature Multiplier - How strongly altitude affects temperature")
-			@Config.Name("AltitudeMultiplier")
-			@Config.RangeInt
-			public int altitudeMultiplier = 3;
+			public static class SDCFGArmorUnderwear
+			{
+				@Config.Comment("Enable Armor Underwear - Built-In Compatibility")
+				@Config.Name("EnableArmorUnderwear")
+				public boolean enableAUW = true;
+				
+				@Config.Comment("Goopak Temperature Modifier - Effect of a Goopak on temperature (won't change tooltip)")
+				@Config.Name("GoopakTemperatureModifier")
+				@Config.RangeDouble(min=0.0)
+				public double goopakTemperatureModifier = 2.0d;
+				
+				@Config.Comment("Goopak Maximum Active - How many Goopaks can stack their effects at once")
+				@Config.Name("GoopakMaximumActive")
+				@Config.RangeInt(min=1)
+				public int goopakMaximumActive = 5;
+				
+				@Config.Comment("Ozzy Base Range - The base temperature range of an Ozzy Liner")
+				@Config.Name("OzzyBaseRange")
+				@Config.RangeDouble(min = 0.0)
+				public double ozzyBaseRange = 3.0d;
+				
+				@Config.Comment("Ozzy Extra Range - The added temperature range when upgrading an Ozzy Liner")
+				@Config.Name("OzzyExtraRange")
+				@Config.RangeDouble(min = 0.0)
+				public double ozzyExtraRange = 3.0d;
+				
+				@Config.Comment("Liner Multiplier - Multiplier for the effect of normal liners")
+				@Config.Name("LinerMultiplier")
+				@Config.RangeDouble(min = 0.0)
+				public double linerMultiplier = 1.0d;
+			}
 			
-			@Config.Comment("Biome Temperature Multiplier - The maximum temperature change in any biome")
-			@Config.Name("BiomeMultiplier")
-			@Config.RangeInt
-			public int biomeMultiplier = 10;
-			
-			@Config.Comment("Underground Effect - Whether being deep underground reduces some surface temperature effects")
-			@Config.Name("UndergroundEffect")
-			public boolean undergroundEffect = true;
-			
-			@Config.Comment("Underground Effect Cutoff - Y Level where surface temperature effects do nothing")
-			@Config.Name("UndergroundEffectCutoff")
-			@Config.RangeInt(min=0, max=64)
-			public int undergroundEffectCutoff = 30;
-			
-			@Config.Comment("Time Temperature Multiplier - How strongly time affects temperature")
-			@Config.Name("TimeMultiplier")
-			@Config.RangeInt
-			public int timeMultiplier = 3;
-			
-			@Config.Comment("Time Temperature Day - Whether time changes temperature during the day")
-			@Config.Name("TimeTemperatureDay")
-			public boolean timeTemperatureDay = true;
-			
-			@Config.Comment("Time Temperature Night - Whether time changes temperature during the night")
-			@Config.Name("TimeTemperatureNight")
-			public boolean timeTemperatureNight = true;
-			
-			@Config.Comment("Time Biome Temperature Multiplier - How strongly different biomes effect day/night temperature")
-			@Config.Name("TimeBiomeMultiplier")
-			@Config.RangeDouble(min=1.0,max=1000000.0)
-			public float timeBiomeMultiplier = 1.25f;
-
-			@Config.Comment("Snow Temperature Value - Effect of snowfall on temperature")
-			@Config.Name("SnowValue")
-			@Config.RangeInt
-			public int snowValue = -10;
-			
-			@Config.Comment("Sprinting Temperature Value - Effect of sprinting on temperature")
-			@Config.Name("SprintingValue")
-			@Config.RangeInt
-			public int sprintingValue = 3;
-			
-			@Config.Comment("Wet Temperature Value - Effect of being wet on temperature")
-			@Config.Name("WetValue")
-			@Config.RangeInt
-			public int wetValue = -7;
-			
-			@Config.Comment("Temperature Max Speed - Maximum time in ticks for a player temperature change")
-			@Config.Name("TemperatureTickMax")
-			@Config.RangeInt(min=20)
-			public int temperatureTickMax = 400;
-			
-			@Config.Comment("Temperature Min Speed - Minimum time in ticks for a player temperature change")
-			@Config.Name("TemperatureTickMin")
-			@Config.RangeInt(min=20)
-			public int temperatureTickMin = 20;
-			
-			@Config.Comment("Enchantment Temperature Change - Effect of temperature enchantments")
-			@Config.Name("EnchantmentTemperature")
-			@Config.RangeInt
-			public int enchantmentTemperature = 1;
-			
-			@Config.Comment("Heater Temperature Change - Strength of heaters / chillers")
-			@Config.Name("HeaterTemperature")
-			@Config.RangeInt(min=-1000000, max=1000000)
-			public int heaterTemperature = 10;
-			
-			@Config.Comment("Heater Full Power Range - Distance where a heater / chiller starts to lose strength")
-			@Config.Name("HeaterFullPowerRange")
-			@Config.RangeDouble(min=0, max=50)
-			public double heaterFullPowerRange = 16;
-			
-			@Config.Comment("Heater Max Range - Distance where a heater / chiller has no effect")
-			@Config.Name("HeaterMaxRange")
-			@Config.RangeDouble(min=0, max=50)
-			public double heaterMaxRange = 32;
-			
-			@Config.Comment("Stacking Temperature - Whether multiple blocks in a vicinity should combine their effect")
-			@Config.Name("StackingTemperature")
-			public boolean stackingTemperature = true;
-			
-			@Config.Comment("Stacking Temperature Limit - How much more extreme block temperature can be from stacking temperature")
-			@Config.Name("StackingTemperatureLimit")
-			@Config.RangeDouble(min=0, max = 1000000)
-			public float stackingTemperatureLimit = 3;
-			
-					
 			public static class SDCFGSereneSeasons
 			{
 				//Serene Seasons
 				//Not synchronized with clients
 				//TODO it should be
+				
+				@Config.Comment("Enable Serene Seasons - Built-In Compatibility")
+				@Config.Name("EnableSereneSeasons")
+				public boolean enableSereneSeasons = true;
 				
 				@Config.Comment("Season Early Winter - Temperature change during the Serene Seasons season")
 				@Config.Name("SeasonEarlyWinter")
@@ -253,7 +193,182 @@ public class ModConfig
 				public int seasonLateAutumn = -3;
 			}
 		}
+		
+		public static class SDCFGMiscellaneous
+		{
+			//Not synchronized with clients
+			
+			@Config.Comment("Whether Ice Blocks drop Ice Chunks")
+			@Config.Name("IceDropsChunks")
+			public boolean iceDropsChunks = true;
+			
+			@Config.Comment("Whether Magma Blocks drop Magma Chunks")
+			@Config.Name("MagmaDropsChunks")
+			public boolean magmaDropsChunks = true;
+			
+			@Config.Comment("Whether Golden Apple Juice gives the golden apple effect")
+			@Config.Name("GoldenAppleJuiceEffect")
+			public boolean goldenAppleJuiceEffect = true;
+		}
+		
+		public static class SDCFGTemperature
+		{
+			//Not synchronized with clients
+			//TODO it probably should be though, because of thermometers and such
+			
+			@Config.Comment("Altitude Temperature Multiplier - How strongly altitude affects temperature")
+			@Config.Name("AltitudeMultiplier")
+			@Config.RangeInt
+			public int altitudeMultiplier = 3;
+			
+			@Config.Comment("Biome Temperature Multiplier - The maximum temperature change in any biome")
+			@Config.Name("BiomeMultiplier")
+			@Config.RangeInt
+			public int biomeMultiplier = 10;
+			
+			@Config.Comment("Underground Effect - Whether being deep underground reduces some surface temperature effects")
+			@Config.Name("UndergroundEffect")
+			public boolean undergroundEffect = true;
+			
+			@Config.Comment("Underground Effect Cutoff - Y Level where surface temperature effects do nothing")
+			@Config.Name("UndergroundEffectCutoff")
+			@Config.RangeInt(min=0, max=64)
+			public int undergroundEffectCutoff = 30;
+			
+			@Config.Comment("Time Temperature Multiplier - How strongly time affects temperature")
+			@Config.Name("TimeMultiplier")
+			@Config.RangeInt
+			public int timeMultiplier = 3;
+			
+			@Config.Comment("Time Temperature Day - Whether time changes temperature during the day")
+			@Config.Name("TimeTemperatureDay")
+			public boolean timeTemperatureDay = true;
+			
+			@Config.Comment("Time Temperature Night - Whether time changes temperature during the night")
+			@Config.Name("TimeTemperatureNight")
+			public boolean timeTemperatureNight = true;
+			
+			@Config.Comment("Time Biome Temperature Multiplier - How strongly different biomes effect day/night temperature")
+			@Config.Name("TimeBiomeMultiplier")
+			@Config.RangeDouble(min=1.0,max=1000000.0)
+			public double timeBiomeMultiplier = 1.25d;
+
+			@Config.Comment("Snow Temperature Value - Effect of snowfall on temperature")
+			@Config.Name("SnowValue")
+			@Config.RangeInt
+			public int snowValue = -10;
+			
+			@Config.Comment("Sprinting Temperature Value - Effect of sprinting on temperature")
+			@Config.Name("SprintingValue")
+			@Config.RangeInt
+			public int sprintingValue = 3;
+			
+			@Config.Comment("Wet Temperature Value - Effect of being wet on temperature")
+			@Config.Name("WetValue")
+			@Config.RangeInt
+			public int wetValue = -7;
+			
+			@Config.Comment("Temperature Max Speed - Maximum time in ticks for a player temperature change")
+			@Config.Name("TemperatureTickMax")
+			@Config.RangeInt(min=20)
+			public int temperatureTickMax = 400;
+			
+			@Config.Comment("Temperature Min Speed - Minimum time in ticks for a player temperature change")
+			@Config.Name("TemperatureTickMin")
+			@Config.RangeInt(min=20)
+			public int temperatureTickMin = 20;
+			
+			@Config.Comment("Enchantment Temperature Change - Effect of temperature enchantments")
+			@Config.Name("EnchantmentTemperature")
+			@Config.RangeInt
+			public int enchantmentTemperature = 1;
+			
+			@Config.Comment("Heater Temperature Change - Strength of heaters / chillers")
+			@Config.Name("HeaterTemperature")
+			@Config.RangeInt(min=-1000000, max=1000000)
+			public int heaterTemperature = 10;
+			
+			@Config.Comment("Heater Full Power Range - Distance where a heater / chiller starts to lose strength")
+			@Config.Name("HeaterFullPowerRange")
+			@Config.RangeDouble(min=0, max=50)
+			public double heaterFullPowerRange = 16.0d;
+			
+			@Config.Comment("Heater Max Range - Distance where a heater / chiller has no effect")
+			@Config.Name("HeaterMaxRange")
+			@Config.RangeDouble(min=0, max=50)
+			public double heaterMaxRange = 32.0d;
+			
+			@Config.Comment("Stacking Temperature - Whether multiple blocks in a vicinity should combine their effect")
+			@Config.Name("StackingTemperature")
+			public boolean stackingTemperature = true;
+			
+			@Config.Comment("Stacking Temperature Limit - How much more extreme block temperature can be from stacking temperature")
+			@Config.Name("StackingTemperatureLimit")
+			@Config.RangeDouble(min=0, max = 1000000)
+			public double stackingTemperatureLimit = 3;
+			
+		}
+		public static class SDCFGThirst
+		{
+			//Not synchronized with clients
+			//Shouldn't need to be either, the thirst server sync is aggressive
+			
+			@Config.Comment("Thirst Exhaustion Limit - How exhausted the player must get before they lose thirst.")
+			@Config.Name("ThirstExhaustionLimit")
+			@Config.RangeDouble(min=1.0)
+			public double thirstExhaustionLimit = 4.0d;
+			
+			@Config.Comment("Thirsty Strength - Strength of the Thirsty Effect")
+			@Config.Name("ThirstyStrength")
+			@Config.RangeDouble(min=0.0)
+			public double thirstyStrength = 0.025d;
+			
+			@Config.Comment("Thirst Attacking - How exhausting attacking enemies is")
+			@Config.Name("ThirstAttacking")
+			@Config.RangeDouble(min=0.0)
+			public double thirstAttacking = 0.3d;
+			
+			@Config.Comment("Thirst Break Block - How exhausting breaking blocks is")
+			@Config.Name("ThirstBreakBlock")
+			@Config.RangeDouble(min=0.0)
+			public double thirstBreakBlock = 0.025d;
+			
+			@Config.Comment("Thirst Sprint Jump - How exhausting jumping while sprinting is")
+			@Config.Name("ThirstSprintJump")
+			@Config.RangeDouble(min=0.0)
+			public double thirstSprintJump = 0.8d;
+			
+			@Config.Comment("Thirst Jump - How exhausting jumping without sprinting is")
+			@Config.Name("ThirstJump")
+			@Config.RangeDouble(min=0.0)
+			public double thirstJump = 0.2d;
+			
+			@Config.Comment("Thirst Base Movement - How exhausting any kind of movement is")
+			@Config.Name("ThirstBaseMovement")
+			@Config.RangeDouble(min=0.0)
+			public double thirstBaseMovement = 0.01d;
+			
+			@Config.Comment("Thirst Swimming Movement - How exhausting swimming movement is")
+			@Config.Name("ThirstSwimmingMovement")
+			@Config.RangeDouble(min=0.0)
+			public double thirstSwimmingMovement = 0.015d;
+			
+			@Config.Comment("Thirst Sprinting Movement - How exhausting sprinting movement is")
+			@Config.Name("ThristSprintingMovement")
+			@Config.RangeDouble(min=0.0)
+			public double thirstSprintingMovement = 0.1d;
+			
+			@Config.Comment("Thirst Walking Movement - How exhausting walking movement is")
+			@Config.Name("ThirstWalkingMovement")
+			@Config.RangeDouble(min=0.0)
+			public double thirstWalkingMovement = 0.01d;
+			
+			
+			
+		}
 	}
+	
+	
 	///
 	/// Client Options
 	///

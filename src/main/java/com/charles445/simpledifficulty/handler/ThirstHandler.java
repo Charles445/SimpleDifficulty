@@ -10,6 +10,7 @@ import com.charles445.simpledifficulty.api.config.json.JsonConsumableThirst;
 import com.charles445.simpledifficulty.api.thirst.IThirstCapability;
 import com.charles445.simpledifficulty.api.thirst.ThirstEnum;
 import com.charles445.simpledifficulty.api.thirst.ThirstUtil;
+import com.charles445.simpledifficulty.config.ModConfig;
 import com.charles445.simpledifficulty.network.MessageDrinkWater;
 import com.charles445.simpledifficulty.network.PacketHandler;
 import com.charles445.simpledifficulty.util.internal.ThirstUtilInternal;
@@ -180,6 +181,8 @@ public class ThirstHandler
 		if(world.isRemote)
 			return;
 		
+		//Server Side
+		
 		EntityPlayer player = event.getEntityPlayer();
 		
 		if(!shouldSkipThirst(player))
@@ -187,7 +190,7 @@ public class ThirstHandler
 			Entity monster = event.getTarget();
 			if(monster.canBeAttackedWithItem() && !monster.hitByEntity(player))
 			{
-				addExhaustion(player, 0.3f);
+				addExhaustion(player, (float)ModConfig.server.thirst.thirstAttacking);
 			}
 		}
 	}
@@ -202,6 +205,8 @@ public class ThirstHandler
 		if(world.isRemote)
 			return;
 		
+		//Server Side
+		
 		EntityPlayer player = event.getPlayer();
 		
 		if(!shouldSkipThirst(player))
@@ -209,7 +214,7 @@ public class ThirstHandler
 			//Check if the player is actually able to harvest the block
 			if(event.getState().getBlock().canHarvestBlock(world, event.getPos(), player))
 			{
-				addExhaustion(player, 0.025f);
+				addExhaustion(player, (float)ModConfig.server.thirst.thirstBreakBlock);
 			}
 		}
 	}
@@ -224,12 +229,15 @@ public class ThirstHandler
 		if(world.isRemote || event.getAmount() == 0.0f)
 			return;
 		
+		//Server Side
+		
 		if(event.getEntity() instanceof EntityPlayer)
 		{
 			EntityPlayer player = (EntityPlayer) event.getEntity();
 			
 			if(!shouldSkipThirst(player))
 			{
+				//Damage source has special behavior
 				addExhaustion(player, event.getSource().getHungerDamage());
 			}
 		}
@@ -245,6 +253,8 @@ public class ThirstHandler
 		if(world.isRemote)
 			return;
 		
+		//Server Side
+		
 		if(event.getEntity() instanceof EntityPlayer)
 		{
 			EntityPlayer player = (EntityPlayer) event.getEntity();
@@ -253,11 +263,11 @@ public class ThirstHandler
 			{
 				if(player.isSprinting())
 				{
-					addExhaustion(player, 0.8f);
+					addExhaustion(player, (float)ModConfig.server.thirst.thirstSprintJump);
 				}
 				else
 				{
-					addExhaustion(player, 0.2f);
+					addExhaustion(player, (float)ModConfig.server.thirst.thirstJump);
 				}
 			}
 		}

@@ -89,12 +89,12 @@ public class ModifierBlocksTiles extends ModifierBase
 		if(result > hottestValue)
 		{
 			//Hotter than hottestValue, clamp
-			return Math.min(hottestValue + ModConfig.server.temperature.stackingTemperatureLimit, result);
+			return Math.min(hottestValue + (float)ModConfig.server.temperature.stackingTemperatureLimit, result);
 		}
 		else if(result < coldestValue)
 		{
 			//Colder than coldestValue, clamp
-			return Math.max(coldestValue - ModConfig.server.temperature.stackingTemperatureLimit, result);
+			return Math.max(coldestValue - (float)ModConfig.server.temperature.stackingTemperatureLimit, result);
 		}
 		else
 		{

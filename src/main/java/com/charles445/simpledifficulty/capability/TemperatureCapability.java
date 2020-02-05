@@ -7,6 +7,7 @@ import com.charles445.simpledifficulty.api.SDPotions;
 import com.charles445.simpledifficulty.api.config.ServerConfig;
 import com.charles445.simpledifficulty.api.config.ServerOptions;
 import com.charles445.simpledifficulty.api.temperature.ITemperatureCapability;
+import com.charles445.simpledifficulty.api.temperature.ITemperatureDynamicModifier;
 import com.charles445.simpledifficulty.api.temperature.ITemperatureModifier;
 import com.charles445.simpledifficulty.api.temperature.TemperatureEnum;
 import com.charles445.simpledifficulty.api.temperature.TemperatureRegistry;
@@ -177,6 +178,8 @@ public class TemperatureCapability implements ITemperatureCapability
 		
 		DebugUtil.clientMessage(player, "----------------");
 		BlockPos pos = player.getPosition();
+		
+		float cumulative = 0;
 		for(ITemperatureModifier modifier : TemperatureRegistry.modifiers.values())
 		{
 			float modsum = 0;
@@ -184,8 +187,17 @@ public class TemperatureCapability implements ITemperatureCapability
 			modsum += modifier.getWorldInfluence(world, pos);
 			modsum += modifier.getPlayerInfluence(player);
 			long nanotime2 = System.nanoTime();
-			//if(modsum!=0)
-				DebugUtil.clientMessage(player, ""+(nanotime2-nanotime)+" : "+modifier.getName()+" - "+modsum);
+			DebugUtil.clientMessage(player, ""+(nanotime2-nanotime)+" : "+modifier.getName()+" - "+modsum);
+			cumulative += modsum;	
+		}
+		for(ITemperatureDynamicModifier dynmodifier : TemperatureRegistry.dynamicModifiers.values())
+		{
+			float oldcumulative = cumulative;
+			long nanotime = System.nanoTime();
+			cumulative = dynmodifier.applyDynamicWorldInfluence(world, pos, cumulative);
+			cumulative = dynmodifier.applyDynamicPlayerInfluence(player, cumulative);
+			long nanotime2 = System.nanoTime();
+			DebugUtil.clientMessage(player, ""+(nanotime2-nanotime)+" : "+dynmodifier.getName()+" - "+(cumulative-oldcumulative));
 		}
 		
 		DebugUtil.clientMessage(player, "( "+TemperatureUtil.getPlayerTargetTemperature(player)+ " )");	
