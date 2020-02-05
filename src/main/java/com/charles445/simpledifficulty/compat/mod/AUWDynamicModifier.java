@@ -37,13 +37,13 @@ public class AUWDynamicModifier extends ModifierDynamicBase
 		super("AUWDynamic");
 	}
 	
-	//The regular implementation of ozzy liner has some really bizarre glitches and inconsistencies
-	
 	@Override
 	public float applyDynamicPlayerInfluence(EntityPlayer player, float currentTemperature)
 	{
 		if(!ModConfig.server.compatibility.auw.enableAUW)
 			return currentTemperature;
+		
+		//TODO clean this up
 		
 		final ItemStack chestplate = player.getItemStackFromSlot(EntityEquipmentSlot.CHEST);
 		final ItemStack leggings = player.getItemStackFromSlot(EntityEquipmentSlot.LEGS);
@@ -53,75 +53,91 @@ public class AUWDynamicModifier extends ModifierDynamicBase
 		int valueChest = 0;
 		int valueLeggings = 0;
 		
-		if(leggings.hasTagCompound())
+		if(!leggings.isEmpty())
 		{
-			NBTTagCompound compound = leggings.getTagCompound();
-			String xLiner = compound.getString(TAG_XLINING);
-			if(xLiner.equals(TAGVAL_OZZY))
+			if(leggings.hasTagCompound())
 			{
-				hasLeggings = true;
-				if(compound.hasKey(TAG_XLINING_VALUE))
+				NBTTagCompound compound = leggings.getTagCompound();
+				String xLiner = compound.getString(TAG_XLINING);
+				if(xLiner.equals(TAGVAL_OZZY))
 				{
-					valueLeggings = compound.getInteger(TAG_XLINING_VALUE);
+					hasLeggings = true;
+					if(compound.hasKey(TAG_XLINING_VALUE))
+					{
+						valueLeggings = compound.getInteger(TAG_XLINING_VALUE);
+					}
 				}
 			}
 		}
 		
-		if(chestplate.hasTagCompound())
+		if(!chestplate.isEmpty())
 		{
-			NBTTagCompound compound = chestplate.getTagCompound();
-			String xLiner = compound.getString(TAG_XLINING);
-			if(xLiner.equals(TAGVAL_OZZY))
+			if(chestplate.hasTagCompound())
 			{
-				hasChest = true;
-				if(compound.hasKey(TAG_XLINING_VALUE))
+				NBTTagCompound compound = chestplate.getTagCompound();
+				String xLiner = compound.getString(TAG_XLINING);
+				if(xLiner.equals(TAGVAL_OZZY))
 				{
-					valueChest = compound.getInteger(TAG_XLINING_VALUE);
+					hasChest = true;
+					if(compound.hasKey(TAG_XLINING_VALUE))
+					{
+						valueChest = compound.getInteger(TAG_XLINING_VALUE);
+					}
 				}
 			}
 		}
 		
-		float baseStretch = (float)ModConfig.server.compatibility.auw.ozzyBaseRange;
-		float valueStretchModifier = (float)ModConfig.server.compatibility.auw.ozzyExtraRange;
-		float valueStretchDefault = valueStretchModifier / 3.0f;
-		
-		//Both mild = +8 to -8
-		//Both one way = +12 to -6
-		//Both different = +9 to -9
-		
-		float lowStretch = 0.0f; 
-		float highStretch = 0.0f;
-		
-		if(hasChest)
+		if(hasChest || hasLeggings)
 		{
-			lowStretch -= baseStretch;
-			highStretch += baseStretch;
+			float baseStretch = (float)ModConfig.server.compatibility.auw.ozzyBaseRange;
+			float valueStretchModifier = (float)ModConfig.server.compatibility.auw.ozzyExtraRange;
+			float valueStretchDefault = valueStretchModifier / 3.0f;
+			
+			//Both mild = +8 to -8
+			//Both one way = +12 to -6
+			//Both different = +9 to -9
+			
+			float lowStretch = 0.0f; 
+			float highStretch = 0.0f;
+			
+			if(hasChest)
+			{
+				lowStretch -= baseStretch;
+				highStretch += baseStretch;
+				
+				switch(valueChest)
+				{
+					case -1: lowStretch -= valueStretchModifier;break;
+					case 1: highStretch += valueStretchModifier;break; 
+					default:
+						lowStretch -= valueStretchDefault;
+						highStretch += valueStretchDefault;
+						break;
+				}
+			}
+			
+			if(hasLeggings)
+			{
+				lowStretch -= baseStretch;
+				highStretch += baseStretch;
+				
+				switch(valueLeggings)
+				{
+					case -1: lowStretch -= valueStretchModifier;break;
+					case 1: highStretch += valueStretchModifier;break;
+					default:
+						lowStretch -= valueStretchDefault;
+						highStretch += valueStretchDefault;
+						break;
+				}
+				
+			}
+			
+			float distanceToDefault = MathHelper.clamp(defaultTemperature - currentTemperature, lowStretch, highStretch);
+			
+			return currentTemperature += distanceToDefault;
 		}
-		
-		if(hasLeggings)
-		{
-			lowStretch -= baseStretch;
-			highStretch += baseStretch;
-		}
-		
-		switch(valueChest)
-		{
-			case -1: lowStretch -= valueStretchModifier;break;
-			case 1: highStretch += valueStretchModifier;break; 
-			default:
-				lowStretch -= valueStretchDefault;
-				highStretch += valueStretchDefault;
-		}
-		
-		switch(valueLeggings)
-		{
-			case -1: lowStretch -= valueStretchModifier;break;
-			case 1: highStretch += valueStretchModifier;break;
-			default:break;
-		}
-		
-		float distanceToDefault = MathHelper.clamp(defaultTemperature - currentTemperature, lowStretch, highStretch);
-		
-		return currentTemperature += distanceToDefault;
+
+		return currentTemperature;
 	}
 }

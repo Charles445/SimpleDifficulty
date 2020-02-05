@@ -7,6 +7,8 @@ import com.charles445.simpledifficulty.api.config.json.JsonPropertyValue;
 
 import net.minecraftforge.fml.common.Loader;
 
+import static com.charles445.simpledifficulty.compat.ModNames.*;
+
 public class JsonCompatDefaults
 {
 	public static JsonCompatDefaults instance = new JsonCompatDefaults();
@@ -19,10 +21,23 @@ public class JsonCompatDefaults
 		populateSimpleCampfire();
 	}
 	
+	public boolean populate(String modid)
+	{
+		switch(modid)
+		{
+			case BIOMESOPLENTY: return populateBiomesOPlenty();
+			case LYCANITESMOBS: return populateLycanitesMobs();
+			case SIMPLECAMPFIRE: return populateSimpleCampfire();
+		
+		
+			default: return false;
+		}
+	}
+	
 	//Biomes O' Plenty
 	private boolean populateBiomesOPlenty()
 	{
-		if(!canUseMod("biomesoplenty"))
+		if(!canUseMod(BIOMESOPLENTY))
 			return false;
 		
 		addFluidTemperature("hot_spring_water", 3.0f);
@@ -32,7 +47,7 @@ public class JsonCompatDefaults
 	//Lycanites Mobs
 	private boolean populateLycanitesMobs()
 	{
-		if(!canUseMod("lycanitesmobs"))
+		if(!canUseMod(LYCANITESMOBS))
 			return false;
 		
 		addBlockTemperature("lycanitesmobs:purelava", 12.5f);
@@ -45,7 +60,7 @@ public class JsonCompatDefaults
 	//Simple Camp Fire
 	private boolean populateSimpleCampfire()
 	{
-		if(!canUseMod("campfire"))
+		if(!canUseMod(SIMPLECAMPFIRE))
 			return false;
 		
 		addBlockTemperature("campfire:campfire", 7.0f);
@@ -72,7 +87,7 @@ public class JsonCompatDefaults
 	// Utility
 	//
 	
-	private boolean canUseMod(String modid)
+	public boolean canUseMod(String modid)
 	{
 		return (Loader.isModLoaded(modid) && !SDCompatibility.disabledDefaultJson.contains(modid));
 	}

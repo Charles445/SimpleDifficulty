@@ -15,6 +15,18 @@ public class CompatController
 	//private static final String pack = "com.charles445.simpledifficulty.";
 	private static final String compatMod = "com.charles445.simpledifficulty.compat.mod.";
 	
+	//Compatibility is set up to be completely detached from the rest of the project
+	//So this mod's own compatibility classes are only interacted with via reflection
+	//This will allow for the use of hard dependencies if needed at a later time
+	
+	
+	
+	//Dependency Type Quick Reference
+	//(None, Reflection, Import)
+	
+	//AUW - None
+	//SereneSeasons - Reflection
+	
 	public static void setup()
 	{
 		//Create compatibility objects

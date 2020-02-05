@@ -73,6 +73,8 @@ public class JsonConfigInternal
 		
 		JsonConfig.registerConsumableThirst(new ItemStack(Items.MILK_BUCKET), 4, 1.0f, 0.2f);
 		
+		JsonConfig.registerHeldItem(new ItemStack(Blocks.MAGMA), 3.0f);
+		JsonConfig.registerHeldItem(new ItemStack(Blocks.TORCH), 1.0f);
 		//materialTemperature is not a Map
 		
 		//Mod Compatibility
@@ -89,11 +91,11 @@ public class JsonConfigInternal
 		//Process JSON
 		
 		JsonConfig.armorTemperatures = processJson(JsonFileName.armorTemperatures.get(), JsonConfig.armorTemperatures, JsonTypeToken.get(JsonFileName.armorTemperatures), jsonDirectory);
-		JsonConfig.fluidTemperatures = processJson(JsonFileName.fluidTemperatures.get(), JsonConfig.fluidTemperatures, JsonTypeToken.get(JsonFileName.fluidTemperatures), jsonDirectory);
-		materialTemperature = processJson(JsonFileName.materialTemperature.get(), materialTemperature, JsonTypeToken.get(JsonFileName.materialTemperature), jsonDirectory);
 		JsonConfig.consumableTemperature = processJson(JsonFileName.consumableTemperature.get(), JsonConfig.consumableTemperature, JsonTypeToken.get(JsonFileName.consumableTemperature), jsonDirectory);
 		JsonConfig.consumableThirst = processJson(JsonFileName.consumableThirst.get(), JsonConfig.consumableThirst, JsonTypeToken.get(JsonFileName.consumableThirst), jsonDirectory);
-		
+		JsonConfig.fluidTemperatures = processJson(JsonFileName.fluidTemperatures.get(), JsonConfig.fluidTemperatures, JsonTypeToken.get(JsonFileName.fluidTemperatures), jsonDirectory);
+		JsonConfig.heldItemTemperatures = processJson(JsonFileName.heldItemTemperatures.get(), JsonConfig.heldItemTemperatures, JsonTypeToken.get(JsonFileName.heldItemTemperatures), jsonDirectory);
+		materialTemperature = processJson(JsonFileName.materialTemperature.get(), materialTemperature, JsonTypeToken.get(JsonFileName.materialTemperature), jsonDirectory);
 		//blockTemperatures migration (legacy support for 0.1.0 and 0.1.1)
 		//TODO once enough versions have passed, get rid of this whole thing and just leave it as what's in the try block (but with processJson instead)
 		
@@ -143,6 +145,7 @@ public class JsonConfigInternal
 			manuallyWriteToJson(JsonFileName.consumableTemperature.get(), JsonConfig.consumableTemperature, JsonTypeToken.get(JsonFileName.consumableTemperature), jsonDirectory);
 			manuallyWriteToJson(JsonFileName.consumableThirst.get(), JsonConfig.consumableThirst, JsonTypeToken.get(JsonFileName.consumableThirst), jsonDirectory);
 			manuallyWriteToJson(JsonFileName.fluidTemperatures.get(), JsonConfig.fluidTemperatures, JsonTypeToken.get(JsonFileName.fluidTemperatures), jsonDirectory);
+			manuallyWriteToJson(JsonFileName.heldItemTemperatures.get(), JsonConfig.heldItemTemperatures, JsonTypeToken.get(JsonFileName.heldItemTemperatures), jsonDirectory);
 			manuallyWriteToJson(JsonFileName.materialTemperature.get(), materialTemperature, JsonTypeToken.get(JsonFileName.materialTemperature), jsonDirectory);
 			
 			
@@ -152,6 +155,7 @@ public class JsonConfigInternal
 			consumableTemperature
 			consumableThirst
 			fluidTemperatures
+			heldItemTemperatures
 			materialTemperature
 			*/
 			return "Successfully exported SimpleDifficulty configuration to JSON";

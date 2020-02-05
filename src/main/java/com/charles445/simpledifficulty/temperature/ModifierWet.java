@@ -38,10 +38,6 @@ public class ModifierWet extends ModifierBase
 		//Optifine + Serene Seasons = misleading particle effects
 		//Nothing I can do about that...
 		
-		
-		//TODO some Material.WATER liquids may not be "cold"
-		//Like Biomes O' Plenty's Hot Spring Water
-		
 		IBlockState state = world.getBlockState(pos);
 		Block block = state.getBlock();
 		

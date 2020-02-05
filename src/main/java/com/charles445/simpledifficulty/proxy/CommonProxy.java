@@ -24,6 +24,7 @@ import com.charles445.simpledifficulty.temperature.ModifierArmor;
 import com.charles445.simpledifficulty.temperature.ModifierBiome;
 import com.charles445.simpledifficulty.temperature.ModifierBlocksTiles;
 import com.charles445.simpledifficulty.temperature.ModifierDefault;
+import com.charles445.simpledifficulty.temperature.ModifierHeldItems;
 import com.charles445.simpledifficulty.temperature.ModifierSnow;
 import com.charles445.simpledifficulty.temperature.ModifierSprint;
 import com.charles445.simpledifficulty.temperature.ModifierTemporary;
@@ -69,6 +70,7 @@ public abstract class CommonProxy implements IProxy
 		TemperatureRegistry.registerModifier(new ModifierArmor());
 		TemperatureRegistry.registerModifier(new ModifierBiome());
 		TemperatureRegistry.registerModifier(new ModifierBlocksTiles());
+		TemperatureRegistry.registerModifier(new ModifierHeldItems());
 		TemperatureRegistry.registerModifier(new ModifierSnow());
 		TemperatureRegistry.registerModifier(new ModifierSprint());
 		TemperatureRegistry.registerModifier(new ModifierTemporary());

@@ -7,6 +7,7 @@ public enum JsonFileName
 	consumableTemperature("consumableTemperature.json"),
 	consumableThirst("consumableThirst.json"),
 	fluidTemperatures("fluidTemperatures.json"),
+	heldItemTemperatures("heldItemTemperatures.json"),
 	materialTemperature("materialTemperature.json");
 	
 	private String fileName;

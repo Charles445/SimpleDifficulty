@@ -8,6 +8,7 @@ import com.charles445.simpledifficulty.api.config.json.JsonConsumableTemperature
 import com.charles445.simpledifficulty.api.config.json.JsonConsumableThirst;
 import com.charles445.simpledifficulty.api.config.json.JsonPropertyTemperature;
 import com.charles445.simpledifficulty.api.config.json.JsonTemperature;
+import com.charles445.simpledifficulty.api.config.json.JsonTemperatureMetadata;
 import com.charles445.simpledifficulty.config.json.MaterialTemperature;
 import com.google.gson.reflect.TypeToken;
 
@@ -22,6 +23,7 @@ public class JsonTypeToken
 			case consumableTemperature: return new TypeToken<Map<String, List<JsonConsumableTemperature>>>(){}.getType();
 			case consumableThirst: 		return new TypeToken<Map<String, List<JsonConsumableThirst>>>(){}.getType();
 			case fluidTemperatures: 	return new TypeToken<Map<String, JsonTemperature>>(){}.getType();
+			case heldItemTemperatures:	return new TypeToken<Map<String, List<JsonTemperatureMetadata>>>(){}.getType();
 			case materialTemperature: 	return new TypeToken<MaterialTemperature>(){}.getType();
 			default: return null;
 		}
