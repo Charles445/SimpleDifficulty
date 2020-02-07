@@ -69,7 +69,7 @@ public class HarvestFestivalModifier extends ModifierBase
 	@Override
 	public float getWorldInfluence(World world, BlockPos pos)
 	{
-		if(enabled && world.provider.isSurfaceWorld() && ModConfig.server.compatibility.harvestfestival.enableHarvestFestival)
+		if(enabled && world.provider.isSurfaceWorld() && ModConfig.server.compatibility.toggles.harvestFestival)
 		{
 			//Attempt Position Specific
 			

@@ -91,6 +91,6 @@ public abstract class CommonProxy implements IProxy
 		JsonConfigInternal.init(SimpleDifficulty.jsonDirectory);
 		
 		//Setup Mod Compatibility
-		CompatController.setup();
+		CompatController.setupCommon();
 	}
 }

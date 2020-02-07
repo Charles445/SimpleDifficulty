@@ -4,6 +4,8 @@ import com.charles445.simpledifficulty.api.SDCompatibility;
 import com.charles445.simpledifficulty.api.config.JsonConfig;
 import com.charles445.simpledifficulty.api.config.json.JsonPropertyTemperature;
 import com.charles445.simpledifficulty.api.config.json.JsonPropertyValue;
+import com.charles445.simpledifficulty.config.ModConfig;
+import com.charles445.simpledifficulty.util.CompatUtil;
 
 import net.minecraftforge.fml.common.Loader;
 
@@ -20,6 +22,7 @@ public class JsonCompatDefaults
 		populateHarvestCraft();
 		populateLycanitesMobs();
 		populateSimpleCampfire();
+		populateTinkersConstruct();
 	}
 	
 	public boolean populate(String modid)
@@ -30,6 +33,7 @@ public class JsonCompatDefaults
 			case HARVESTCRAFT: return populateHarvestCraft();
 			case LYCANITESMOBS: return populateLycanitesMobs();
 			case SIMPLECAMPFIRE: return populateSimpleCampfire();
+			case TINKERSCONSTRUCT: return populateTinkersConstruct();
 		
 		
 			default: return false;
@@ -39,7 +43,7 @@ public class JsonCompatDefaults
 	//Biomes O' Plenty
 	private boolean populateBiomesOPlenty()
 	{
-		if(!canUseMod(BIOMESOPLENTY))
+		if(!canUseMod(BIOMESOPLENTY, ModConfig.server.compatibility.toggles.biomesOPlenty))
 			return false;
 		
 		addFluidTemperature("hot_spring_water", 3.0f);
@@ -49,7 +53,7 @@ public class JsonCompatDefaults
 	//HarvestCraft (Pam's)
 	private boolean populateHarvestCraft()
 	{
-		if(!canUseMod(HARVESTCRAFT))
+		if(!canUseMod(HARVESTCRAFT, ModConfig.server.compatibility.toggles.harvestCraft))
 			return false;
 		
 		//Juice, soda, and smoothies are handled in ThirstHandler as they are more broad
@@ -108,7 +112,7 @@ public class JsonCompatDefaults
 	//Lycanites Mobs
 	private boolean populateLycanitesMobs()
 	{
-		if(!canUseMod(LYCANITESMOBS))
+		if(!canUseMod(LYCANITESMOBS, ModConfig.server.compatibility.toggles.lycanitesMobs))
 			return false;
 		
 		addBlockTemperature("lycanitesmobs:purelava", 12.5f);
@@ -121,13 +125,71 @@ public class JsonCompatDefaults
 	//Simple Camp Fire
 	private boolean populateSimpleCampfire()
 	{
-		if(!canUseMod(SIMPLECAMPFIRE))
+		if(!canUseMod(SIMPLECAMPFIRE, ModConfig.server.compatibility.toggles.simpleCampfire))
 			return false;
 		
 		addBlockTemperature("campfire:campfire", 7.0f);
 		return true;
 	}
 	
+	//Tinker's Construct
+	private boolean populateTinkersConstruct()
+	{
+		if(!canUseMod(TINKERSCONSTRUCT, ModConfig.server.compatibility.toggles.tinkersconstruct))
+			return false;
+		
+		float moltenTemp = 12.5f;
+		
+		addBlockTemperature("tconstruct:molten_alubrass", moltenTemp);
+		addBlockTemperature("tconstruct:molten_aluminum", moltenTemp);
+		addBlockTemperature("tconstruct:molten_ardite", moltenTemp);
+		addBlockTemperature("tconstruct:molten_brass", moltenTemp);
+		addBlockTemperature("tconstruct:molten_bronze", moltenTemp);
+		addBlockTemperature("tconstruct:molten_clay", moltenTemp);
+		addBlockTemperature("tconstruct:molten_cobalt", moltenTemp);
+		addBlockTemperature("tconstruct:molten_copper", moltenTemp);
+		addBlockTemperature("tconstruct:molten_dirt", moltenTemp);
+		addBlockTemperature("tconstruct:molten_electrum", moltenTemp);
+		addBlockTemperature("tconstruct:molten_emerald", moltenTemp);
+		addBlockTemperature("tconstruct:molten_glass", moltenTemp);
+		addBlockTemperature("tconstruct:molten_gold", moltenTemp);
+		addBlockTemperature("tconstruct:molten_iron", moltenTemp);
+		addBlockTemperature("tconstruct:molten_knightslime", moltenTemp);
+		addBlockTemperature("tconstruct:molten_lead", moltenTemp);
+		addBlockTemperature("tconstruct:molten_manyullyn", moltenTemp);
+		addBlockTemperature("tconstruct:molten_nickel", moltenTemp);
+		addBlockTemperature("tconstruct:molten_obsidian", moltenTemp);
+		addBlockTemperature("tconstruct:molten_pigiron", moltenTemp);
+		addBlockTemperature("tconstruct:molten_silver", moltenTemp);
+		addBlockTemperature("tconstruct:molten_steel", moltenTemp);
+		addBlockTemperature("tconstruct:molten_stone", moltenTemp);
+		addBlockTemperature("tconstruct:molten_tin", moltenTemp);
+		addBlockTemperature("tconstruct:molten_zinc", moltenTemp);
+		
+		float lavawood = 5.0f;
+		float firewood = 7.0f;
+		
+		addBlockTemperature("tconstruct:firewood",lavawood, new JsonPropertyValue("type", "LAVAWOOD"));
+		addBlockTemperature("tconstruct:firewood",firewood, new JsonPropertyValue("type", "FIREWOOD"));
+		
+		addBlockTemperature("tconstruct:firewood_stairs",firewood);
+		addBlockTemperature("tconstruct:lavawood_stairs",lavawood);
+		
+		addBlockTemperature("tconstruct:firewood_slab",lavawood, new JsonPropertyValue("type", "LAVAWOOD"));
+		addBlockTemperature("tconstruct:firewood_slab",firewood, new JsonPropertyValue("type", "FIREWOOD"));
+		
+		float heldWood = 2.0f;
+		
+		addHeldItemTemperature("tconstruct:firewood", 0, heldWood);
+		addHeldItemTemperature("tconstruct:firewood", 1, heldWood);
+		addHeldItemTemperature("tconstruct:firewood_stairs", 0, heldWood);
+		addHeldItemTemperature("tconstruct:lavawood_stairs", 0, heldWood);
+		addHeldItemTemperature("tconstruct:firewood_slab", 0, heldWood);
+		addHeldItemTemperature("tconstruct:firewood_slab", 1, heldWood);
+		addHeldItemTemperature("tconstruct:stone_torch", 0, 1.0f);
+		
+		return true;
+	}
 	
 	//
 	// API
@@ -154,13 +216,17 @@ public class JsonCompatDefaults
 		JsonConfig.registerFluidTemperature(fluidName, temperature);
 	}
 	
+	private void addHeldItemTemperature(String registryName, int metadata, float temperature)
+	{
+		JsonConfig.registerHeldItem(registryName, metadata, temperature);
+	}
 	//
 	// Utility
 	//
 	
-	public boolean canUseMod(String modid)
+	private boolean canUseMod(String modid, boolean modBool)
 	{
-		return (Loader.isModLoaded(modid) && !SDCompatibility.disabledDefaultJson.contains(modid));
+		return modBool && CompatUtil.canUseMod(modid);
 	}
 	
 	private JsonPropertyTemperature propTemp(float temp)

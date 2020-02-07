@@ -4,8 +4,8 @@ import net.minecraft.item.ItemStack;
 
 public class JsonTemperatureMetadata
 {
-	public float temperature;
 	public int metadata;
+	public float temperature;
 	
 	public JsonTemperatureMetadata(int metadata, float temperature)
 	{

@@ -188,7 +188,7 @@ public class CommandSimpleDifficulty extends CommandBase
 				}
 				else
 				{
-					message(sender, "There are no defaults for the mod "+modid);
+					message(sender, "There are no defaults for the mod "+modid+", or it's disabled in the compatibility config.");
 				}
 			}
 		}

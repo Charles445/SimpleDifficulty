@@ -62,17 +62,20 @@ public class DebugUtil
 		elapsedTotal += elapsedInst;
 		count++;
 		
+		if(count == 0)
+			return;
+		
 		if(snapshotTime < nanoCache)
 		{
 			if(client)
 			{
 				EntityPlayer player = SimpleDifficulty.proxy.getClientMinecraftPlayer();
 				if(player!=null)
-					DebugUtil.clientMessage(player, ""+(elapsedTotal - snapshot+" : "+count));
+					DebugUtil.clientMessage(player, ""+(elapsedTotal - snapshot+" : "+count + " ("+((elapsedTotal-snapshot)/count))+")");
 			}
 			else
 			{
-				DebugUtil.messageAll(""+(elapsedTotal - snapshot+" : "+count));
+				DebugUtil.messageAll(""+(elapsedTotal - snapshot+" : "+count + " ("+((elapsedTotal-snapshot)/count))+")");
 			}
 			
 			snapshot = elapsedTotal;

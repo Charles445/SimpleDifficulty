@@ -45,6 +45,7 @@ public class JsonConfigInternal
 	
 	public static List<String> jsonErrors = new ArrayList<String>();
 	
+	//postInit
 	public static void init(File jsonDirectory)
 	{
 		//Setup default JSON

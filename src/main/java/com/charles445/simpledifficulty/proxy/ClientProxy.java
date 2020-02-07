@@ -5,6 +5,7 @@ import java.io.File;
 import com.charles445.simpledifficulty.SimpleDifficulty;
 import com.charles445.simpledifficulty.client.gui.TemperatureGui;
 import com.charles445.simpledifficulty.client.gui.ThirstGui;
+import com.charles445.simpledifficulty.compat.CompatController;
 import com.charles445.simpledifficulty.handler.TooltipHandler;
 
 import net.minecraft.client.Minecraft;
@@ -33,6 +34,9 @@ public class ClientProxy extends CommonProxy
 	public void postInit()
 	{
 		super.postInit();
+		
+		//Setup Mod Compatibility
+		CompatController.setupClient();
 	}
 
 	@Override

@@ -259,7 +259,10 @@ public class TemperatureGui
 			
 			//TODO configure where this thing draws
 			
-			RenderUtil.drawTexturedModalRect(x, y - 18, therm_x, therm_y, textureWidthTherm, textureHeightTherm);
+			int therm_xOffset = ClientConfig.instance.getInteger(ClientOptions.HUD_THERMOMETERX);
+			int therm_yOffset = ClientConfig.instance.getInteger(ClientOptions.HUD_THERMOMETERY);
+			
+			RenderUtil.drawTexturedModalRect(x + therm_xOffset, y - 18 + therm_yOffset, therm_x, therm_y, textureWidthTherm, textureHeightTherm);
 		}
 		// - - -
 		

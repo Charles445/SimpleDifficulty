@@ -22,7 +22,7 @@ public class AUWModifier extends ModifierBase
 	@Override
 	public float getPlayerInfluence(EntityPlayer player)
 	{
-		if(!ModConfig.server.compatibility.auw.enableAUW)
+		if(!ModConfig.server.compatibility.toggles.armorUnderwear)
 			return 0.0f;
 		
 		return doLinedArmor(player) + doGooPak(player);

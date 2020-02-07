@@ -40,7 +40,7 @@ public class AUWDynamicModifier extends ModifierDynamicBase
 	@Override
 	public float applyDynamicPlayerInfluence(EntityPlayer player, float currentTemperature)
 	{
-		if(!ModConfig.server.compatibility.auw.enableAUW)
+		if(!ModConfig.server.compatibility.toggles.armorUnderwear)
 			return currentTemperature;
 		
 		//TODO clean this up

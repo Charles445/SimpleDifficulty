@@ -7,6 +7,8 @@ import com.charles445.simpledifficulty.api.SDCompatibility;
 import com.charles445.simpledifficulty.api.temperature.ITemperatureDynamicModifier;
 import com.charles445.simpledifficulty.api.temperature.ITemperatureModifier;
 import com.charles445.simpledifficulty.api.temperature.TemperatureRegistry;
+import com.charles445.simpledifficulty.config.ModConfig;
+import com.charles445.simpledifficulty.util.CompatUtil;
 
 import net.minecraftforge.fml.common.Loader;
 
@@ -24,15 +26,20 @@ public class CompatController
 	//Dependency Type Quick Reference
 	//(None, Reflection, Import)
 	
-	//AUW - None
-	//SereneSeasons - Reflection
+	//AUW - None (Imitation)
+	//HarvestFestival - Reflection (API)
+	//OreExcavation - Reflection (SubscribeEvent)
+	//SereneSeasons - Reflection (API)
 	
-	public static void setup()
+	
+	//postInit
+	public static void setupCommon()
 	{
 		//Create compatibility objects
 		Object auwDynamicModifier = newCompatObject(ModNames.AUW, compatMod + "AUWDynamicModifier");
 		Object auwModifier = newCompatObject(ModNames.AUW, compatMod + "AUWModifier");
 		Object harvestFestivalModifier = newCompatObject(ModNames.HARVESTFESTIVAL, compatMod + "HarvestFestivalModifier");
+		Object oreExcavationHandler = newCompatObject(ModNames.OREEXCAVATION, compatMod + "OreExcavationHandler");
 		Object sereneSeasonsModifier = newCompatObject(ModNames.SERENESEASONS, compatMod + "SereneSeasonsModifier");
 		
 		
@@ -49,6 +56,11 @@ public class CompatController
 			TemperatureRegistry.registerModifier((ITemperatureModifier)harvestFestivalModifier);
 		}
 		
+		if(oreExcavationHandler != null)
+		{
+			SimpleDifficulty.logger.info("OreExcavation Handler Enabled");
+		}
+		
 		if(sereneSeasonsModifier instanceof ITemperatureModifier)
 		{
 			SimpleDifficulty.logger.info("Serene Seasons Modifier Enabled");
@@ -56,10 +68,28 @@ public class CompatController
 		}
 	}
 	
+	public static void setupClient()
+	{
+		//This worked, but I decided it wasn't a good idea
+		//In safer built-in compatibilities, SimpleDifficulty would invoke functions from the mod.
+		//In this one, ClassicBar would be invoking things from SimpleDifficulty
+		//That means if something went wrong, a crash couldn't be avoided.
+		
+		
+		/*
+		Object classicBarProxy = newCompatObject(ModNames.CLASSICBAR, compatMod + "ClassicBarProxy");
+		
+		if(classicBarProxy != null)
+		{
+			SimpleDifficulty.logger.info("ClassicBarProxy Enabled");
+		}
+		*/
+	}
+	
 	@Nullable
 	public static Object newCompatObject(String modid, String clazzpath)
 	{
-		if(Loader.isModLoaded(modid) && !SDCompatibility.disabledCompletely.contains(modid))
+		if(CompatUtil.canUseMod(modid))
 		{
 			try
 			{

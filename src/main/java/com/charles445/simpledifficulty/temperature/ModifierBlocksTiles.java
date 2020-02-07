@@ -174,6 +174,7 @@ public class ModifierBlocksTiles extends ModifierBase
 								//SimpleDifficulty.logger.debug("Match at pos: "+blockpos.toString());
 								
 								processTemp(blockTemp);
+								continue;
 							}
 						}
 					}

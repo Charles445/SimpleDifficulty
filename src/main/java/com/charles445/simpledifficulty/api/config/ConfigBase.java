@@ -12,6 +12,11 @@ public abstract class ConfigBase
 		return Boolean.valueOf(values.get(option.getName()));
 	}
 	
+	public int getInteger(IConfigOption option)
+	{
+		return Integer.valueOf(values.get(option.getName()));
+	}
+	
 	public void put(IConfigOption option, Object obj)
 	{
 		values.put(option.getName(), ""+obj);

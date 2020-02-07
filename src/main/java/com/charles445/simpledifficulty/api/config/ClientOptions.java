@@ -6,7 +6,9 @@ public enum ClientOptions implements IConfigOption
 	/*Boolean*/ DRAW_THIRST_SATURATION ("drawThirstSaturation"),
 	/*Boolean*/ ENABLE_THERMOMETER ("enableThermometer"),
 	/*Boolean*/ ALTERNATE_TEMP ("alternateTemp"),
-	/*BOOLEAN*/ HUD_THERMOMETER ("hudThermometer");
+	/*Boolean*/ HUD_THERMOMETER ("hudThermometer"),
+	/*Integer*/ HUD_THERMOMETERX ("hudThermometerX"),
+	/*Integer*/ HUD_THERMOMETERY ("hudThermometerY");
 	
 	String name;
 	

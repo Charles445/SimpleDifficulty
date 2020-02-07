@@ -59,7 +59,7 @@ public class SereneSeasonsModifier extends ModifierBase
 	public float getWorldInfluence(World world, BlockPos pos)
 	{
 		//SeasonHelper.getSeasonState(world).getSubSeason();
-		if(enabled && world.provider.isSurfaceWorld() && ModConfig.server.compatibility.sereneseasons.enableSereneSeasons)
+		if(enabled && world.provider.isSurfaceWorld() && ModConfig.server.compatibility.toggles.sereneSeasons)
 		{
 			try
 			{

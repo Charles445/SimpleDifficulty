@@ -121,7 +121,7 @@ public class ThirstHandler
 			//So now it takes 2k every single time, way better
 			//I'll be using this system for any further compatibility things like this, probably
 			
-			if(harvestcraftLoaded && stack.getItem().getRegistryName().getResourceDomain().equals(ModNames.HARVESTCRAFT) && !SDCompatibility.disabledCompletely.contains(ModNames.HARVESTCRAFT))
+			if(harvestcraftLoaded && stack.getItem().getRegistryName().getResourceDomain().equals(ModNames.HARVESTCRAFT) && ModConfig.server.compatibility.toggles.harvestCraft && !SDCompatibility.disabledCompletely.contains(ModNames.HARVESTCRAFT))
 			{
 				if(OreDictUtil.isOre(OreDictUtil.listAlljuice, stack))
 				{

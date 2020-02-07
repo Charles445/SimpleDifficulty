@@ -56,7 +56,17 @@ public class JsonPropertyTemperature
 		for(JsonPropertyValue prop : props)
 		{
 			if(!properties.containsKey(prop.property))
+			{
 				return false;
+			}
+			else
+			{
+				//Has key
+				if(!prop.value.equals(properties.get(prop.property)))
+				{
+					return false;
+				}
+			}
 		}
 		
 		return true;
