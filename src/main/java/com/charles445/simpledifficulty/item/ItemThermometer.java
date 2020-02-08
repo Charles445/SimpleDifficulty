@@ -29,13 +29,15 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ItemThermometer extends Item
 {
-	@SideOnly(Side.CLIENT)
+	//Turns out running @SideOnly(Side.CLIENT) on these variables causes a NoSuchFieldError. Great.
+	
+	//Only used by clients
 	protected static Map<Integer, Long> hashAge = new HashMap<Integer, Long>();
 	
-	@SideOnly(Side.CLIENT)
+	//Only used by clients
 	protected static Map<Integer, Float> hashTemp = new HashMap<Integer, Float>();
 	
-	@SideOnly(Side.CLIENT)
+	//Only used by clients
 	protected static long lastAudit = 0L;
 	
 	@SideOnly(Side.CLIENT)

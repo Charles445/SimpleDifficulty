@@ -60,7 +60,7 @@ public class CFGServerCompatibility
 		@Config.Name("EnableSimpleCampfire")
 		public boolean simpleCampfire = true;
 
-		@Config.Comment("Enable Tinker's Construct - Built-In Compatibility")
+		@Config.Comment("Enable Tinkers' Construct - Built-In Compatibility")
 		@Config.Name("EnableTinkersConstruct")
 		public boolean tinkersconstruct = true;
 		
