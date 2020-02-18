@@ -3,8 +3,14 @@
     "defaults": {
         "model": "simpledifficulty:campfire"
     },
-    "variants":{
-        "normal":[{}],
-        "inventory":[{}]
+    "variants": {
+        "age=0": { "model": "simpledifficulty:campfire"},
+        "age=1": { "model": "simpledifficulty:campfire"},
+		"age=2": { "model": "simpledifficulty:campfire"},
+        "age=3": { "model": "simpledifficulty:campfire_half"},
+		"age=4": { "model": "simpledifficulty:campfire_half"},
+        "age=5": { "model": "simpledifficulty:campfire_half"},
+		"age=6": { "model": "simpledifficulty:campfire_burnt"},
+        "age=7": { "model": "simpledifficulty:campfire_burnt"}
     }
 }

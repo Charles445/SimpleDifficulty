@@ -83,7 +83,7 @@ public class ModConfig
 		@Config.Name("DebugMode")
 		public boolean debug = false;
 		
-		public static class SDCFGMiscellaneous
+		public class SDCFGMiscellaneous
 		{
 			//Not synchronized with clients
 			
@@ -100,7 +100,7 @@ public class ModConfig
 			public boolean goldenAppleJuiceEffect = true;
 		}
 		
-		public static class SDCFGTemperature
+		public class SDCFGTemperature
 		{
 			//Not synchronized with clients
 			//TODO it probably should be though, because of thermometers and such
@@ -197,7 +197,7 @@ public class ModConfig
 			public double stackingTemperatureLimit = 3;
 			
 		}
-		public static class SDCFGThirst
+		public class SDCFGThirst
 		{
 			//Not synchronized with clients
 			//Shouldn't need to be either, the thirst server sync is aggressive
@@ -280,7 +280,7 @@ public class ModConfig
 		@Config.Name("ClientConfigDebug")
 		public boolean clientdebug = false;
 		
-		public static class SDCFGClientThermometer
+		public class SDCFGClientThermometer
 		{
 			@Config.Comment("Whether thermometers display the correct temperature. Only disable this if you are trying to determine what's lagging.")
 			@Config.Name("EnableThermometer")

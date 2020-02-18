@@ -48,7 +48,7 @@ public class BlockCampfire extends Block implements IBlockStateIgnore
 	public static final PropertyInteger AGE = PropertyInteger.create("age", AGE_MIN, AGE_MAX);
 	public static final PropertyBool BURNING = PropertyBool.create("burning");
 
-	private static final IProperty[] ignoredProperties = new IProperty[]{AGE,BURNING};
+	private static final IProperty[] ignoredProperties = new IProperty[]{BURNING};
 	private static final AxisAlignedBB HITBOX = new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.25D, 1.0D);
 	
 	public BlockCampfire()

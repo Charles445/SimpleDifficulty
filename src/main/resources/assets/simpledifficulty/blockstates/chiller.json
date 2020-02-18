@@ -1,7 +1,7 @@
 {
 	"forge_marker": 1,
     "variants": {
-        "enabled=true": { "model": "simpledifficulty:chiller_enabled"},
-        "enabled=false": { "model": "simpledifficulty:chiller_disabled"}
+        "enabled=true": { "model": "simpledifficulty:temper_chill_on"},
+        "enabled=false": { "model": "simpledifficulty:temper_chill_off"}
     }
 }

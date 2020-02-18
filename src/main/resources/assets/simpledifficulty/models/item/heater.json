@@ -1,3 +1,3 @@
 {
-    "parent": "simpledifficulty:block/heater_enabled"
+    "parent": "simpledifficulty:block/temper_heat_on"
 }

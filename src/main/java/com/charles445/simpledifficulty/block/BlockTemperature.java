@@ -13,9 +13,13 @@ import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class BlockTemperature extends BlockContainer
 {
@@ -160,4 +164,46 @@ public class BlockTemperature extends BlockContainer
 	{
 		return new BlockStateContainer(this, new IProperty[] {ENABLED});
 	}
+	
+	//RENDER
+	
+	@Override
+	public boolean isOpaqueCube(IBlockState state)
+	{
+		return false;
+	}
+
+  	@Override
+  	public boolean isFullCube(IBlockState state)
+  	{
+  		return false;
+  	}
+	
+	@SideOnly(Side.CLIENT)
+	@Override
+  	public BlockRenderLayer getBlockLayer()
+	{
+		return BlockRenderLayer.CUTOUT;
+	}
+	
+	@SideOnly(Side.CLIENT)
+	@Override
+	public float getAmbientOcclusionLightValue(IBlockState state)
+	{
+		return 1.0F;
+	}
+	
+	@Override
+	public int getLightValue(IBlockState state, IBlockAccess world, BlockPos pos)
+	{
+		if(state.getValue(ENABLED))
+		{
+			return 1;
+		}
+		else
+		{
+			return 0;
+		}
+	}
+	
 }

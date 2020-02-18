@@ -1,0 +1,39 @@
+{
+	"credit": "Made with Blockbench",
+	"parent": "minecraft:block/block",
+	"ambientocclusion": false,
+	"textures": {
+		"0": "simpledifficulty:blocks/temper_cut",
+		"1": "simpledifficulty:blocks/temper_heat_off",
+		"particle": "simpledifficulty:blocks/temper_base"
+	},
+	"elements": [
+		{
+			"from": [0, 0, 0],
+			"to": [16, 16, 16],
+			"shade": false,
+			"faces": {
+				"north": {"uv": [0, 0, 16, 16], "texture": "#0", "cullface": "north"},
+				"east": {"uv": [0, 0, 16, 16], "texture": "#0", "cullface": "east"},
+				"south": {"uv": [0, 0, 16, 16], "texture": "#0", "cullface": "south"},
+				"west": {"uv": [0, 0, 16, 16], "texture": "#0", "cullface": "west"},
+				"up": {"uv": [0, 0, 16, 16], "texture": "#0", "cullface": "up"},
+				"down": {"uv": [0, 0, 16, 16], "texture": "#0", "cullface": "down"}
+			}
+		},
+		{
+			"name": "center",
+			"from": [0.1, 0.1, 0.1],
+			"to": [15.9, 15.9, 15.9],
+			"shade": false,
+			"faces": {
+				"north": {"uv": [1, 1, 15, 15], "texture": "#1", "cullface": "north"},
+				"east": {"uv": [1, 1, 15, 15], "texture": "#1", "cullface": "east"},
+				"south": {"uv": [1, 1, 15, 15], "texture": "#1", "cullface": "south"},
+				"west": {"uv": [1, 1, 15, 15], "texture": "#1", "cullface": "west"},
+				"up": {"uv": [1, 1, 15, 15], "texture": "#1", "cullface": "up"},
+				"down": {"uv": [1, 1, 15, 15], "texture": "#1", "cullface": "down"}
+			}
+		}
+	]
+}
