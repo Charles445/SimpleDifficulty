@@ -15,6 +15,7 @@ import com.charles445.simpledifficulty.api.temperature.TemperatureUtil;
 import com.charles445.simpledifficulty.api.temperature.TemporaryModifier;
 import com.charles445.simpledifficulty.config.ModConfig;
 import com.charles445.simpledifficulty.debug.DebugUtil;
+import com.charles445.simpledifficulty.util.WorldUtil;
 import com.google.common.collect.ImmutableMap;
 
 import net.minecraft.entity.player.EntityPlayer;
@@ -177,7 +178,8 @@ public class TemperatureCapability implements ITemperatureCapability
 		//DebugUtil.clientMessage(player, ""+TemperatureUtil.getPlayerTargetTemperature(player));
 		
 		DebugUtil.clientMessage(player, "----------------");
-		BlockPos pos = player.getPosition();
+		//BlockPos pos = player.getPosition();
+		BlockPos pos = WorldUtil.getSidedBlockPos(world, player);
 		
 		float cumulative = 0;
 		for(ITemperatureModifier modifier : TemperatureRegistry.modifiers.values())

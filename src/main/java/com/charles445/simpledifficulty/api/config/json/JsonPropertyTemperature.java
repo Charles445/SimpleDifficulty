@@ -1,6 +1,8 @@
 package com.charles445.simpledifficulty.api.config.json;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import com.google.gson.annotations.SerializedName;
@@ -24,6 +26,16 @@ public class JsonPropertyTemperature
 		{
 			properties.put(prop.property, prop.value);
 		}
+	}
+	
+	public JsonPropertyValue[] getAsPropertyArray()
+	{
+		List<JsonPropertyValue> jpvList = new ArrayList<JsonPropertyValue>();
+		for(Map.Entry<String, String> entry : properties.entrySet())
+		{
+			jpvList.add(new JsonPropertyValue(entry.getKey(),entry.getValue()));
+		}
+		return jpvList.toArray(new JsonPropertyValue[0]); //Necessary to avoid a ClassCastException
 	}
 
 	public boolean matchesState(IBlockState blockstate)

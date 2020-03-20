@@ -6,6 +6,14 @@ import java.util.List;
 public class SDCompatibility
 {
 	/**
+	 * Whether the default thirst display should be rendered. 
+	 * <br>
+	 * Mods that replace the thirst display should set this to false!
+	 * <br>
+	 */
+	public static boolean defaultThirstDisplay = true;
+	
+	/**
 	 * Don't change this directly, use {@link #disableBuiltInModJsonConfiguration(String) disableBuiltInModJsonConfiguration}
 	 * <br>
 	 */
@@ -39,6 +47,4 @@ public class SDCompatibility
 		disabledDefaultJson.add(modid);
 		disabledCompletely.add(modid);
 	}
-	
-	
 }

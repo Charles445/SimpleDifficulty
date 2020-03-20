@@ -23,8 +23,12 @@ public class OreExcavationHandler
 	
 	private Field f_MiningAgent_player; //EntityPlayerMP
 	
+	private boolean working;
+	
 	public OreExcavationHandler()
 	{
+		working = true;
+		
 		try
 		{
 			EventExcavate = Class.forName("oreexcavation.events.EventExcavate");
@@ -48,6 +52,7 @@ public class OreExcavationHandler
 		catch(Exception e)
 		{
 			SimpleDifficulty.logger.error("OreExcavationHandler failed to start", e);
+			working = false;
 		}
 		
 	}
@@ -59,7 +64,7 @@ public class OreExcavationHandler
 		
 		//Seems to take 1.5k on a good day
 		
-		if(!QuickConfig.isThirstEnabled() || !ModConfig.server.compatibility.toggles.oreExcavation)
+		if(!QuickConfig.isThirstEnabled() || !ModConfig.server.compatibility.toggles.oreExcavation || !working)
 			return;
 		
 		try
@@ -83,7 +88,7 @@ public class OreExcavationHandler
 		catch(Exception e)
 		{
 			SimpleDifficulty.logger.error("OreExcavationHandler encountered an error, disabling self to avoid error spam.", e);
-			MinecraftForge.EVENT_BUS.unregister(this);
+			working = false;
 		}
 		
 		

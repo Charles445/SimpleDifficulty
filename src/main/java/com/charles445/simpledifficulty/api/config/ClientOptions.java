@@ -8,7 +8,8 @@ public enum ClientOptions implements IConfigOption
 	/*Boolean*/ ALTERNATE_TEMP ("alternateTemp"),
 	/*Boolean*/ HUD_THERMOMETER ("hudThermometer"),
 	/*Integer*/ HUD_THERMOMETERX ("hudThermometerX"),
-	/*Integer*/ HUD_THERMOMETERY ("hudThermometerY");
+	/*Integer*/ HUD_THERMOMETERY ("hudThermometerY"),
+	/*Integer*/ TEMPERATURE_READOUT ("temperatureReadout");
 	
 	String name;
 	

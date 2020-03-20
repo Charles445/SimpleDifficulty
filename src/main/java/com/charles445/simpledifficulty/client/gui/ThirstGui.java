@@ -3,6 +3,7 @@ package com.charles445.simpledifficulty.client.gui;
 import java.util.Random;
 
 import com.charles445.simpledifficulty.api.SDCapabilities;
+import com.charles445.simpledifficulty.api.SDCompatibility;
 import com.charles445.simpledifficulty.api.SDPotions;
 import com.charles445.simpledifficulty.api.config.ClientConfig;
 import com.charles445.simpledifficulty.api.config.ClientOptions;
@@ -40,7 +41,7 @@ public class ThirstGui
 	@SubscribeEvent
 	public void onPreRenderGameOverlay(RenderGameOverlayEvent.Pre event)
 	{
-		if(event.getType() == ElementType.AIR && QuickConfig.isThirstEnabled())
+		if(event.getType() == ElementType.AIR && QuickConfig.isThirstEnabled() && SDCompatibility.defaultThirstDisplay)
 		{
 			//Set the seed to avoid shaking during pausing
 			rand.setSeed((long)(updateCounter * 445));

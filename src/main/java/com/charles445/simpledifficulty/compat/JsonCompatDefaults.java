@@ -1,15 +1,16 @@
 package com.charles445.simpledifficulty.compat;
 
+import static com.charles445.simpledifficulty.compat.ModNames.*;
+
 import com.charles445.simpledifficulty.api.SDCompatibility;
 import com.charles445.simpledifficulty.api.config.JsonConfig;
 import com.charles445.simpledifficulty.api.config.json.JsonPropertyTemperature;
 import com.charles445.simpledifficulty.api.config.json.JsonPropertyValue;
-import com.charles445.simpledifficulty.config.ModConfig;
 import com.charles445.simpledifficulty.util.CompatUtil;
+import com.charles445.simpledifficulty.util.OreDictUtil;
 
-import net.minecraftforge.fml.common.Loader;
-
-import static com.charles445.simpledifficulty.compat.ModNames.*;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 
 public class JsonCompatDefaults
 {
@@ -43,7 +44,7 @@ public class JsonCompatDefaults
 	//Biomes O' Plenty
 	private boolean populateBiomesOPlenty()
 	{
-		if(!canUseMod(BIOMESOPLENTY, ModConfig.server.compatibility.toggles.biomesOPlenty))
+		if(!canUseModJsonDefaults(BIOMESOPLENTY))
 			return false;
 		
 		addFluidTemperature("hot_spring_water", 3.0f);
@@ -53,10 +54,36 @@ public class JsonCompatDefaults
 	//HarvestCraft (Pam's)
 	private boolean populateHarvestCraft()
 	{
-		if(!canUseMod(HARVESTCRAFT, ModConfig.server.compatibility.toggles.harvestCraft))
+		if(!canUseModJsonDefaults(HARVESTCRAFT))
 			return false;
 		
-		//Juice, soda, and smoothies are handled in ThirstHandler as they are more broad
+		//Juice, soda, and smoothies
+		for(ItemStack stack : OreDictUtil.listAlljuice)
+		{
+			ResourceLocation loc = stack.getItem().getRegistryName();
+			if(loc.getResourceDomain().equals(HARVESTCRAFT))
+			{
+				addDrink(loc.toString(), 6, 5.0f);
+			}
+		}
+		
+		for(ItemStack stack : OreDictUtil.listAllsoda)
+		{
+			ResourceLocation loc = stack.getItem().getRegistryName();
+			if(loc.getResourceDomain().equals(HARVESTCRAFT))
+			{
+				addDrink(loc.toString(), 9, 7.0f);
+			}
+		}
+		
+		for(ItemStack stack : OreDictUtil.listAllsmoothie)
+		{
+			ResourceLocation loc = stack.getItem().getRegistryName();
+			if(loc.getResourceDomain().equals(HARVESTCRAFT))
+			{
+				addDrink(loc.toString(), 9, 7.0f);
+			}
+		}
 		
 		//There's bound to be a typo in here somewhere
 		
@@ -95,8 +122,6 @@ public class JsonCompatDefaults
 		addDrink("harvestcraft:gooseberrymilkshakeitem", 9, 7.0f);
 		addDrink("harvestcraft:durianmilkshakeitem", 9, 7.0f);
 		
-		
-
 		//meal
 		addDrink("harvestcraft:cookiesandmilkitem", 8, 7.0f);
 		addDrink("harvestcraft:sundayhighteaitem", 12, 10.0f);
@@ -112,7 +137,7 @@ public class JsonCompatDefaults
 	//Lycanites Mobs
 	private boolean populateLycanitesMobs()
 	{
-		if(!canUseMod(LYCANITESMOBS, ModConfig.server.compatibility.toggles.lycanitesMobs))
+		if(!canUseModJsonDefaults(LYCANITESMOBS))
 			return false;
 		
 		addBlockTemperature("lycanitesmobs:purelava", 12.5f);
@@ -125,7 +150,7 @@ public class JsonCompatDefaults
 	//Simple Camp Fire
 	private boolean populateSimpleCampfire()
 	{
-		if(!canUseMod(SIMPLECAMPFIRE, ModConfig.server.compatibility.toggles.simpleCampfire))
+		if(!canUseModJsonDefaults(SIMPLECAMPFIRE))
 			return false;
 		
 		addBlockTemperature("campfire:campfire", 7.0f);
@@ -135,7 +160,7 @@ public class JsonCompatDefaults
 	//Tinker's Construct
 	private boolean populateTinkersConstruct()
 	{
-		if(!canUseMod(TINKERSCONSTRUCT, ModConfig.server.compatibility.toggles.tinkersconstruct))
+		if(!canUseModJsonDefaults(TINKERSCONSTRUCT))
 			return false;
 		
 		float moltenTemp = 12.5f;
@@ -220,13 +245,19 @@ public class JsonCompatDefaults
 	{
 		JsonConfig.registerHeldItem(registryName, metadata, temperature);
 	}
+	
 	//
 	// Utility
 	//
 	
-	private boolean canUseMod(String modid, boolean modBool)
+	private boolean canUseModJsonDefaults(String modid)
 	{
-		return modBool && CompatUtil.canUseMod(modid);
+		return canUseModJsonDefaults(modid, true);
+	}
+	
+	private boolean canUseModJsonDefaults(String modid, boolean modBool)
+	{
+		return modBool && CompatUtil.canUseMod(modid) && !SDCompatibility.disabledDefaultJson.contains(modid);
 	}
 	
 	private JsonPropertyTemperature propTemp(float temp)

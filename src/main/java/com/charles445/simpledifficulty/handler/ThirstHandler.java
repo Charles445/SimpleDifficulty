@@ -120,7 +120,7 @@ public class ThirstHandler
 			//The stack getitem getregistryname getresourcedomain runs ten times faster on anything not mod specific
 			//So now it takes 2k every single time, way better
 			//I'll be using this system for any further compatibility things like this, probably
-			
+			/*
 			if(harvestcraftLoaded && stack.getItem().getRegistryName().getResourceDomain().equals(ModNames.HARVESTCRAFT) && ModConfig.server.compatibility.toggles.harvestCraft && !SDCompatibility.disabledCompletely.contains(ModNames.HARVESTCRAFT))
 			{
 				if(OreDictUtil.isOre(OreDictUtil.listAlljuice, stack))
@@ -136,6 +136,7 @@ public class ThirstHandler
 					ThirstUtil.takeDrink(player, ModConfig.server.compatibility.harvestcraft.sodaThirst, (float)ModConfig.server.compatibility.harvestcraft.sodaSaturation, (float)ModConfig.server.compatibility.harvestcraft.sodaThirstyChance);
 				}
 			}
+			*/
 		}
 	}
 	

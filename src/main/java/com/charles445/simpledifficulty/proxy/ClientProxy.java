@@ -4,6 +4,7 @@ import java.io.File;
 
 import com.charles445.simpledifficulty.SimpleDifficulty;
 import com.charles445.simpledifficulty.client.gui.TemperatureGui;
+import com.charles445.simpledifficulty.client.gui.TemperatureInfoGui;
 import com.charles445.simpledifficulty.client.gui.ThirstGui;
 import com.charles445.simpledifficulty.compat.CompatController;
 import com.charles445.simpledifficulty.handler.TooltipHandler;
@@ -20,6 +21,7 @@ public class ClientProxy extends CommonProxy
 	{
 		super.preInit();
 		MinecraftForge.EVENT_BUS.register(new TemperatureGui());
+		MinecraftForge.EVENT_BUS.register(new TemperatureInfoGui());
 		MinecraftForge.EVENT_BUS.register(new ThirstGui());
 		MinecraftForge.EVENT_BUS.register(new TooltipHandler());
 	}

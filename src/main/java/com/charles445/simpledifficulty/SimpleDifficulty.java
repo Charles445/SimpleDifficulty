@@ -32,7 +32,7 @@ public class SimpleDifficulty
 {
 	public static final String MODID = "simpledifficulty";
 	public static final String NAME = "SimpleDifficulty";
-	public static final String VERSION = "0.2.4";
+	public static final String VERSION = "0.3.0";
 	
 	@Mod.Instance(SimpleDifficulty.MODID)
 	public static SimpleDifficulty instance;
@@ -46,7 +46,7 @@ public class SimpleDifficulty
 	public static File jsonDirectory;
 	
 	@Mod.EventHandler
-	public static void preInit(FMLPreInitializationEvent event)
+	public void preInit(FMLPreInitializationEvent event)
 	{
 		jsonDirectory = new File(event.getModConfigurationDirectory(), SimpleDifficulty.MODID);
 		
@@ -56,26 +56,26 @@ public class SimpleDifficulty
 	}
 	
 	@Mod.EventHandler
-	public static void init(FMLInitializationEvent event)
+	public void init(FMLInitializationEvent event)
 	{
 		proxy.init();
 	}
 	
 	@Mod.EventHandler
-	public static void postInit(FMLPostInitializationEvent event)
+	public void postInit(FMLPostInitializationEvent event)
 	{
 		proxy.postInit();
 	}
 	
 	@Mod.EventHandler
-	public static void loadComplete(FMLLoadCompleteEvent event)
+	public void loadComplete(FMLLoadCompleteEvent event)
 	{
 		DebugVerifier verifier = new DebugVerifier();
 		verifier.verify();
 	}
 	
 	@Mod.EventHandler
-	public static void serverStarting(FMLServerStartingEvent event)
+	public void serverStarting(FMLServerStartingEvent event)
 	{
 		event.registerServerCommand(new CommandSimpleDifficulty());
 	}

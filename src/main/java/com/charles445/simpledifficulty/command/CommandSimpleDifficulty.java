@@ -1,6 +1,7 @@
 package com.charles445.simpledifficulty.command;
 
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 
 import javax.annotation.Nullable;
@@ -23,7 +24,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentString;
-import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fml.common.Loader;
@@ -63,6 +63,11 @@ public class CommandSimpleDifficulty extends CommandBase
 	private final String warn_noItem = "Not holding an item!";
 	private final String exportJsonReminder = "(Don't forget to exportJson !)";
 
+	public List<String> getAliases()
+    {
+		return Arrays.asList(new String[]{"sd"});
+    }
+	
 	@Override
 	public String getName()
 	{
@@ -134,7 +139,8 @@ public class CommandSimpleDifficulty extends CommandBase
 	{
 		if(args.length<2)
 		{
-			message(sender, "/simpledifficulty help <command> \n(Replace <command> with a simpledifficulty command name)\n"+listOfCommands);
+			//message(sender, "/simpledifficulty help <command> \n(Replace <command> with a simpledifficulty command name)\n"+listOfCommands);
+			message(sender, listOfCommands);
 			return;
 		}
 		

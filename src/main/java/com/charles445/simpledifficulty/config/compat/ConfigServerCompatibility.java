@@ -2,39 +2,31 @@ package com.charles445.simpledifficulty.config.compat;
 
 import net.minecraftforge.common.config.Config;
 
-public class CFGServerCompatibility
+public class ConfigServerCompatibility
 {
 	//Server Compatibility Settings
 	
 	@Config.Comment("Built-In Compatibility Toggles - Turn compatibility for mods on or off")
 	@Config.Name("Built-In Compatibility Toggles")
-	public final SDCFG_Toggles toggles = new SDCFG_Toggles();
+	public final ConfigToggles toggles = new ConfigToggles();
 	
 	@Config.Comment("Armor Underwear Configurations")
 	@Config.Name("Armor Underwear")
-	public final SDCFGArmorUnderwear auw = new SDCFGArmorUnderwear();
-	
-	@Config.Comment("Pam's HarvestCraft Configurations")
-	@Config.Name("Pam's HarvestCraft")
-	public final SDCFGHarvestCraft harvestcraft = new SDCFGHarvestCraft();
+	public final ConfigArmorUnderwear auw = new ConfigArmorUnderwear();
 	
 	@Config.Comment("Harvest Festival Configurations")
 	@Config.Name("Harvest Festival")
-	public final SDCFGHarvestFestival harvestfestival = new SDCFGHarvestFestival();
+	public final ConfigHarvestFestival harvestfestival = new ConfigHarvestFestival();
 	
 	@Config.Comment("Serene Seasons Configurations")
 	@Config.Name("Serene Seasons")
-	public final SDCFGSereneSeasons sereneseasons = new SDCFGSereneSeasons();
+	public final ConfigSereneSeasons sereneseasons = new ConfigSereneSeasons();
 	
-	public static class SDCFG_Toggles
+	public class ConfigToggles
 	{
 		@Config.Comment("Enable Armor Underwear - Built-In Compatibility")
 		@Config.Name("EnableArmorUnderwear")
 		public boolean armorUnderwear = true;
-		
-		@Config.Comment("Enable Biomes O' Plenty - Built-In Compatibility")
-		@Config.Name("EnableBiomesOPlenty")
-		public boolean biomesOPlenty = true;
 		
 		@Config.Comment("Enable Harvest Craft - Built-In Compatibility")
 		@Config.Name("EnableHarvestCraft")
@@ -44,10 +36,6 @@ public class CFGServerCompatibility
 		@Config.Name("EnableHarvestFestival")
 		public boolean harvestFestival = true;
 		
-		@Config.Comment("Enable Lycanites Mobs - Built-In Compatibility")
-		@Config.Name("EnableLycanitesMobs")
-		public boolean lycanitesMobs = true;
-		
 		@Config.Comment("Enable OreExcavation - Built-In Compatibility")
 		@Config.Name("EnableOreExcavation")
 		public boolean oreExcavation = true;
@@ -55,18 +43,9 @@ public class CFGServerCompatibility
 		@Config.Comment("Enable Serene Seasons - Built-In Compatibility")
 		@Config.Name("EnableSereneSeasons")
 		public boolean sereneSeasons = true;
-		
-		@Config.Comment("Enable Simple Campfire - Built-In Compatibility")
-		@Config.Name("EnableSimpleCampfire")
-		public boolean simpleCampfire = true;
-
-		@Config.Comment("Enable Tinkers' Construct - Built-In Compatibility")
-		@Config.Name("EnableTinkersConstruct")
-		public boolean tinkersconstruct = true;
-		
 	}
 	
-	public static class SDCFGArmorUnderwear
+	public class ConfigArmorUnderwear
 	{
 		//Armor Underwear
 		
@@ -96,48 +75,7 @@ public class CFGServerCompatibility
 		public double linerMultiplier = 1.0d;
 	}
 	
-	public static class SDCFGHarvestCraft
-	{
-		//Harvestcraft
-		
-		@Config.Comment("Juice Thirst")
-		@Config.Name("JuiceThirst")
-		public int juiceThirst = 6;
-		
-		@Config.Comment("Juice Saturation")
-		@Config.Name("JuiceSaturation")
-		public double juiceSaturation = 5.0d;
-		
-		@Config.Comment("Juice Thirsty Chance")
-		@Config.Name("JuiceThirstyChance")
-		public double juiceThirstyChance = 0.0d;
-		
-		@Config.Comment("Smoothie Thirst")
-		@Config.Name("SmoothieThirst")
-		public int smoothieThirst = 9;
-		
-		@Config.Comment("Smoothie Saturation")
-		@Config.Name("SmoothieSaturation")
-		public double smoothieSaturation = 7.0d;
-		
-		@Config.Comment("Smoothie Thirsty Chance")
-		@Config.Name("SmoothieThirstyChance")
-		public double smoothieThirstyChance = 0.0d;
-		
-		@Config.Comment("Soda Thirst")
-		@Config.Name("SodaThirst")
-		public int sodaThirst = 9;
-		
-		@Config.Comment("Soda Saturation")
-		@Config.Name("SodaSaturation")
-		public double sodaSaturation = 7.0d;
-		
-		@Config.Comment("Soda Thirsty Chance")
-		@Config.Name("SodaThirstyChance")
-		public double sodaThirstyChance = 0.0d;
-	}
-	
-	public static class SDCFGHarvestFestival
+	public class ConfigHarvestFestival
 	{
 		//Harvest Festival
 		
@@ -159,7 +97,7 @@ public class CFGServerCompatibility
 
 	}
 	
-	public static class SDCFGSereneSeasons
+	public class ConfigSereneSeasons
 	{
 		//Serene Seasons
 		

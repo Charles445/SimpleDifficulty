@@ -6,7 +6,7 @@ import com.charles445.simpledifficulty.api.config.ClientConfig;
 import com.charles445.simpledifficulty.api.config.ClientOptions;
 import com.charles445.simpledifficulty.api.config.ServerConfig;
 import com.charles445.simpledifficulty.api.config.ServerOptions;
-import com.charles445.simpledifficulty.config.compat.CFGServerCompatibility;
+import com.charles445.simpledifficulty.config.compat.ConfigServerCompatibility;
 import com.charles445.simpledifficulty.network.MessageConfigLAN;
 import com.charles445.simpledifficulty.network.MessageUpdateConfig;
 import com.charles445.simpledifficulty.network.PacketHandler;
@@ -18,39 +18,41 @@ import net.minecraftforge.common.config.ConfigManager;
 import net.minecraftforge.fml.client.event.ConfigChangedEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 @Config(modid = SimpleDifficulty.MODID)
 public class ModConfig 
 {
 	@Config.Comment("Client configuration")
 	@Config.Name("Client")
-	public static final SDCFGClientConfig client = new SDCFGClientConfig();
+	public static final ConfigClientConfig client = new ConfigClientConfig();
 	
 	@Config.Comment("Server configuration")
 	@Config.Name("Server")
-	public static final SDCFGServerConfig server = new SDCFGServerConfig();
+	public static final ConfigServerConfig server = new ConfigServerConfig();
 	
 	//TODO Lang
 	
 	//TODO Is it possible to migrate these to separate files w/o breaking it all completely?
 	
-	public static class SDCFGServerConfig
+	public static class ConfigServerConfig
 	{
 		@Config.Comment("Built-in mod compatibility options")
 		@Config.Name("Compatibility")
-		public final CFGServerCompatibility compatibility = new CFGServerCompatibility();
+		public final ConfigServerCompatibility compatibility = new ConfigServerCompatibility();
 		
 		@Config.Comment("Miscellaneous gameplay configurations")
 		@Config.Name("Miscellaneous")
-		public final SDCFGMiscellaneous miscellaneous = new SDCFGMiscellaneous();
+		public final ConfigMiscellaneous miscellaneous = new ConfigMiscellaneous();
 		
 		@Config.Comment("Temperature related configurations")
 		@Config.Name("Temperature")
-		public final SDCFGTemperature temperature = new SDCFGTemperature();
+		public final ConfigTemperature temperature = new ConfigTemperature();
 		
 		@Config.Comment("Thirst related configurations")
 		@Config.Name("Thirst")
-		public final SDCFGThirst thirst = new SDCFGThirst();
+		public final ConfigThirst thirst = new ConfigThirst();
 		
 		///
 		/// Server Options
@@ -83,7 +85,7 @@ public class ModConfig
 		@Config.Name("DebugMode")
 		public boolean debug = false;
 		
-		public class SDCFGMiscellaneous
+		public class ConfigMiscellaneous
 		{
 			//Not synchronized with clients
 			
@@ -100,7 +102,7 @@ public class ModConfig
 			public boolean goldenAppleJuiceEffect = true;
 		}
 		
-		public class SDCFGTemperature
+		public class ConfigTemperature
 		{
 			//Not synchronized with clients
 			//TODO it probably should be though, because of thermometers and such
@@ -197,7 +199,7 @@ public class ModConfig
 			public double stackingTemperatureLimit = 3;
 			
 		}
-		public class SDCFGThirst
+		public class ConfigThirst
 		{
 			//Not synchronized with clients
 			//Shouldn't need to be either, the thirst server sync is aggressive
@@ -257,16 +259,15 @@ public class ModConfig
 		}
 	}
 	
-	
 	///
 	/// Client Options
 	///
 	
-	public static class SDCFGClientConfig
+	public static class ConfigClientConfig
 	{
 		@Config.Comment("Thermometer Configuration")
 		@Config.Name("Thermometer")
-		public final SDCFGClientThermometer thermometer = new SDCFGClientThermometer();
+		public final ConfigClientThermometer thermometer = new ConfigClientThermometer();
 		
 		@Config.Comment("Whether the alternate temperature display is enabled")
 		@Config.Name("AlternateTemperature")
@@ -280,7 +281,11 @@ public class ModConfig
 		@Config.Name("ClientConfigDebug")
 		public boolean clientdebug = false;
 		
-		public class SDCFGClientThermometer
+		@Config.Comment("Debug temperature readout")
+		@Config.Name("TemperatureReadout")
+		public boolean temperatureReadout = false;
+		
+		public class ConfigClientThermometer
 		{
 			@Config.Comment("Whether thermometers display the correct temperature. Only disable this if you are trying to determine what's lagging.")
 			@Config.Name("EnableThermometer")
@@ -308,8 +313,8 @@ public class ModConfig
 	@Mod.EventBusSubscriber(modid = SimpleDifficulty.MODID)
 	private static class EventHandler
 	{
-		//Client Side
 		@SubscribeEvent
+		@SideOnly(Side.CLIENT)
 		public static void onConfigChanged(ConfigChangedEvent.OnConfigChangedEvent event)
 		{
 			if(event.getModID().equals(SimpleDifficulty.MODID))
@@ -344,15 +349,15 @@ public class ModConfig
 		//So it should just be referenced directly instead of using this hash map stuff?...
 		
 		//Place in Client Config
-		
+
+		ClientConfig.instance.put(ClientOptions.DEBUG, client.clientdebug);
 		ClientConfig.instance.put(ClientOptions.DRAW_THIRST_SATURATION, client.drawThirstSaturation);
 		ClientConfig.instance.put(ClientOptions.ENABLE_THERMOMETER, client.thermometer.enableThermometer);
 		ClientConfig.instance.put(ClientOptions.ALTERNATE_TEMP, client.alternateTemp);
 		ClientConfig.instance.put(ClientOptions.HUD_THERMOMETER, client.thermometer.hudThermometer);
 		ClientConfig.instance.put(ClientOptions.HUD_THERMOMETERX, client.thermometer.hudThermometerX);
 		ClientConfig.instance.put(ClientOptions.HUD_THERMOMETERY, client.thermometer.hudThermometerY);
-		ClientConfig.instance.put(ClientOptions.DEBUG, client.clientdebug);
-		
+		ClientConfig.instance.put(ClientOptions.TEMPERATURE_READOUT, client.temperatureReadout);
 	}
 	
 	public static void sendLocalServerConfigToAPI()

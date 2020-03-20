@@ -33,7 +33,7 @@ import net.minecraftforge.fml.common.gameevent.TickEvent;
 
 public class TemperatureGui
 {
-	private final Minecraft minecraftInstance = Minecraft.getMinecraft();
+	private final Minecraft mc = Minecraft.getMinecraft();
 	
 	private int updateCounter = 0;
 	private final Random rand = new Random();
@@ -66,7 +66,7 @@ public class TemperatureGui
 	@SubscribeEvent
 	public void onPreRenderGameOverlay(RenderGameOverlayEvent.Pre event)
 	{
-		if(event.getType()==ElementType.EXPERIENCE && QuickConfig.isTemperatureEnabled() && minecraftInstance.playerController.gameIsSurvivalOrAdventure())
+		if(event.getType()==ElementType.EXPERIENCE && QuickConfig.isTemperatureEnabled() && mc.playerController.gameIsSurvivalOrAdventure())
 		{
 			//Set the seed to avoid shaking during pausing
 			rand.setSeed((long)(updateCounter * 445));
@@ -276,7 +276,7 @@ public class TemperatureGui
 		if(event.phase==TickEvent.Phase.END)
 		{
 			//Make sure game isn't paused as the GUI shouldn't be changing
-			if(!minecraftInstance.isGamePaused())
+			if(!mc.isGamePaused())
 			{
 				updateCounter++;
 				
@@ -297,9 +297,9 @@ public class TemperatureGui
 					
 				if(updateCounter % 15 == 12 && QuickConfig.isTemperatureEnabled())
 				{
-					if(minecraftInstance.player != null)
+					if(mc.player != null)
 					{
-						EntityPlayer player = minecraftInstance.player;
+						EntityPlayer player = mc.player;
 						World world = player.getEntityWorld();
 						
 						if(ClientConfig.instance.getBoolean(ClientOptions.ALTERNATE_TEMP))
@@ -323,6 +323,6 @@ public class TemperatureGui
 	
 	private void bind(ResourceLocation resource)
 	{
-		minecraftInstance.getTextureManager().bindTexture(resource);
+		mc.getTextureManager().bindTexture(resource);
 	}
 }
