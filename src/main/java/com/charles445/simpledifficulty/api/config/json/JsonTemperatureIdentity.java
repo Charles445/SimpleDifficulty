@@ -5,31 +5,28 @@ import javax.annotation.Nullable;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
-public class JsonConsumableTemperature
+public class JsonTemperatureIdentity
 {
 	public JsonItemIdentity identity;
 	
-	public String group;
 	public float temperature;
-	public int duration;
 	
-	public JsonConsumableTemperature(String group, float temperature, int duration, int metadata)
+	public JsonTemperatureIdentity(float temperature, int metadata)
 	{
-		this(group, temperature, duration, new JsonItemIdentity(metadata));
+		this(temperature, new JsonItemIdentity(metadata));
 	}
 	
-	public JsonConsumableTemperature(String group, float temperature, int duration, int metadata, String nbt)
+	public JsonTemperatureIdentity(float temperature, int metadata, String nbt)
 	{
-		this(group,temperature,duration, new JsonItemIdentity(metadata, nbt));
+		this(temperature, new JsonItemIdentity(metadata, nbt));
 	}
 	
-	public JsonConsumableTemperature(String group, float temperature, int duration, JsonItemIdentity identity)
+	public JsonTemperatureIdentity(float temperature, JsonItemIdentity identity)
 	{
 		this.temperature = temperature;
-		this.duration = duration;
-		this.group = group.toLowerCase();
 		this.identity = identity;
 	}
+	
 	
 	
 	//Identity matching
@@ -53,6 +50,4 @@ public class JsonConsumableTemperature
 	{
 		return identity.matches(metadata, compound);
 	}
-	
-	
 }

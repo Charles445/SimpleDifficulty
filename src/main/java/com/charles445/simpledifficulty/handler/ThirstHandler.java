@@ -3,7 +3,6 @@ package com.charles445.simpledifficulty.handler;
 import java.util.List;
 
 import com.charles445.simpledifficulty.api.SDCapabilities;
-import com.charles445.simpledifficulty.api.SDCompatibility;
 import com.charles445.simpledifficulty.api.SDPotions;
 import com.charles445.simpledifficulty.api.config.JsonConfig;
 import com.charles445.simpledifficulty.api.config.QuickConfig;
@@ -13,10 +12,8 @@ import com.charles445.simpledifficulty.api.thirst.ThirstEnum;
 import com.charles445.simpledifficulty.api.thirst.ThirstUtil;
 import com.charles445.simpledifficulty.compat.ModNames;
 import com.charles445.simpledifficulty.config.ModConfig;
-import com.charles445.simpledifficulty.debug.DebugUtil;
 import com.charles445.simpledifficulty.network.MessageDrinkWater;
 import com.charles445.simpledifficulty.network.PacketHandler;
-import com.charles445.simpledifficulty.util.OreDictUtil;
 import com.charles445.simpledifficulty.util.internal.ThirstUtilInternal;
 
 import net.minecraft.entity.Entity;

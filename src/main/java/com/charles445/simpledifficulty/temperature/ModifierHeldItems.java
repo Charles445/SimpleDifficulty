@@ -3,8 +3,7 @@ package com.charles445.simpledifficulty.temperature;
 import java.util.List;
 
 import com.charles445.simpledifficulty.api.config.JsonConfig;
-import com.charles445.simpledifficulty.api.config.json.JsonConsumableTemperature;
-import com.charles445.simpledifficulty.api.config.json.JsonTemperatureMetadata;
+import com.charles445.simpledifficulty.api.config.json.JsonTemperatureIdentity;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -39,11 +38,11 @@ public class ModifierHeldItems extends ModifierBase
 	
 	private float processStack(ItemStack stack)
 	{
-		List<JsonTemperatureMetadata> heldItemList = JsonConfig.heldItemTemperatures.get(stack.getItem().getRegistryName().toString());
+		List<JsonTemperatureIdentity> heldItemList = JsonConfig.heldItemTemperatures.get(stack.getItem().getRegistryName().toString());
 		
 		if(heldItemList!=null)
 		{
-			for(JsonTemperatureMetadata jtm : heldItemList)
+			for(JsonTemperatureIdentity jtm : heldItemList)
 			{
 				if(jtm==null)
 					continue;

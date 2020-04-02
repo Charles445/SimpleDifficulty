@@ -27,6 +27,7 @@ public class CompatUtil
 	
 	/** Manual EVENT_BUS registering 
 	 * Don't forget to add the SubscribeEvent annotation
+	 * But do not register the whole class to the event bus!
 	 * 
 	 * @param clazz (Event) Event Class
 	 * @param thiz  (this) Event Handler Object

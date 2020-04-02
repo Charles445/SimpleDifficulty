@@ -1,5 +1,7 @@
 package com.charles445.simpledifficulty.api.temperature;
 
+import net.minecraft.util.math.MathHelper;
+
 public enum TemperatureEnum
 {
 	//Must be in order
@@ -20,10 +22,16 @@ public enum TemperatureEnum
 		this.lowerBound=lowerBound;
 		this.upperBound=upperBound;
 	}
-	
-	public boolean matches(int val)
+
+	/**
+	 * Returns whether the given temperature fits in the enum's boundaries
+	 * @param temperature
+	 * @return boolean
+	 * <br>
+	 */
+	public boolean matches(int temperature)
 	{
-		return (val>=this.lowerBound && val<=this.upperBound);
+		return (temperature>=this.lowerBound && temperature<=this.upperBound);
 	}
 	
 	public int getMiddle()

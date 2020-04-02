@@ -2,11 +2,9 @@ package com.charles445.simpledifficulty.config;
 
 import java.io.File;
 import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.lang.reflect.Modifier;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -21,19 +19,20 @@ import com.charles445.simpledifficulty.api.SDItems;
 import com.charles445.simpledifficulty.api.config.JsonConfig;
 import com.charles445.simpledifficulty.api.config.json.JsonConsumableTemperature;
 import com.charles445.simpledifficulty.api.config.json.JsonConsumableThirst;
+import com.charles445.simpledifficulty.api.config.json.JsonItemIdentity;
 import com.charles445.simpledifficulty.api.config.json.JsonPropertyTemperature;
 import com.charles445.simpledifficulty.api.config.json.JsonPropertyValue;
 import com.charles445.simpledifficulty.api.config.json.JsonTemperature;
-import com.charles445.simpledifficulty.api.config.json.JsonTemperatureMetadata;
+import com.charles445.simpledifficulty.api.config.json.JsonTemperatureIdentity;
+import com.charles445.simpledifficulty.api.config.json.migrate.JsonConsumableTemperatureMigrate;
+import com.charles445.simpledifficulty.api.config.json.migrate.JsonConsumableThirstMigrate;
+import com.charles445.simpledifficulty.api.config.json.migrate.JsonTemperatureMetadataMigrate;
 import com.charles445.simpledifficulty.api.temperature.TemporaryModifierGroupEnum;
-import com.charles445.simpledifficulty.api.thirst.ThirstEnum;
 import com.charles445.simpledifficulty.compat.JsonCompatDefaults;
 import com.charles445.simpledifficulty.config.json.MaterialTemperature;
-import com.charles445.simpledifficulty.item.ItemJuice;
 import com.charles445.simpledifficulty.item.ItemJuice.JuiceEnum;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.reflect.TypeToken;
 
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -47,6 +46,8 @@ public class JsonConfigInternal
 	public static MaterialTemperature materialTemperature = new MaterialTemperature();
 	
 	public static List<String> jsonErrors = new ArrayList<String>();
+	
+	public static final JsonItemIdentity DEFAULT_ITEM_IDENTITY = new JsonItemIdentity(-1);
 	
 	//postInit
 	public static void init(File jsonDirectory)
@@ -148,50 +149,154 @@ public class JsonConfigInternal
 				logMerge(jsonFileName,e);
 			}
 		}
-		
+
+		//TODO migrate
 		//Consumable Temperature
 		jsonFileName = JsonFileName.consumableTemperature.get();
 		Map<String, List<JsonConsumableTemperature>> jsonConsumableTemperature = processJson(JsonFileName.consumableTemperature, JsonConfig.consumableTemperature, jsonDirectory, true);
 		if(jsonConsumableTemperature!=null)
 		{
-			for(Map.Entry<String, List<JsonConsumableTemperature>> entry : jsonConsumableTemperature.entrySet())
+			boolean migrate = true;
+			//Test for migration (no identities are set)
+			for(List<JsonConsumableTemperature> mvalues : jsonConsumableTemperature.values())
 			{
-				for(JsonConsumableTemperature jct : entry.getValue())
+				for(JsonConsumableTemperature value : mvalues)
 				{
-					JsonConfig.registerConsumableTemperature(jct.group, entry.getKey(), jct.metadata, jct.temperature, jct.duration);
+					if(value.identity!=null)
+					{
+						migrate = false;
+						break;
+					}
 				}
 			}
 			
-			try
+			if(migrate)
 			{
-				manuallyWriteToJson(JsonFileName.consumableTemperature, JsonConfig.consumableTemperature, jsonDirectory);
+				SimpleDifficulty.logger.info("Attempting to migrate "+jsonFileName+" to new format");
+				
+				Map<String, List<JsonConsumableTemperatureMigrate>> migrateMap = new HashMap<>();
+				
+				try
+				{
+					migrateMap = processUncaughtJson(JsonFileName.consumableTemperature_MIGRATE, migrateMap, jsonDirectory, true);
+					for(Map.Entry<String, List<JsonConsumableTemperatureMigrate>> registryEntry : migrateMap.entrySet())
+					{
+						for(JsonConsumableTemperatureMigrate jctm : registryEntry.getValue())
+						{
+							JsonConfig.registerConsumableTemperature(jctm.group, registryEntry.getKey(), jctm.temperature, jctm.duration, new JsonItemIdentity(jctm.metadata));
+						}
+					}
+					
+					try
+					{
+						manuallyWriteToJson(JsonFileName.consumableTemperature, JsonConfig.consumableTemperature, jsonDirectory);
+						SimpleDifficulty.logger.info("Migrated "+jsonFileName);
+					}
+					catch (Exception e)
+					{
+						logMerge(jsonFileName,e);
+					}
+					
+				}
+				catch (Exception e)
+				{
+					SimpleDifficulty.logger.error("Migration failed, JSON of "+jsonFileName+" was likely already invalid");
+					logMerge(jsonFileName,e);
+				}
 			}
-			catch (Exception e)
+			else
 			{
-				logMerge(jsonFileName,e);
+				for(Map.Entry<String, List<JsonConsumableTemperature>> entry : jsonConsumableTemperature.entrySet())
+				{
+					for(JsonConsumableTemperature jct : entry.getValue())
+					{
+						JsonConfig.registerConsumableTemperature(jct.group, entry.getKey(), jct.temperature, jct.duration, jct.identity==null?DEFAULT_ITEM_IDENTITY:jct.identity);
+					}
+				}
+				try
+				{
+					manuallyWriteToJson(JsonFileName.consumableTemperature, JsonConfig.consumableTemperature, jsonDirectory);
+				}
+				catch (Exception e)
+				{
+					logMerge(jsonFileName,e);
+				}
 			}
 		}
 		
+		//TODO migrate
 		//Consumable Thirst
 		jsonFileName = JsonFileName.consumableThirst.get();
 		Map<String, List<JsonConsumableThirst>> jsonConsumableThirst = processJson(JsonFileName.consumableThirst, JsonConfig.consumableThirst, jsonDirectory, true);
 		if(jsonConsumableThirst!=null)
 		{
-			for(Map.Entry<String, List<JsonConsumableThirst>> entry : jsonConsumableThirst.entrySet())
+			boolean migrate = true;
+			//Test for migration (no identities are set)
+			for(List<JsonConsumableThirst> mvalues : jsonConsumableThirst.values())
 			{
-				for(JsonConsumableThirst jct : entry.getValue())
+				for(JsonConsumableThirst value : mvalues)
 				{
-					JsonConfig.registerConsumableThirst(entry.getKey(), jct.metadata, jct.amount, jct.saturation, jct.thirstyChance);
+					if(value.identity!=null)
+					{
+						migrate = false;
+						break;
+					}
 				}
 			}
 			
-			try
+			if(migrate)
 			{
-				manuallyWriteToJson(JsonFileName.consumableThirst, JsonConfig.consumableThirst, jsonDirectory);
+				SimpleDifficulty.logger.info("Attempting to migrate "+jsonFileName+" to new format");
+				
+				Map<String, List<JsonConsumableThirstMigrate>> migrateMap = new HashMap<>();
+				
+				try
+				{
+					migrateMap = processUncaughtJson(JsonFileName.consumableThirst_MIGRATE, migrateMap, jsonDirectory, true);
+					for(Map.Entry<String, List<JsonConsumableThirstMigrate>> registryEntry : migrateMap.entrySet())
+					{
+						for(JsonConsumableThirstMigrate jctm : registryEntry.getValue())
+						{
+							JsonConfig.registerConsumableThirst(registryEntry.getKey(), jctm.amount, jctm.saturation, jctm.thirstyChance, new JsonItemIdentity(jctm.metadata));
+						}
+					}
+					
+					try
+					{
+						manuallyWriteToJson(JsonFileName.consumableThirst, JsonConfig.consumableThirst, jsonDirectory);
+						SimpleDifficulty.logger.info("Migrated "+jsonFileName);
+					}
+					catch (Exception e)
+					{
+						logMerge(jsonFileName,e);
+					}
+					
+				}
+				catch (Exception e)
+				{
+					SimpleDifficulty.logger.error("Migration failed, JSON of "+jsonFileName+" was likely already invalid");
+					logMerge(jsonFileName,e);
+				}
 			}
-			catch (Exception e)
+			else
 			{
-				logMerge(jsonFileName,e);
+				//TODO normal behavior after migration has been ongoing for enough versions
+				for(Map.Entry<String, List<JsonConsumableThirst>> entry : jsonConsumableThirst.entrySet())
+				{
+					for(JsonConsumableThirst jct : entry.getValue())
+					{
+						JsonConfig.registerConsumableThirst(entry.getKey(), jct.amount, jct.saturation, jct.thirstyChance, jct.identity==null?DEFAULT_ITEM_IDENTITY:jct.identity);
+					}
+				}
+				
+				try
+				{
+					manuallyWriteToJson(JsonFileName.consumableThirst, JsonConfig.consumableThirst, jsonDirectory);
+				}
+				catch (Exception e)
+				{
+					logMerge(jsonFileName,e);
+				}
 			}
 		}
 		
@@ -215,25 +320,78 @@ public class JsonConfigInternal
 			}
 		}
 		
+		//TODO migrate
+		//Held Item Temperatures
 		jsonFileName = JsonFileName.heldItemTemperatures.get();
-		Map<String, List<JsonTemperatureMetadata>> jsonHeldItemTemperatures = processJson(JsonFileName.heldItemTemperatures, JsonConfig.heldItemTemperatures, jsonDirectory, true);
+		Map<String, List<JsonTemperatureIdentity>> jsonHeldItemTemperatures = processJson(JsonFileName.heldItemTemperatures, JsonConfig.heldItemTemperatures, jsonDirectory, true);
 		if(jsonHeldItemTemperatures!=null)
 		{
-			for(Map.Entry<String, List<JsonTemperatureMetadata>> entry : jsonHeldItemTemperatures.entrySet())
+			boolean migrate = true;
+			//Test for migration (no identities are set)
+			for(List<JsonTemperatureIdentity> mvalues : jsonHeldItemTemperatures.values())
 			{
-				for(JsonTemperatureMetadata jtm : entry.getValue())
+				for(JsonTemperatureIdentity value : mvalues)
 				{
-					JsonConfig.registerHeldItem(entry.getKey(), jtm.metadata, jtm.temperature);
+					if(value.identity!=null)
+					{
+						migrate = false;
+						break;
+					}
 				}
 			}
 			
-			try
+			if(migrate)
 			{
-				manuallyWriteToJson(JsonFileName.heldItemTemperatures, JsonConfig.heldItemTemperatures, jsonDirectory);
+				SimpleDifficulty.logger.info("Attempting to migrate "+jsonFileName+" to new format");
+				
+				Map<String, List<JsonTemperatureMetadataMigrate>> migrateMap = new HashMap<>();
+				
+				try
+				{
+					migrateMap = processUncaughtJson(JsonFileName.heldItemTemperatures_MIGRATE, migrateMap, jsonDirectory, true);
+					for(Map.Entry<String, List<JsonTemperatureMetadataMigrate>> registryEntry : migrateMap.entrySet())
+					{
+						for(JsonTemperatureMetadataMigrate jctm : registryEntry.getValue())
+						{
+							JsonConfig.registerHeldItem(registryEntry.getKey(), jctm.temperature, new JsonItemIdentity(jctm.metadata));
+						}
+					}
+					
+					try
+					{
+						manuallyWriteToJson(JsonFileName.heldItemTemperatures, JsonConfig.heldItemTemperatures, jsonDirectory);
+						SimpleDifficulty.logger.info("Migrated "+jsonFileName);
+					}
+					catch (Exception e)
+					{
+						logMerge(jsonFileName,e);
+					}
+					
+				}
+				catch (Exception e)
+				{
+					SimpleDifficulty.logger.error("Migration failed, JSON of "+jsonFileName+" was likely already invalid");
+					logMerge(jsonFileName,e);
+				}
 			}
-			catch (Exception e)
+			else
 			{
-				logMerge(jsonFileName,e);
+				for(Map.Entry<String, List<JsonTemperatureIdentity>> entry : jsonHeldItemTemperatures.entrySet())
+				{
+					for(JsonTemperatureIdentity jtm : entry.getValue())
+					{
+						JsonConfig.registerHeldItem(entry.getKey(), jtm.temperature, jtm.identity==null?DEFAULT_ITEM_IDENTITY:jtm.identity);
+					}
+				}
+				
+				try
+				{
+					manuallyWriteToJson(JsonFileName.heldItemTemperatures, JsonConfig.heldItemTemperatures, jsonDirectory);
+				}
+				catch (Exception e)
+				{
+					logMerge(jsonFileName,e);
+				}
 			}
 		}
 		
@@ -316,14 +474,14 @@ public class JsonConfigInternal
 		File jsonFile = new File(jsonDirectory,jsonFileName);
 		if(jsonFile.exists())
 		{
-			Gson gson = new GsonBuilder().setPrettyPrinting().create();
+			Gson gson = buildNewGson();
 			//Read
 			//System.out.println("fromJson");
 			return (T) gson.fromJson(new FileReader(jsonFile), type);
 		}
 		else
 		{
-			Gson gson = new GsonBuilder().setPrettyPrinting().create();
+			Gson gson = buildNewGson();
 			//Write
 			//System.out.println("toJson");
 			//System.out.println(jsonFile.getAbsolutePath());
@@ -346,8 +504,14 @@ public class JsonConfigInternal
 		String jsonFileName = jfn.get();
 		Type type = JsonTypeToken.get(jfn);
 		
-		Gson gson = new GsonBuilder().setPrettyPrinting().create();
+		Gson gson = buildNewGson();
 		File jsonFile = new File(jsonDirectory,jsonFileName);
 		FileUtils.write(jsonFile, gson.toJson(container, type),(String)null);
+	}
+	
+	private static Gson buildNewGson()
+	{
+		//Pretty printing, and private modifiers are not serialized
+		return new GsonBuilder().setPrettyPrinting().excludeFieldsWithModifiers(Modifier.PRIVATE).create();
 	}
 }

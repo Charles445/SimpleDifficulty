@@ -1,13 +1,13 @@
-package com.charles445.simpledifficulty.api.config.json;
+package com.charles445.simpledifficulty.api.config.json.migrate;
 
 import net.minecraft.item.ItemStack;
 
-public class JsonTemperatureMetadata
+public class JsonTemperatureMetadataMigrate
 {
 	public int metadata;
 	public float temperature;
 	
-	public JsonTemperatureMetadata(int metadata, float temperature)
+	public JsonTemperatureMetadataMigrate(int metadata, float temperature)
 	{
 		this.metadata = metadata;
 		this.temperature = temperature;

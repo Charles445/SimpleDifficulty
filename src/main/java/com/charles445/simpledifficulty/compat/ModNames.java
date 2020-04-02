@@ -8,6 +8,7 @@ public class ModNames
 	public static final String HARVESTFESTIVAL = "harvestfestival";
 	public static final String LYCANITESMOBS = "lycanitesmobs";
 	public static final String OREEXCAVATION = "oreexcavation";
+	public static final String RUSTIC = "rustic";
 	public static final String SERENESEASONS = "sereneseasons";
 	public static final String SIMPLECAMPFIRE = "campfire";
 	public static final String TINKERSCONSTRUCT = "tconstruct";

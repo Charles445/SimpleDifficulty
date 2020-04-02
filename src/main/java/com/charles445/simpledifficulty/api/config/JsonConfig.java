@@ -7,22 +7,23 @@ import java.util.Map;
 
 import com.charles445.simpledifficulty.api.config.json.JsonConsumableTemperature;
 import com.charles445.simpledifficulty.api.config.json.JsonConsumableThirst;
+import com.charles445.simpledifficulty.api.config.json.JsonItemIdentity;
 import com.charles445.simpledifficulty.api.config.json.JsonPropertyTemperature;
 import com.charles445.simpledifficulty.api.config.json.JsonPropertyValue;
 import com.charles445.simpledifficulty.api.config.json.JsonTemperature;
-import com.charles445.simpledifficulty.api.config.json.JsonTemperatureMetadata;
+import com.charles445.simpledifficulty.api.config.json.JsonTemperatureIdentity;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 
 public class JsonConfig
 {
-	public static Map<String, JsonTemperature> armorTemperatures = new HashMap<String, JsonTemperature>();	
-	public static Map<String, List<JsonPropertyTemperature>> blockTemperatures = new HashMap<String, List<JsonPropertyTemperature>>();
-	public static Map<String, List<JsonConsumableTemperature>> consumableTemperature = new HashMap<String, List<JsonConsumableTemperature>>();
-	public static Map<String, List<JsonConsumableThirst>> consumableThirst = new HashMap<String, List<JsonConsumableThirst>>();
-	public static Map<String, JsonTemperature> fluidTemperatures = new HashMap<String, JsonTemperature>();
-	public static Map<String, List<JsonTemperatureMetadata>> heldItemTemperatures = new HashMap<String, List<JsonTemperatureMetadata>>();
+	public static Map<String, JsonTemperature> armorTemperatures = new HashMap<>();	
+	public static Map<String, List<JsonPropertyTemperature>> blockTemperatures = new HashMap<>();
+	public static Map<String, List<JsonConsumableTemperature>> consumableTemperature = new HashMap<>();
+	public static Map<String, List<JsonConsumableThirst>> consumableThirst = new HashMap<>();
+	public static Map<String, JsonTemperature> fluidTemperatures = new HashMap<>();
+	public static Map<String, List<JsonTemperatureIdentity>> heldItemTemperatures = new HashMap<>();
 	
 	//TODO jdoc
 	
@@ -109,8 +110,6 @@ public class JsonConfig
 	
 	//Consumable Temperature
 	
-	
-	
 	public static void registerConsumableTemperature(String group, ItemStack stack, float temperature, int duration)
 	{
 		String registryName = stack.getItem().getRegistryName().toString();
@@ -119,22 +118,21 @@ public class JsonConfig
 		if(stack.getHasSubtypes())
 			metadata = stack.getMetadata();
 		
-		registerConsumableTemperature(group, registryName, metadata, temperature, duration);
+		registerConsumableTemperature(group, registryName, temperature, duration, new JsonItemIdentity(metadata));
 	}
-	
-	public static void registerConsumableTemperature(String group, String registryName, int metadata, float temperature, int duration)
+	public static void registerConsumableTemperature(String group, String registryName, float temperature, int duration, JsonItemIdentity identity)
 	{
 		if(!consumableTemperature.containsKey(registryName))
 			consumableTemperature.put(registryName, new ArrayList<JsonConsumableTemperature>());
 		
 		final List<JsonConsumableTemperature> currentList = consumableTemperature.get(registryName);
 		
-		JsonConsumableTemperature result = new JsonConsumableTemperature(group, temperature, metadata, duration);
+		JsonConsumableTemperature result = new JsonConsumableTemperature(group, temperature, duration, identity);
 		
 		for(int i=0; i<currentList.size(); i++)
 		{
 			JsonConsumableTemperature jct = currentList.get(i);
-			if(jct.matches(metadata))
+			if(jct.matches(identity))
 			{
 				currentList.set(i, result);
 				return;
@@ -154,22 +152,21 @@ public class JsonConfig
 		if(stack.getHasSubtypes())
 			metadata = stack.getMetadata();
 		
-		registerConsumableThirst(stack.getItem().getRegistryName().toString(), metadata, amount, saturation, thirstyChance);
+		registerConsumableThirst(stack.getItem().getRegistryName().toString(), amount, saturation, thirstyChance, new JsonItemIdentity(metadata));
 	}
-	
-	public static void registerConsumableThirst(String registryName, int metadata, int amount, float saturation, float thirstyChance)
+	public static void registerConsumableThirst(String registryName, int amount, float saturation, float thirstyChance, JsonItemIdentity identity)
 	{
 		if(!consumableThirst.containsKey(registryName))
 			consumableThirst.put(registryName, new ArrayList<JsonConsumableThirst>());
 		
 		final List<JsonConsumableThirst> currentList = consumableThirst.get(registryName);
 		
-		JsonConsumableThirst result = new JsonConsumableThirst(metadata, amount, saturation, thirstyChance);
+		JsonConsumableThirst result = new JsonConsumableThirst(amount, saturation, thirstyChance, identity);
 		
 		for(int i=0; i<currentList.size(); i++)
 		{
 			JsonConsumableThirst jct = currentList.get(i);
-			if(jct.matches(metadata))
+			if(jct.matches(identity))
 			{
 				currentList.set(i, result);
 				return;
@@ -189,22 +186,22 @@ public class JsonConfig
 		if(stack.getHasSubtypes())
 			metadata = stack.getMetadata();
 		
-		registerHeldItem(stack.getItem().getRegistryName().toString(), metadata, temperature);
+		registerHeldItem(stack.getItem().getRegistryName().toString(), temperature, new JsonItemIdentity(metadata));
 	}
 	
-	public static void registerHeldItem(String registryName, int metadata, float temperature)
+	public static void registerHeldItem(String registryName, float temperature, JsonItemIdentity identity)
 	{
 		if(!heldItemTemperatures.containsKey(registryName))
-			heldItemTemperatures.put(registryName, new ArrayList<JsonTemperatureMetadata>());
+			heldItemTemperatures.put(registryName, new ArrayList<JsonTemperatureIdentity>());
 		
-		final List<JsonTemperatureMetadata> currentList = heldItemTemperatures.get(registryName);
+		final List<JsonTemperatureIdentity> currentList = heldItemTemperatures.get(registryName);
 		
-		JsonTemperatureMetadata result = new JsonTemperatureMetadata(metadata, temperature);
+		JsonTemperatureIdentity result = new JsonTemperatureIdentity(temperature, identity);
 		
 		for(int i=0; i<currentList.size(); i++)
 		{
-			JsonTemperatureMetadata jtm = currentList.get(i);
-			if(jtm.matches(metadata))
+			JsonTemperatureIdentity jtm = currentList.get(i);
+			if(jtm.matches(identity))
 			{
 				currentList.set(i, result);
 				return;

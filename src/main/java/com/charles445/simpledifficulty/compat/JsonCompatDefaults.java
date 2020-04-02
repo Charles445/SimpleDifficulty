@@ -1,9 +1,15 @@
 package com.charles445.simpledifficulty.compat;
 
-import static com.charles445.simpledifficulty.compat.ModNames.*;
+import static com.charles445.simpledifficulty.compat.ModNames.BIOMESOPLENTY;
+import static com.charles445.simpledifficulty.compat.ModNames.HARVESTCRAFT;
+import static com.charles445.simpledifficulty.compat.ModNames.LYCANITESMOBS;
+import static com.charles445.simpledifficulty.compat.ModNames.RUSTIC;
+import static com.charles445.simpledifficulty.compat.ModNames.SIMPLECAMPFIRE;
+import static com.charles445.simpledifficulty.compat.ModNames.TINKERSCONSTRUCT;
 
 import com.charles445.simpledifficulty.api.SDCompatibility;
 import com.charles445.simpledifficulty.api.config.JsonConfig;
+import com.charles445.simpledifficulty.api.config.json.JsonItemIdentity;
 import com.charles445.simpledifficulty.api.config.json.JsonPropertyTemperature;
 import com.charles445.simpledifficulty.api.config.json.JsonPropertyValue;
 import com.charles445.simpledifficulty.util.CompatUtil;
@@ -22,6 +28,7 @@ public class JsonCompatDefaults
 		populateBiomesOPlenty();
 		populateHarvestCraft();
 		populateLycanitesMobs();
+		populateRustic();
 		populateSimpleCampfire();
 		populateTinkersConstruct();
 	}
@@ -33,6 +40,7 @@ public class JsonCompatDefaults
 			case BIOMESOPLENTY: return populateBiomesOPlenty();
 			case HARVESTCRAFT: return populateHarvestCraft();
 			case LYCANITESMOBS: return populateLycanitesMobs();
+			case RUSTIC: return populateRustic();
 			case SIMPLECAMPFIRE: return populateSimpleCampfire();
 			case TINKERSCONSTRUCT: return populateTinkersConstruct();
 		
@@ -147,6 +155,22 @@ public class JsonCompatDefaults
 		return true;
 	}
 	
+	//Rustic
+	private boolean populateRustic()
+	{
+		if(!canUseModJsonDefaults(RUSTIC))
+			return false;
+		
+		addHeldItemTemperature("rustic:candle", 1.0f);
+		addHeldItemTemperature("rustic:candle_gold", 1.0f);
+		
+		//TODO NBT handling
+		addDrink("rustic:elixir", 6, 5.0f);
+		addDrink("rustic:fluid_bottle", 6, 5.0f);
+		
+		return true;
+	}
+	
 	//Simple Camp Fire
 	private boolean populateSimpleCampfire()
 	{
@@ -233,7 +257,7 @@ public class JsonCompatDefaults
 	
 	private void addDrink(String registryName, int amount, float saturation, float thirstyChance)
 	{
-		JsonConfig.registerConsumableThirst(registryName, -1, amount, saturation, thirstyChance);
+		JsonConfig.registerConsumableThirst(registryName, amount, saturation, thirstyChance, new JsonItemIdentity(-1));
 	}
 	
 	private void addFluidTemperature(String fluidName, float temperature)
@@ -241,9 +265,14 @@ public class JsonCompatDefaults
 		JsonConfig.registerFluidTemperature(fluidName, temperature);
 	}
 	
+	private void addHeldItemTemperature(String registryName, float temperature)
+	{
+		JsonConfig.registerHeldItem(registryName, temperature, new JsonItemIdentity(-1));
+	}
+	
 	private void addHeldItemTemperature(String registryName, int metadata, float temperature)
 	{
-		JsonConfig.registerHeldItem(registryName, metadata, temperature);
+		JsonConfig.registerHeldItem(registryName, temperature, new JsonItemIdentity(metadata));
 	}
 	
 	//
