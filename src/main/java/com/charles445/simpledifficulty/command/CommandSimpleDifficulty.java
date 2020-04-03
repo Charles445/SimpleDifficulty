@@ -1,7 +1,6 @@
 package com.charles445.simpledifficulty.command;
 
 import java.util.Arrays;
-import java.util.LinkedList;
 import java.util.List;
 
 import javax.annotation.Nullable;
@@ -21,9 +20,13 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.event.ClickEvent;
+import net.minecraft.util.text.event.HoverEvent;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fml.common.Loader;
@@ -40,7 +43,8 @@ public class CommandSimpleDifficulty extends CommandBase
 			"addConsumableThirst",
 			"addFluid",
 			"addHeldItem",
-			"loadDefaultModConfig"
+			"loadDefaultModConfig",
+			"nbt"
 	});
 	
 	private final String commandUsage = "/simpledifficulty help";
@@ -56,7 +60,8 @@ public class CommandSimpleDifficulty extends CommandBase
 			+ "   addConsumableThirst <amount> <saturation> <thirstyChance>\n"
 			+ "   addFluid <temperature>\n"
 			+ "   addHeldItem <temperature>\n"
-			+ "   loadDefaultModConfig <modid>";
+			+ "   loadDefaultModConfig <modid>\n"
+			+ "   nbt";
 
 	private final String warn_notPlayerAdmin = "You do not have permission, or are not a player ingame!";
 	private final String warn_invalidArgs = "Invalid Arguments";
@@ -115,6 +120,8 @@ public class CommandSimpleDifficulty extends CommandBase
 			case "addfluid": addFluid(server, sender, args); break;
 			case "addhelditem": addHeldItem(server, sender, args); break;
 			
+			case "nbt": tagToString(server, sender, args); break;
+			
 			/*
 			armorTemperatures
 			blockTemperatures
@@ -156,10 +163,55 @@ public class CommandSimpleDifficulty extends CommandBase
 		case "addfluid":message(sender, "Adds the held fluid item to the fluid JSON\n(changes temperature when inside the fluid)");return;
 		case "addhelditem":message(sender, "Adds the held item to the heldItems JSON\n(changes player temperature when held in mainhand or offhand)");return;
 		case "loaddefaultmodconfig":message(sender, "Loads a mod's built-in default JSON config.\nThis will overwrite any matching settings! Use caution.");return;
-		
+		case "nbt":message(sender, "Gets an item's NBT tag as a string for config use");return;
 		
 		
 			default:message(sender, "/simpledifficulty help <command> \n(Replace <command> with a simpledifficulty command name)");return;
+		}
+	}
+	
+	private void tagToString(MinecraftServer server, ICommandSender sender, String[] args)
+	{
+		if(isAdminPlayer(sender))
+		{
+			EntityPlayer player = (EntityPlayer)sender.getCommandSenderEntity();
+			
+			ItemStack stack = player.getHeldItemMainhand();
+			
+			if(stack.isEmpty())
+			{
+				message(sender, warn_noItem);
+				return;
+			}
+			
+			//Stack has an item
+			if(stack.hasTagCompound())
+			{
+				NBTTagCompound compound = stack.getTagCompound();
+				//message(sender, compound.toString());
+				
+				String compString = compound.toString();
+				
+				TextComponentString tc = new TextComponentString(compString);
+				
+				int metadata = stack.getHasSubtypes()?stack.getMetadata():-1;
+				
+				//Clickable style
+				Style style = new Style();
+				style.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/sdcopyidentity "+metadata+" "+compString));
+				style.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new TextComponentString("Click to copy identity to clipboard")));
+				tc.setStyle(style);
+				
+				sender.sendMessage(tc);
+			}
+			else
+			{
+				message(sender, "This item has no NBT tag.");
+			}
+		}
+		else
+		{
+			message(sender, warn_notPlayerAdmin);
 		}
 	}
 	
@@ -489,7 +541,15 @@ public class CommandSimpleDifficulty extends CommandBase
 		{
 			message(sender, "Reloading SimpleDifficulty JSON");
 			JsonConfigInternal.jsonErrors.clear();
-			JsonConfigInternal.processAllJson(SimpleDifficulty.jsonDirectory);
+			
+			
+			//Reload the json (do the startup routine)
+			JsonConfigInternal.init(SimpleDifficulty.jsonDirectory);
+			
+			
+			//JsonConfigInternal.processAllJson(SimpleDifficulty.jsonDirectory);
+			
+			
 			for(String s : JsonConfigInternal.jsonErrors)
 			{
 				sender.sendMessage(new TextComponentString(s));

@@ -52,6 +52,14 @@ public class JsonConfigInternal
 	//postInit
 	public static void init(File jsonDirectory)
 	{
+		//Clear the containers first (in case this isn't the first run)
+		JsonConfig.armorTemperatures.clear();
+		JsonConfig.blockTemperatures.clear();
+		JsonConfig.consumableTemperature.clear();
+		JsonConfig.consumableThirst.clear();
+		JsonConfig.fluidTemperatures.clear();
+		JsonConfig.heldItemTemperatures.clear();
+		
 		//Setup default JSON
 		
 		JsonConfig.registerArmorTemperature(new ItemStack(SDItems.wool_helmet), 2.0f);
@@ -210,6 +218,10 @@ public class JsonConfigInternal
 				{
 					for(JsonConsumableTemperature jct : entry.getValue())
 					{
+						//Populate compound since it was lost during serialization
+						if(jct.identity!=null)
+							jct.identity.tryPopulateCompound();
+						
 						JsonConfig.registerConsumableTemperature(jct.group, entry.getKey(), jct.temperature, jct.duration, jct.identity==null?DEFAULT_ITEM_IDENTITY:jct.identity);
 					}
 				}
@@ -285,6 +297,10 @@ public class JsonConfigInternal
 				{
 					for(JsonConsumableThirst jct : entry.getValue())
 					{
+						//Populate compound since it was lost during serialization
+						if(jct.identity!=null)
+							jct.identity.tryPopulateCompound();
+						
 						JsonConfig.registerConsumableThirst(entry.getKey(), jct.amount, jct.saturation, jct.thirstyChance, jct.identity==null?DEFAULT_ITEM_IDENTITY:jct.identity);
 					}
 				}
@@ -380,6 +396,10 @@ public class JsonConfigInternal
 				{
 					for(JsonTemperatureIdentity jtm : entry.getValue())
 					{
+						//Populate compound since it was lost during serialization
+						if(jtm.identity!=null)
+							jtm.identity.tryPopulateCompound();
+						
 						JsonConfig.registerHeldItem(entry.getKey(), jtm.temperature, jtm.identity==null?DEFAULT_ITEM_IDENTITY:jtm.identity);
 					}
 				}
