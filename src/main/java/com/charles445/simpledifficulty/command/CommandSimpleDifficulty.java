@@ -18,10 +18,13 @@ import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextComponentString;
@@ -284,8 +287,32 @@ public class CommandSimpleDifficulty extends CommandBase
 				
 				if(block == Blocks.AIR)
 				{
-					message(sender, "Couldn't find block for item!");
-					return;
+					FluidStack fluidStack = FluidUtil.getFluidContained(stack);
+					if(fluidStack!=null)
+					{
+						block = fluidStack.getFluid().getBlock();
+						if(block == Blocks.AIR)
+						{
+							message(sender, "Couldn't find block for fluid!");
+							return;
+						}
+						else if(block == Blocks.LAVA || block == Blocks.FLOWING_LAVA)
+						{
+							block = Blocks.FLOWING_LAVA;
+							JsonConfig.registerBlockTemperature(Blocks.LAVA, temperature);
+						}
+						else if(block == Blocks.WATER || block == Blocks.FLOWING_WATER)
+						{
+
+							block = Blocks.FLOWING_WATER;
+							JsonConfig.registerBlockTemperature(Blocks.WATER, temperature);
+						}
+					}
+					else
+					{
+						message(sender, "Couldn't find block for item!");
+						return;
+					}
 				}
 				
 				boolean accepted = JsonConfig.registerBlockTemperature(block, temperature);

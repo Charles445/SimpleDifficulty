@@ -1,17 +1,13 @@
 package com.charles445.simpledifficulty.compat;
 
-import static com.charles445.simpledifficulty.compat.ModNames.BIOMESOPLENTY;
-import static com.charles445.simpledifficulty.compat.ModNames.HARVESTCRAFT;
-import static com.charles445.simpledifficulty.compat.ModNames.LYCANITESMOBS;
-import static com.charles445.simpledifficulty.compat.ModNames.RUSTIC;
-import static com.charles445.simpledifficulty.compat.ModNames.SIMPLECAMPFIRE;
-import static com.charles445.simpledifficulty.compat.ModNames.TINKERSCONSTRUCT;
+import static com.charles445.simpledifficulty.compat.ModNames.*;
 
 import com.charles445.simpledifficulty.api.SDCompatibility;
 import com.charles445.simpledifficulty.api.config.JsonConfig;
 import com.charles445.simpledifficulty.api.config.json.JsonItemIdentity;
 import com.charles445.simpledifficulty.api.config.json.JsonPropertyTemperature;
 import com.charles445.simpledifficulty.api.config.json.JsonPropertyValue;
+import com.charles445.simpledifficulty.api.thirst.ThirstEnum;
 import com.charles445.simpledifficulty.util.CompatUtil;
 import com.charles445.simpledifficulty.util.OreDictUtil;
 
@@ -28,6 +24,7 @@ public class JsonCompatDefaults
 		populateBiomesOPlenty();
 		populateHarvestCraft();
 		populateLycanitesMobs();
+		populatePyrotech();
 		populateRustic();
 		populateSimpleCampfire();
 		populateTinkersConstruct();
@@ -40,6 +37,7 @@ public class JsonCompatDefaults
 			case BIOMESOPLENTY: return populateBiomesOPlenty();
 			case HARVESTCRAFT: return populateHarvestCraft();
 			case LYCANITESMOBS: return populateLycanitesMobs();
+			case PYROTECH: return populatePyrotech();
 			case RUSTIC: return populateRustic();
 			case SIMPLECAMPFIRE: return populateSimpleCampfire();
 			case TINKERSCONSTRUCT: return populateTinkersConstruct();
@@ -139,6 +137,12 @@ public class JsonCompatDefaults
 		addDrink("harvestcraft:friedfeastitem", 20, 20.0f);
 		addDrink("harvestcraft:bbqplatteritem", 20, 20.0f);
 		
+		//candles
+		for(int i=1;i<=16;i++)
+		{
+			addHeldItemTemperature("harvestcraft:candledeco"+i, 1.0f);
+		}
+		
 		return true;
 	}
 	
@@ -148,10 +152,49 @@ public class JsonCompatDefaults
 		if(!canUseModJsonDefaults(LYCANITESMOBS))
 			return false;
 		
+		//Settings are from RLCraft
+		//Slightly modified for SimpleDifficulty's stacking effect
 		addBlockTemperature("lycanitesmobs:purelava", 12.5f);
+		addBlockTemperature("lycanitesmobs:moglava", 12.5f);
+		addBlockTemperature("lycanitesmobs:ooze", -12.5f);
+		addBlockTemperature("lycanitesmobs:rabbitooze", -12.5f);
+		addBlockTemperature("lycanitesmobs:frostfire", -5.0f);
+		addBlockTemperature("lycanitesmobs:icefire", -8.0f);
 		
-		//TODO considering adding the ooze to actually chill the surrounding area
-		//That could be fun
+		
+		return true;
+	}
+	
+	private boolean populatePyrotech()
+	{
+		if(!canUseModJsonDefaults(PYROTECH))
+			return false;
+		
+		addBlockTemperature("pyrotech:torch_fiber", 3.0f, new JsonPropertyValue("type", "LIT"));
+		addBlockTemperature("pyrotech:torch_stone", 3.0f, new JsonPropertyValue("type", "LIT"));
+		
+		addBlockTemperature("pyrotech:campfire", 7.0f, new JsonPropertyValue("variant", "LIT"));
+		
+		addBlockTemperature("pyrotech:kiln_pit", 6.0f, new JsonPropertyValue("variant", "ACTIVE"));
+		
+		addBlockTemperature("pyrotech:bloomery", 6.0f, new JsonPropertyValue("type", "BottomLit"));
+		addBlockTemperature("pyrotech:wither_forge", 7.0f, new JsonPropertyValue("type", "BottomLit"));
+		addBlockTemperature("pyrotech:pile_slag", 4.0f, new JsonPropertyValue("molten", "true"));
+		
+		float pyrotechStone = 5.0f;
+		float pyroTechBrick = 4.0f;
+		
+		addBlockTemperature("pyrotech:stone_kiln", pyrotechStone, new JsonPropertyValue("type", "BOTTOM_LIT"));
+		addBlockTemperature("pyrotech:stone_oven", pyrotechStone, new JsonPropertyValue("type", "BOTTOM_LIT"));
+		addBlockTemperature("pyrotech:stone_sawmill", pyrotechStone, new JsonPropertyValue("type", "BOTTOM_LIT"));
+		addBlockTemperature("pyrotech:stone_crucible", pyrotechStone, new JsonPropertyValue("type", "BOTTOM_LIT"));
+		
+		//It's more visually covered up, I'd expect this to have less radiant heat
+		addBlockTemperature("pyrotech:brick_kiln", pyroTechBrick, new JsonPropertyValue("type", "BOTTOM_LIT"));
+		addBlockTemperature("pyrotech:brick_oven", pyroTechBrick, new JsonPropertyValue("type", "BOTTOM_LIT"));
+		addBlockTemperature("pyrotech:brick_sawmill", pyroTechBrick, new JsonPropertyValue("type", "BOTTOM_LIT"));
+		addBlockTemperature("pyrotech:brick_crucible", pyroTechBrick, new JsonPropertyValue("type", "BOTTOM_LIT"));
+		
 		return true;
 	}
 	
@@ -164,11 +207,40 @@ public class JsonCompatDefaults
 		addHeldItemTemperature("rustic:candle", 1.0f);
 		addHeldItemTemperature("rustic:candle_gold", 1.0f);
 		
-		//TODO NBT handling
-		addDrink("rustic:elixir", 6, 5.0f);
-		addDrink("rustic:fluid_bottle", 6, 5.0f);
+		
+		int boozeThirst = 5;
+		float boozeSaturation = 5.0f;
+		float boozeSickness = 0.25f;
+		
+		int juiceThirst = 6;
+		float juiceSaturation = 5.0f;
+		
+		//TODO NBT builder
+		addDrink("rustic:elixir", 4, 0.4f);
+		
+		addDrink("rustic:fluid_bottle", 2, 0.1f, 0.9f, rusticFluid("oliveoil"));
+		addDrink("rustic:fluid_bottle", 2, 8.0f, rusticFluid("ironberryjuice"));
+		addDrink("rustic:fluid_bottle", juiceThirst, juiceSaturation, rusticFluid("wildberryjuice"));
+		addDrink("rustic:fluid_bottle", juiceThirst, juiceSaturation, rusticFluid("grapejuice"));
+		addDrink("rustic:fluid_bottle", juiceThirst, juiceSaturation, rusticFluid("applejuice"));
+		addDrink("rustic:fluid_bottle", boozeThirst, boozeSaturation, boozeSickness, rusticFluid("alewort"));
+		//Rustic honey appears to be a lot safer to drink than actual honey
+		addDrink("rustic:fluid_bottle", 4, 3.0f, rusticFluid("honey"));
+		addDrink("rustic:fluid_bottle", boozeThirst, boozeSaturation, boozeSickness, rusticFluid("ale"));
+		addDrink("rustic:fluid_bottle", boozeThirst, boozeSaturation, boozeSickness, rusticFluid("cider"));
+		addDrink("rustic:fluid_bottle", boozeThirst, boozeSaturation, boozeSickness, rusticFluid("ironwine"));
+		addDrink("rustic:fluid_bottle", boozeThirst, boozeSaturation, boozeSickness, rusticFluid("mead"));
+		addDrink("rustic:fluid_bottle", boozeThirst, boozeSaturation, boozeSickness, rusticFluid("wildberrywine"));
+		addDrink("rustic:fluid_bottle", boozeThirst, boozeSaturation, boozeSickness, rusticFluid("wine"));
+		
+		
 		
 		return true;
+	}
+	
+	private String rusticFluid(String name)
+	{
+		return "{Fluid:{FluidName:\""+name+"\"}}";
 	}
 	
 	//Simple Camp Fire
@@ -258,6 +330,16 @@ public class JsonCompatDefaults
 	private void addDrink(String registryName, int amount, float saturation, float thirstyChance)
 	{
 		JsonConfig.registerConsumableThirst(registryName, amount, saturation, thirstyChance, new JsonItemIdentity(-1));
+	}
+	
+	private void addDrink(String registryName, int amount, float saturation, String nbt)
+	{
+		JsonConfig.registerConsumableThirst(registryName, amount, saturation, 0.0f, new JsonItemIdentity(-1, nbt));
+	}
+	
+	private void addDrink(String registryName, int amount, float saturation, float thirstyChance, String nbt)
+	{
+		JsonConfig.registerConsumableThirst(registryName, amount, saturation, thirstyChance, new JsonItemIdentity(-1, nbt));
 	}
 	
 	private void addFluidTemperature(String fluidName, float temperature)

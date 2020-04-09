@@ -55,6 +55,8 @@ public class JsonPropertyTemperature
 					return false;
 				}
 			}
+			//TODO properties may not contain the key, which probably means the configuration is broken
+			//It'll be ignored for now, but it deceived me during development and probably needs addressing
 		}
 		
 		return true;

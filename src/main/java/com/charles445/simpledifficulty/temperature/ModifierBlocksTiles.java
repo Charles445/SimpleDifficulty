@@ -141,6 +141,7 @@ public class ModifierBlocksTiles extends ModifierBase
 		
 	}		
 	
+	@SuppressWarnings("deprecation")
 	private void doBlocksRoutine(World world, BlockPos pos)
 	{
 		for(int x = -4; x <= 4; x++)
@@ -158,6 +159,15 @@ public class ModifierBlocksTiles extends ModifierBase
 					
 					if(tempInfoList!=null)
 					{
+						//Some blocks use the block's getActualState for important information
+						//Namely fences, and pyrotech torches
+						
+						//We're grabbing this after there's already been a match,
+						//so there shouldn't be a significant performance hit
+						
+						//Why is this deprecated, anyway? This seems really important...
+						final IBlockState actualBlockState = block.getActualState(blockstate, world, blockpos);
+						
 						for(JsonPropertyTemperature tempInfo : tempInfoList)
 						{
 							if(tempInfo==null)
@@ -168,7 +178,7 @@ public class ModifierBlocksTiles extends ModifierBase
 							if(blockTemp == 0.0f)
 								continue;
 							
-							if(tempInfo.matchesState(blockstate))
+							if(tempInfo.matchesState(actualBlockState))
 							{
 								//Do a thing
 								//SimpleDifficulty.logger.debug("Match at pos: "+blockpos.toString());

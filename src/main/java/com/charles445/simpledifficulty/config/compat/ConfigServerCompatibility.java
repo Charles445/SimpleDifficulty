@@ -28,10 +28,6 @@ public class ConfigServerCompatibility
 		@Config.Name("EnableArmorUnderwear")
 		public boolean armorUnderwear = true;
 		
-		@Config.Comment("Enable Harvest Craft - Built-In Compatibility")
-		@Config.Name("EnableHarvestCraft")
-		public boolean harvestCraft = true;
-		
 		@Config.Comment("Enable Harvest Festival - Built-In Compatibility")
 		@Config.Name("EnableHarvestFestival")
 		public boolean harvestFestival = true;
