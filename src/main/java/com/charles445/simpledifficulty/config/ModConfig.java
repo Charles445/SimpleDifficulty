@@ -100,6 +100,11 @@ public class ModConfig
 			@Config.Comment("Whether Golden Apple Juice gives the golden apple effect")
 			@Config.Name("GoldenAppleJuiceEffect")
 			public boolean goldenAppleJuiceEffect = true;
+			
+			@Config.Comment("How often player temperature and thirst are regularly synced, in ticks")
+			@Config.Name("RoutinePacketDelay")
+			@Config.RangeInt(min=0)
+			public int routinePacketDelay = 30;
 		}
 		
 		public class ConfigTemperature

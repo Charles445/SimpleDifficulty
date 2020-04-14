@@ -102,7 +102,17 @@ public abstract class ItemDrinkBase extends Item
 			ThirstUtil.takeDrink(player, this.getThirstLevel(stack), this.getSaturationLevel(stack), this.getDirtyChance(stack));
 		
 		this.runSecondaryEffect(player, stack);
-		return new ItemStack(Items.GLASS_BOTTLE);
+		
+		stack.shrink(1);
+		if(stack.isEmpty())
+		{
+			return new ItemStack(Items.GLASS_BOTTLE);
+		}
+		else
+		{
+			player.inventory.addItemStackToInventory(new ItemStack(Items.GLASS_BOTTLE));
+			return stack;
+		}
 	}
 	
 	@Override

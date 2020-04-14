@@ -12,6 +12,7 @@ import com.charles445.simpledifficulty.api.thirst.ThirstEnum;
 import com.charles445.simpledifficulty.api.thirst.ThirstEnumBlockPos;
 import com.charles445.simpledifficulty.api.thirst.ThirstUtil;
 import com.charles445.simpledifficulty.capability.ThirstCapability;
+import com.charles445.simpledifficulty.util.SoundUtil;
 
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
@@ -115,7 +116,7 @@ public class ItemCanteen extends ItemDrinkBase
 				}
 				player.setActiveHand(hand);
 				player.swingArm(hand);
-				player.playSound(SoundEvents.ITEM_BUCKET_FILL, 0.5f, 1.0f);
+				SoundUtil.commonPlayPlayerSound(player, SoundEvents.ITEM_BUCKET_FILL);
 				player.stopActiveHand();
 				return new ActionResult(EnumActionResult.SUCCESS, stack);
 			}

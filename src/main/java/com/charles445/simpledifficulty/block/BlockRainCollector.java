@@ -2,10 +2,12 @@ package com.charles445.simpledifficulty.block;
 
 import java.util.Random;
 
+import com.charles445.simpledifficulty.api.SDCapabilities;
 import com.charles445.simpledifficulty.api.SDItems;
 import com.charles445.simpledifficulty.api.thirst.ThirstEnum;
 import com.charles445.simpledifficulty.api.thirst.ThirstUtil;
 import com.charles445.simpledifficulty.item.ItemCanteen;
+import com.charles445.simpledifficulty.util.SoundUtil;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
@@ -108,11 +110,32 @@ public class BlockRainCollector extends Block
 	//BlockCauldron.onBlockActivated
 	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ)
 	{
+		//Both Sides
+		
 		//Heavily tweaked to only cause purified water withdrawal, and to change the items that work with it
 		ItemStack itemstack = player.getHeldItem(hand);
 
 		if (itemstack.isEmpty())
 		{
+			if(player.isSneaking())
+			{
+				int amount = state.getValue(LEVEL);
+				if(amount > 0)
+				{
+					if(SDCapabilities.getThirstData(player).isThirsty())
+					{
+						SoundUtil.commonPlayPlayerSound(player, SoundEvents.ENTITY_GENERIC_DRINK);
+						
+						if(!world.isRemote)
+						{
+							//Server Side
+							this.setWaterLevel(world, pos, state, amount - 1);
+							ThirstUtil.takeDrink(player, ThirstEnum.PURIFIED);
+						}
+					}
+				}
+			}
+			
 			return true;
 		}
 		else
@@ -143,7 +166,7 @@ public class BlockRainCollector extends Block
 						//TODO should this also update the player's inventory like glass bottles do?
 					}
 					this.setWaterLevel(world, pos, state, amount - 1);
-					world.playSound(null, pos, SoundEvents.ITEM_BUCKET_FILL, SoundCategory.BLOCKS, 0.75F, 1.0F);
+					SoundUtil.serverPlayBlockSound(world, pos, SoundEvents.ITEM_BUCKET_FILL);
 				}
 				
 				return true;
@@ -169,7 +192,7 @@ public class BlockRainCollector extends Block
 							((EntityPlayerMP)player).sendContainerToPlayer(player.inventoryContainer);
 						}
 						this.setWaterLevel(world, pos, state, amount - 1);
-						world.playSound(null, pos, SoundEvents.ITEM_BOTTLE_FILL, SoundCategory.BLOCKS, 0.75f, 1.0f);
+						SoundUtil.serverPlayBlockSound(world, pos, SoundEvents.ITEM_BOTTLE_FILL);
 					}
 				}
 				
@@ -199,7 +222,7 @@ public class BlockRainCollector extends Block
 								this.setWaterLevel(world, pos, state, amount - 1);
 								
 								//Play sound
-								world.playSound(null, pos, SoundEvents.ITEM_BUCKET_FILL, SoundCategory.BLOCKS, 0.5F, 1.0F);
+								SoundUtil.serverPlayBlockSound(world, pos, SoundEvents.ITEM_BUCKET_FILL);
 							}
 							else if(itemstack.getItemDamage() > 0)
 							{
@@ -210,7 +233,7 @@ public class BlockRainCollector extends Block
 								this.setWaterLevel(world, pos, state, amount - 1);
 								
 								//Play sound
-								world.playSound(null, pos, SoundEvents.ITEM_BUCKET_FILL, SoundCategory.BLOCKS, 0.5F, 1.0F);
+								SoundUtil.serverPlayBlockSound(world, pos, SoundEvents.ITEM_BUCKET_FILL);
 							}
 							
 						}

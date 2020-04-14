@@ -7,6 +7,7 @@ import com.charles445.simpledifficulty.api.temperature.ITemperatureCapability;
 import com.charles445.simpledifficulty.api.thirst.IThirstCapability;
 import com.charles445.simpledifficulty.capability.TemperatureProvider;
 import com.charles445.simpledifficulty.capability.ThirstProvider;
+import com.charles445.simpledifficulty.config.ModConfig;
 import com.charles445.simpledifficulty.network.MessageUpdateTemperature;
 import com.charles445.simpledifficulty.network.MessageUpdateThirst;
 import com.charles445.simpledifficulty.network.PacketHandler;
@@ -24,7 +25,6 @@ import net.minecraftforge.fml.common.gameevent.TickEvent.PlayerTickEvent;
 
 public class CapabilityHandler
 {
-	
 	@SubscribeEvent
 	public void onAttachCapability(AttachCapabilitiesEvent event)
 	{
@@ -45,34 +45,6 @@ public class CapabilityHandler
 		}
 	}
 	
-	/* Player doesn't exist client side yet so this isn't going to work
-	@SubscribeEvent
-	public void onPlayerLogin(PlayerLoggedInEvent event)
-	{
-		EntityPlayer player = event.player;
-		World world = player.world;
-		
-		if(world.isRemote)
-			return;
-		
-		forceThirstUpdate(player);
-	}
-	*/
-	
-	@SubscribeEvent
-	public void onClonePlayer(Clone event)
-	{
-		//TODO Untested
-		
-		EntityPlayer player = event.getEntityPlayer();
-		World world = player.world;
-		
-		if(world.isRemote)
-			return;
-		
-		forceCapabilityUpdate(player);
-	}
-	
 	@SubscribeEvent
 	public void onPlayerTick(PlayerTickEvent event)
 	{
@@ -90,17 +62,21 @@ public class CapabilityHandler
 			*/		
 			return;
 		}
-			
+		
+		//Server Side (assumes EntityPlayerMP from this point on)
+		
+		int packetTimerThreshold = ModConfig.server.miscellaneous.routinePacketDelay;
+		
 		//Update Temperature
 		if(QuickConfig.isTemperatureEnabled())
 		{
 			ITemperatureCapability temperatureCapability = SDCapabilities.getTemperatureData(player);
 			temperatureCapability.tickUpdate(player, world, event.phase);
 			
-			if(temperatureCapability.isDirty() && event.phase == TickEvent.Phase.START)
+			if(event.phase == TickEvent.Phase.START && (temperatureCapability.isDirty() || temperatureCapability.getPacketTimer()%packetTimerThreshold == 0))
 			{
 				temperatureCapability.setClean();
-				sendTemperatureUpdate(player);
+				sendTemperatureUpdate((EntityPlayerMP)player);
 			}
 		}
 		
@@ -110,10 +86,10 @@ public class CapabilityHandler
 			IThirstCapability thirstCapability = SDCapabilities.getThirstData(player);
 			thirstCapability.tickUpdate(player,world,event.phase);
 			
-			if(thirstCapability.isDirty() && event.phase == TickEvent.Phase.START)
+			if(event.phase == TickEvent.Phase.START && (thirstCapability.isDirty() || thirstCapability.getPacketTimer()%packetTimerThreshold == 0))
 			{
 				thirstCapability.setClean();
-				sendThirstUpdate(player);
+				sendThirstUpdate((EntityPlayerMP)player);
 			}
 		}
 	}
@@ -124,39 +100,19 @@ public class CapabilityHandler
 		return player.isSpectator() || player.isCreative();
 	}
 	
-	private void forceCapabilityUpdate(EntityPlayer player)
+	private void sendTemperatureUpdate(EntityPlayerMP player)
 	{
-		if(QuickConfig.isTemperatureEnabled())
-		{
-			ITemperatureCapability tempCapability = SDCapabilities.getTemperatureData(player);
-			tempCapability.setClean();
-		}
-		
-		if(QuickConfig.isThirstEnabled())
-		{
-			IThirstCapability thirstCapability = SDCapabilities.getThirstData(player);
-			thirstCapability.setClean();
-			sendThirstUpdate(player);
-		}
-	}
-	
-	private void sendTemperatureUpdate(EntityPlayer player)
-	{
-		//TODO EntityPlayerMP issues? Is this ever a problem?
-		
 		Capability capability = SDCapabilities.TEMPERATURE;
 		
 		//Make new message with new data
 		MessageUpdateTemperature message = new MessageUpdateTemperature(capability.getStorage().writeNBT(capability, SDCapabilities.getTemperatureData(player), null));
 		
 		//Send to player
-		PacketHandler.instance.sendTo(message, (EntityPlayerMP) player);
+		PacketHandler.instance.sendTo(message, player);
 	}
 	
-	private void sendThirstUpdate(EntityPlayer player)
+	private void sendThirstUpdate(EntityPlayerMP player)
 	{
-		//TODO EntityPlayerMP issues? Is this ever a problem?
-		
 		//DebugUtil.messageAll("Player thirst has updated via sendThirstUpdate");
 		Capability capability = SDCapabilities.THIRST;
 		
@@ -164,6 +120,6 @@ public class CapabilityHandler
 		MessageUpdateThirst message = new MessageUpdateThirst(capability.getStorage().writeNBT(capability, SDCapabilities.getThirstData(player), null));
 		
 		//Send to player
-		PacketHandler.instance.sendTo(message, (EntityPlayerMP) player);
+		PacketHandler.instance.sendTo(message, player);
 	}
 }

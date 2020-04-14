@@ -38,6 +38,7 @@ public class TemperatureCapability implements ITemperatureCapability
 	private int debugtimer = 0;
 	private boolean manualDirty = false;
 	private int oldmodifiersize = 0;
+	private int packetTimer = 0;
 
 	@Override
 	public int getTemperatureLevel()
@@ -81,7 +82,10 @@ public class TemperatureCapability implements ITemperatureCapability
 		//NOTE Player can be in Creative or Spectator
 		
 		if(phase==TickEvent.Phase.START)
+		{
+			packetTimer++;
 			return;
+		}
 		
 		//DEBUG START
 		debugtimer++;
@@ -261,5 +265,11 @@ public class TemperatureCapability implements ITemperatureCapability
 	public void clearTemporaryModifiers()
 	{
 		this.temporaryModifiers.clear();
+	}
+	
+	@Override
+	public int getPacketTimer()
+	{
+		return packetTimer;
 	}
 }

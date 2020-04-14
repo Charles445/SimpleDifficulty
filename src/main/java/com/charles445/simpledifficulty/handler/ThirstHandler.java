@@ -14,10 +14,14 @@ import com.charles445.simpledifficulty.compat.ModNames;
 import com.charles445.simpledifficulty.config.ModConfig;
 import com.charles445.simpledifficulty.network.MessageDrinkWater;
 import com.charles445.simpledifficulty.network.PacketHandler;
+import com.charles445.simpledifficulty.util.SoundUtil;
 import com.charles445.simpledifficulty.util.internal.ThirstUtilInternal;
 
+import net.minecraft.block.BlockCauldron;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.init.PotionTypes;
 import net.minecraft.init.SoundEvents;
@@ -25,6 +29,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.potion.PotionType;
 import net.minecraft.potion.PotionUtils;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.event.entity.living.LivingEntityUseItemEvent;
 import net.minecraftforge.event.entity.living.LivingEvent.LivingJumpEvent;
@@ -141,6 +146,10 @@ public class ThirstHandler
 	@SubscribeEvent
 	public void onRightClickBlock(PlayerInteractEvent.RightClickBlock event)
 	{
+		//TODO is a client packet the way to go?
+		if(!QuickConfig.isThirstEnabled())
+			return;
+		
 		if(event.getWorld().isRemote)
 		{
 			//Client Side
@@ -149,22 +158,46 @@ public class ThirstHandler
 			if(event.getHand()==EnumHand.MAIN_HAND)
 			{
 				if(clientCheckWater(event.getEntityPlayer()))
-					clientSendDrinkMessage(event.getEntityPlayer());
+					clientSendDrinkMessageAndPlaySound(event.getEntityPlayer());
 			}
 		}
+		else
+		{
+			//Server side
+			EntityPlayer player = event.getEntityPlayer();
+			if(event.getHand()==EnumHand.MAIN_HAND && player.getHeldItemMainhand().isEmpty() && player.isSneaking())
+			{
+				World world = event.getWorld();
+				BlockPos pos = event.getPos();
+				IBlockState state = world.getBlockState(pos);
+					
+				if(state.getBlock() == Blocks.CAULDRON && SDCapabilities.getThirstData(player).isThirsty())
+				{
+
+					//Sneak-right clicking on a cauldron with an empty hand, with a thirsty player
+					int level = state.getValue(BlockCauldron.LEVEL);
+					if(level > 0)
+					{
+						ThirstUtil.takeDrink(player, ThirstEnum.NORMAL);
+						SoundUtil.serverPlayBlockSound(world, pos, SoundEvents.ENTITY_GENERIC_DRINK);
+					}
+				}
+			}
+		}	
 	}
 	
 	//Client Side
 	@SubscribeEvent
 	public void onRightClickEmpty(PlayerInteractEvent.RightClickEmpty event)
 	{
+		if(!QuickConfig.isThirstEnabled())
+			return;
+		
 		//Only run on main hand (otherwise it runs twice)
 		if(event.getHand()==EnumHand.MAIN_HAND)
 		{
 			if(clientCheckWater(event.getEntityPlayer()))
-				clientSendDrinkMessage(event.getEntityPlayer());
-			
-			//TODO check for empty water bottle? (I forgot why I wrote this todo)
+				clientSendDrinkMessageAndPlaySound(event.getEntityPlayer());
 		}
 	}
 	
@@ -179,7 +212,7 @@ public class ThirstHandler
 		return false;
 	}
 	
-	private void clientSendDrinkMessage(EntityPlayer player)
+	private void clientSendDrinkMessageAndPlaySound(EntityPlayer player)
 	{
 		//Make new message
 		MessageDrinkWater message = new MessageDrinkWater();
@@ -187,10 +220,9 @@ public class ThirstHandler
 		//Send to server
 		PacketHandler.instance.sendToServer(message);
 		
-		//TODO should sound be on server?
 		//Play sound and swing arm
-		player.playSound(SoundEvents.ENTITY_GENERIC_DRINK, 0.5f, 1.0f);
 		player.swingArm(EnumHand.MAIN_HAND);
+		SoundUtil.commonPlayPlayerSound(player, SoundEvents.ENTITY_GENERIC_DRINK);
 	}
 	
 	//

@@ -5,6 +5,7 @@ import java.util.Random;
 import javax.annotation.Nullable;
 
 import com.charles445.simpledifficulty.util.OreDictUtil;
+import com.charles445.simpledifficulty.util.SoundUtil;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
@@ -288,7 +289,7 @@ public class BlockCampfire extends Block implements IBlockStateIgnore
 	
 	private void effectExtinguish(World world, BlockPos pos)
 	{
-		world.playSound(null, pos, SoundEvents.BLOCK_FIRE_EXTINGUISH, SoundCategory.BLOCKS, 0.5f, 1.0f);
+		SoundUtil.serverPlayBlockSound(world, pos, SoundEvents.BLOCK_FIRE_EXTINGUISH);
 		world.spawnParticle(EnumParticleTypes.SMOKE_LARGE, 0.5d +  pos.getX(), 0.25d + pos.getY(), 0.5d + pos.getZ(), 0.0d, 0.1d, 0.0d);
 		
 		world.spawnParticle(EnumParticleTypes.SMOKE_LARGE, 0.75d +  pos.getX(), 0.25d + pos.getY(), 0.75d + pos.getZ(), 0.0d, 0.05d, 0.0d);

@@ -29,10 +29,13 @@ public class ThirstCapability implements IThirstCapability
 	private int oldthirst = 0;
 	private float oldsaturation = 0.0f;
 	Vector3d position = null;
+	private int packetTimer = 0;
 	
 	@Override
 	public void tickUpdate(EntityPlayer player, World world, TickEvent.Phase phase)
 	{
+		//TODO vector length sq instead?
+		
 		//This currently only runs on the server, which is very convenient
 		
 		//Allowing sprinting, for now, I don't see a reliable way to actually disable player sprinting
@@ -40,6 +43,7 @@ public class ThirstCapability implements IThirstCapability
 		if(phase == TickEvent.Phase.START)
 		{
 			//checkSprint(player);
+			packetTimer++;
 			return;
 		}
 		
@@ -227,5 +231,11 @@ public class ThirstCapability implements IThirstCapability
 	public boolean isThirsty()
 	{
 		return this.getThirstLevel() < 20;
+	}
+
+	@Override
+	public int getPacketTimer()
+	{
+		return packetTimer;
 	}
 }

@@ -50,4 +50,12 @@ public interface IThirstCapability
 	 * @param phase
 	 */
 	public void tickUpdate(EntityPlayer player, World world, TickEvent.Phase phase);
+	
+
+	/**
+	 * (Don't use this!) <br>
+	 * Gets the current tick of the packet timer
+	 * @return int packetTimer
+	 */
+	public int getPacketTimer();
 }

@@ -47,4 +47,11 @@ public interface ITemperatureCapability
 	 * Sets the capability as updated
 	 */
 	public void setClean();
+	
+	/**
+	 * (Don't use this!) <br>
+	 * Gets the current tick of the packet timer
+	 * @return int packetTimer
+	 */
+	public int getPacketTimer();
 }
