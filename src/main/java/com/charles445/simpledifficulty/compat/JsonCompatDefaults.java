@@ -143,6 +143,7 @@ public class JsonCompatDefaults
 		for(int i=1;i<=16;i++)
 		{
 			addHeldItemTemperature("harvestcraft:candledeco"+i, 1.0f);
+			addBlockTemperature("harvestcraft:candledeco"+i, 1.0f);
 		}
 		
 		return true;
@@ -220,7 +221,9 @@ public class JsonCompatDefaults
 			return false;
 		
 		addHeldItemTemperature("rustic:candle", 1.0f);
+		addBlockTemperature("rustic:candle", 1.0f);
 		addHeldItemTemperature("rustic:candle_gold", 1.0f);
+		addBlockTemperature("rustic:candle_gold", 1.0f);
 		
 		
 		int boozeThirst = 5;
