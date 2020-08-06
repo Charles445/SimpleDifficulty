@@ -1,6 +1,7 @@
 package com.charles445.simpledifficulty.network;
 
 import com.charles445.simpledifficulty.api.thirst.ThirstEnum;
+import com.charles445.simpledifficulty.api.thirst.ThirstEnumBlockPos;
 import com.charles445.simpledifficulty.api.thirst.ThirstUtil;
 import com.charles445.simpledifficulty.util.SoundUtil;
 import com.charles445.simpledifficulty.util.internal.ThirstUtilInternal;
@@ -49,9 +50,11 @@ public class MessageDrinkWater implements IMessage
 				{
 					player.getServerWorld().addScheduledTask(() -> 
 					{
-						ThirstEnum result = ThirstUtilInternal.traceWaterToDrink(player).thirstEnum;
-						if(result==null)
+						ThirstEnumBlockPos traceResult = ThirstUtilInternal.traceWaterToDrink(player);
+						if(traceResult==null)
 							return;
+						
+						ThirstEnum result = traceResult.thirstEnum;
 						
 						//Enum now has important values
 						

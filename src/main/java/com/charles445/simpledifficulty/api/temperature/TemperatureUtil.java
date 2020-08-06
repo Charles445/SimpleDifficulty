@@ -10,7 +10,9 @@ public class TemperatureUtil
 	public static ITemperatureUtil internal;
 	
 	/**
-	 * Calculates the target temperature of a player
+	 * Calculates the target temperature of a player. <br>
+	 * This is the target temperature, not the player's actual temperature! <br>
+	 * Calling this infrequently is recommended for the best performance.
 	 * @param player
 	 * @return Player's target temperature
 	 */
@@ -20,7 +22,8 @@ public class TemperatureUtil
 	}
 	
 	/**
-	 * Calculates the temperature of the world at a position
+	 * Calculates the temperature of the world at a position. <br>
+	 * Calling this infrequently is recommended for the best performance.
 	 * @param world
 	 * @param pos
 	 * @return World temperature at position

@@ -49,7 +49,6 @@ public class TemperatureStorage implements IStorage<ITemperatureCapability>
 	@Override
 	public void readNBT(Capability<ITemperatureCapability> capability, ITemperatureCapability instance, EnumFacing side, NBTBase nbt)
 	{
-		//TODO failsafe?
 		if(nbt instanceof NBTTagCompound)
 		{
 			NBTTagCompound compound = (NBTTagCompound)nbt;

@@ -1,13 +1,17 @@
 package com.charles445.simpledifficulty.command;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import javax.annotation.Nullable;
 
 import com.charles445.simpledifficulty.SimpleDifficulty;
+import com.charles445.simpledifficulty.api.SDCapabilities;
 import com.charles445.simpledifficulty.api.SDCompatibility;
 import com.charles445.simpledifficulty.api.config.JsonConfig;
+import com.charles445.simpledifficulty.api.temperature.ITemperatureCapability;
+import com.charles445.simpledifficulty.api.thirst.IThirstCapability;
 import com.charles445.simpledifficulty.compat.JsonCompatDefaults;
 import com.charles445.simpledifficulty.config.JsonConfigInternal;
 import com.charles445.simpledifficulty.config.JsonFileName;
@@ -18,13 +22,10 @@ import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextComponentString;
@@ -46,8 +47,10 @@ public class CommandSimpleDifficulty extends CommandBase
 			"addConsumableThirst",
 			"addFluid",
 			"addHeldItem",
-			"loadDefaultModConfig",
-			"nbt"
+			//"loadDefaultModConfig",
+			"nbt",
+			"setThirst",
+			"setTemperature"
 	});
 	
 	private final String commandUsage = "/simpledifficulty help";
@@ -63,8 +66,10 @@ public class CommandSimpleDifficulty extends CommandBase
 			+ "   addConsumableThirst <amount> <saturation> <thirstyChance>\n"
 			+ "   addFluid <temperature>\n"
 			+ "   addHeldItem <temperature>\n"
-			+ "   loadDefaultModConfig <modid>\n"
-			+ "   nbt";
+			//+ "   loadDefaultModConfig <modid>\n"
+			+ "   nbt\n"
+			+ "   setThirst <thirst> <saturation>\n"
+			+ "   setTemperature <temperature>";
 
 	private final String warn_notPlayerAdmin = "You do not have permission, or are not a player ingame!";
 	private final String warn_invalidArgs = "Invalid Arguments";
@@ -97,8 +102,18 @@ public class CommandSimpleDifficulty extends CommandBase
 	@Override
 	public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender, String[] args, @Nullable BlockPos targetPos)
 	{
-		//return Collections.<String>emptyList();
-		return tabCompletionsCommands;
+		if (args.length == 1)
+        {
+            return getListOfStringsMatchingLastWord(args, tabCompletionsCommands);
+        }
+		else if(args.length==0)
+		{
+			return tabCompletionsCommands;
+		}
+		else
+		{
+			return Collections.<String>emptyList();
+		}
 	}
 
 	@Override
@@ -125,6 +140,9 @@ public class CommandSimpleDifficulty extends CommandBase
 			
 			case "nbt": tagToString(server, sender, args); break;
 			
+			case "setthirst": setThirst(server, sender, args); break;
+			case "settemperature": setTemperature(server, sender, args); break;
+			
 			/*
 			armorTemperatures
 			blockTemperatures
@@ -136,7 +154,7 @@ public class CommandSimpleDifficulty extends CommandBase
 			*/
 			
 			
-			case "loaddefaultmodconfig": loadDefaultModConfig(server, sender, args); break;
+			//case "loaddefaultmodconfig": loadDefaultModConfig(server, sender, args); break;
 			
 			case "help": helpCommand(server, sender, args);break;
 			
@@ -165,11 +183,67 @@ public class CommandSimpleDifficulty extends CommandBase
 		case "addconsumablethirst":message(sender, "Adds the held item to the consumableThirst JSON\n(replenishes thirst when consumed)");return;
 		case "addfluid":message(sender, "Adds the held fluid item to the fluid JSON\n(changes temperature when inside the fluid)");return;
 		case "addhelditem":message(sender, "Adds the held item to the heldItems JSON\n(changes player temperature when held in mainhand or offhand)");return;
-		case "loaddefaultmodconfig":message(sender, "Loads a mod's built-in default JSON config.\nThis will overwrite any matching settings! Use caution.");return;
+		//case "loaddefaultmodconfig":message(sender, "Loads a mod's built-in default JSON config.\nThis will overwrite any matching settings! Use caution.");return;
 		case "nbt":message(sender, "Gets an item's NBT tag as a string for config use");return;
-		
+		case "setthirst":message(sender, "Sets the player's thirst");return;
+		case "settemperature":message(sender, "Sets the player's temperature");return;
 		
 			default:message(sender, "/simpledifficulty help <command> \n(Replace <command> with a simpledifficulty command name)");return;
+		}
+	}
+	
+	private void setThirst(MinecraftServer server, ICommandSender sender, String[] args)
+	{
+		if(isAdminPlayer(sender))
+		{
+			try
+			{
+				if(args.length < 2)
+				{
+					message(sender, warn_invalidArgs + " <modid>");
+					return;
+				}
+				
+				EntityPlayer player = (EntityPlayer)sender.getCommandSenderEntity();
+				IThirstCapability capability = SDCapabilities.getThirstData(player);
+				
+				capability.setThirstLevel(Integer.parseInt(args[1]));
+				
+				if(args.length >= 3)
+				{
+					capability.setThirstSaturation(Float.parseFloat(args[2]));
+				}
+			}
+			catch(NumberFormatException e)
+			{
+				message(sender, warn_invalidArgs + " <thirst> <saturation>");
+				return;
+			}
+		}
+	}
+	
+	private void setTemperature(MinecraftServer server, ICommandSender sender, String[] args)
+	{
+		if(isAdminPlayer(sender))
+		{
+			try
+			{
+				if(args.length < 2)
+				{
+					message(sender, warn_invalidArgs + " <temperature>");
+					return;
+				}
+				
+				EntityPlayer player = (EntityPlayer)sender.getCommandSenderEntity();
+				ITemperatureCapability capability = SDCapabilities.getTemperatureData(player);
+				
+				capability.setTemperatureLevel(Integer.parseInt(args[1]));
+			}
+			catch(NumberFormatException e)
+			{
+				message(sender, warn_invalidArgs + " <temperature>");
+				return;
+			}
 		}
 	}
 	
@@ -217,7 +291,8 @@ public class CommandSimpleDifficulty extends CommandBase
 			message(sender, warn_notPlayerAdmin);
 		}
 	}
-	
+	//Deprecated, this no longer works or is necessary
+	/*
 	private void loadDefaultModConfig(MinecraftServer server, ICommandSender sender, String[] args)
 	{
 		if(isAdminPlayer(sender))
@@ -258,6 +333,7 @@ public class CommandSimpleDifficulty extends CommandBase
 			message(sender, warn_notPlayerAdmin);
 		}
 	}
+	*/
 	
 	private void addBlock(MinecraftServer server, ICommandSender sender, String[] args)
 	{

@@ -61,8 +61,6 @@ public class BlockCampfire extends Block implements IBlockStateIgnore
 		setTickRandomly(true);
 	}
 	
-	//TODO there's no visual for when the campfire is burnt out other than a lack of flames and an inability to light it
-	
 	//INTERACT
 	
 	@Override

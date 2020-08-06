@@ -257,7 +257,7 @@ public class TemperatureGui
 			int therm_y = (therm_position / thermometer_per_row)*textureHeightTherm + texturepos_Y_therm;
 			
 			
-			//TODO configure where this thing draws
+			//Configure where this thing draws
 			
 			int therm_xOffset = ClientConfig.instance.getInteger(ClientOptions.HUD_THERMOMETERX);
 			int therm_yOffset = ClientConfig.instance.getInteger(ClientOptions.HUD_THERMOMETERY);

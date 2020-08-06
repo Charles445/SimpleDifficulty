@@ -253,6 +253,12 @@ public class TemperatureCapability implements ITemperatureCapability
 	@Override
 	public void setTemporaryModifier(String name, float temp, int duration)
 	{
+		//Prevent overriding with nothing or invalid results
+		//TODO some manner of determining what overrides what? Not a big deal right now
+		
+		if(temp == 0.0f || !Float.isFinite(temp))
+			return;
+		
 		if(this.temporaryModifiers.containsKey(name))
 		{
 			//Reset

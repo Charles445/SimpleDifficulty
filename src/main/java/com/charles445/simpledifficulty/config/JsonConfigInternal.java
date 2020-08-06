@@ -75,6 +75,8 @@ public class JsonConfigInternal
 		JsonConfig.registerBlockTemperature(SDBlocks.campfire, 7.0f, new JsonPropertyValue("burning", "true"));
 		JsonConfig.registerBlockTemperature(SDBlocks.campfire, 0.0f, new JsonPropertyValue("burning", "false")); //Example
 		
+		JsonConfig.registerBlockTemperature(Blocks.TORCH, 1.0f);
+		
 		JsonConfig.registerBlockTemperature(Blocks.LIT_FURNACE, 4.0f);
 		JsonConfig.registerBlockTemperature(Blocks.LAVA, 12.5f);
 		JsonConfig.registerBlockTemperature(Blocks.FLOWING_LAVA, 12.5f);
@@ -114,6 +116,11 @@ public class JsonConfigInternal
 		JsonConfig.fluidTemperatures = processJson(JsonFileName.fluidTemperatures.get(), JsonConfig.fluidTemperatures, JsonTypeToken.get(JsonFileName.fluidTemperatures), jsonDirectory);
 		JsonConfig.heldItemTemperatures = processJson(JsonFileName.heldItemTemperatures.get(), JsonConfig.heldItemTemperatures, JsonTypeToken.get(JsonFileName.heldItemTemperatures), jsonDirectory);
 		*/
+		
+		
+		//TODO Remove Migration after some versions (written for 0.3.0)
+		
+		
 		
 		//Armor Temperatures
 		String jsonFileName = JsonFileName.armorTemperatures.get();
@@ -158,7 +165,6 @@ public class JsonConfigInternal
 			}
 		}
 
-		//TODO migrate
 		//Consumable Temperature
 		jsonFileName = JsonFileName.consumableTemperature.get();
 		Map<String, List<JsonConsumableTemperature>> jsonConsumableTemperature = processJson(JsonFileName.consumableTemperature, JsonConfig.consumableTemperature, jsonDirectory, true);
@@ -236,7 +242,6 @@ public class JsonConfigInternal
 			}
 		}
 		
-		//TODO migrate
 		//Consumable Thirst
 		jsonFileName = JsonFileName.consumableThirst.get();
 		Map<String, List<JsonConsumableThirst>> jsonConsumableThirst = processJson(JsonFileName.consumableThirst, JsonConfig.consumableThirst, jsonDirectory, true);
@@ -292,7 +297,6 @@ public class JsonConfigInternal
 			}
 			else
 			{
-				//TODO normal behavior after migration has been ongoing for enough versions
 				for(Map.Entry<String, List<JsonConsumableThirst>> entry : jsonConsumableThirst.entrySet())
 				{
 					for(JsonConsumableThirst jct : entry.getValue())
@@ -336,7 +340,6 @@ public class JsonConfigInternal
 			}
 		}
 		
-		//TODO migrate
 		//Held Item Temperatures
 		jsonFileName = JsonFileName.heldItemTemperatures.get();
 		Map<String, List<JsonTemperatureIdentity>> jsonHeldItemTemperatures = processJson(JsonFileName.heldItemTemperatures, JsonConfig.heldItemTemperatures, jsonDirectory, true);

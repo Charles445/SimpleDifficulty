@@ -43,8 +43,6 @@ public class AUWDynamicModifier extends ModifierDynamicBase
 		if(!ModConfig.server.compatibility.toggles.armorUnderwear)
 			return currentTemperature;
 		
-		//TODO clean this up
-		
 		final ItemStack chestplate = player.getItemStackFromSlot(EntityEquipmentSlot.CHEST);
 		final ItemStack leggings = player.getItemStackFromSlot(EntityEquipmentSlot.LEGS);
 		

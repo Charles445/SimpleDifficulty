@@ -120,11 +120,6 @@ public class ThirstUtilInternal implements IThirstUtil
 		
 		IThirstCapability capability = SDCapabilities.getThirstData(player);
 		
-		//TODO reconsider the check for isThirsty, because modders will possibly want to add saturation themselves
-		//OK but the check is here because otherwise people can just chug water bottles to fortify saturation
-		//And other unforseeable futures
-		//Maybe make another method callable to ignore this check... lmao
-		
 		if(capability.isThirsty())
 		{
 			capability.addThirstLevel(thirst);
@@ -144,6 +139,13 @@ public class ThirstUtilInternal implements IThirstUtil
 			{
 				player.addPotionEffect(new PotionEffect(SDPotions.thirsty,600));
 			}
+		}
+		else
+		{
+			//Player isn't thirsty, so check if the saturation of the drink itself is more, and set to that
+			
+			if(capability.getThirstSaturation() < saturation)
+				capability.setThirstSaturation(saturation);
 		}
 	}
 	

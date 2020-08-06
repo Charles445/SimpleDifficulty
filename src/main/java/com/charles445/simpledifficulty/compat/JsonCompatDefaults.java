@@ -25,6 +25,7 @@ public class JsonCompatDefaults
 		populateHarvestCraft();
 		populateLycanitesMobs();
 		populatePyrotech();
+		populateRealisticTorches();
 		populateRustic();
 		populateSimpleCampfire();
 		populateTinkersConstruct();
@@ -38,6 +39,7 @@ public class JsonCompatDefaults
 			case HARVESTCRAFT: return populateHarvestCraft();
 			case LYCANITESMOBS: return populateLycanitesMobs();
 			case PYROTECH: return populatePyrotech();
+			case REALISTICTORCHES: return populateRealisticTorches();
 			case RUSTIC: return populateRustic();
 			case SIMPLECAMPFIRE: return populateSimpleCampfire();
 			case TINKERSCONSTRUCT: return populateTinkersConstruct();
@@ -165,6 +167,7 @@ public class JsonCompatDefaults
 		return true;
 	}
 	
+	//Pyrotech
 	private boolean populatePyrotech()
 	{
 		if(!canUseModJsonDefaults(PYROTECH))
@@ -194,6 +197,18 @@ public class JsonCompatDefaults
 		addBlockTemperature("pyrotech:brick_oven", pyroTechBrick, new JsonPropertyValue("type", "BOTTOM_LIT"));
 		addBlockTemperature("pyrotech:brick_sawmill", pyroTechBrick, new JsonPropertyValue("type", "BOTTOM_LIT"));
 		addBlockTemperature("pyrotech:brick_crucible", pyroTechBrick, new JsonPropertyValue("type", "BOTTOM_LIT"));
+		
+		return true;
+	}
+	
+	//Realistic Torches
+	private boolean populateRealisticTorches()
+	{
+		if(!canUseModJsonDefaults(REALISTICTORCHES))
+			return false;
+		
+		addHeldItemTemperature("realistictorches:torch_lit", 1.0f);
+		addBlockTemperature("realistictorches:torch_lit", 1.0f);
 		
 		return true;
 	}

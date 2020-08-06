@@ -34,7 +34,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class ItemCanteen extends ItemDrinkBase
 {
 	//TODO This code is terrible and can't be interfaced with
-	//TODO cauldron implementation? lol
 	
 	public static final String CANTEENTYPE = "CanteenType";
 	
@@ -91,6 +90,7 @@ public class ItemCanteen extends ItemDrinkBase
 		
 		//Only attempt refill if item isn't full or if it isn't normal water
 		//This prevents full purified canteens from getting overridden and removing purified water from the ground mistakenly
+		//TODO not this weird implementation that doesn't make much sense
 		if(!isCanteenFull(stack) || typetag==ThirstEnum.NORMAL.ordinal())
 		{
 			ThirstEnumBlockPos traceBlockPos = ThirstUtil.traceWater(player);
@@ -105,18 +105,10 @@ public class ItemCanteen extends ItemDrinkBase
 				if(trace==ThirstEnum.RAIN)
 					trace = ThirstEnum.NORMAL;
 				
-				if(trace.ordinal()==typetag)
-				{
-					addDose(stack);
-				}
-				else
-				{
-					setTypeTag(stack,trace.ordinal());
-					setDoses(stack,1);
-				}
+				tryAddDose(stack,trace);
+				SoundUtil.commonPlayPlayerSound(player, SoundEvents.ITEM_BUCKET_FILL);
 				player.setActiveHand(hand);
 				player.swingArm(hand);
-				SoundUtil.commonPlayPlayerSound(player, SoundEvents.ITEM_BUCKET_FILL);
 				player.stopActiveHand();
 				return new ActionResult(EnumActionResult.SUCCESS, stack);
 			}
@@ -183,91 +175,35 @@ public class ItemCanteen extends ItemDrinkBase
 	@Override
 	public int getThirstLevel(ItemStack stack)
 	{
-		int type = getTypeTag(stack).getInt();
-		if(type>=ThirstEnum.values().length)
-			return 0;
-		
-		return ThirstEnum.values()[type].getThirst();
+		ThirstEnum thirstEnum = getThirstEnum(stack);
+		return thirstEnum==null ? 0 : thirstEnum.getThirst();
 	}
 
 	@Override
 	public float getSaturationLevel(ItemStack stack)
 	{
-		int type = getTypeTag(stack).getInt();
-		if(type>=ThirstEnum.values().length)
-			return 0.0f;
-		
-		return ThirstEnum.values()[type].getSaturation();
+		ThirstEnum thirstEnum = getThirstEnum(stack);
+		return thirstEnum==null ? 0.0f : thirstEnum.getSaturation();
 	}
 
 	@Override
 	public float getDirtyChance(ItemStack stack)
 	{
+		ThirstEnum thirstEnum = getThirstEnum(stack);
+		return thirstEnum==null ? 0.0f : thirstEnum.getThirstyChance();
+	}
+	
+	@Nullable
+	public ThirstEnum getThirstEnum(ItemStack stack)
+	{
 		int type = getTypeTag(stack).getInt();
-		if(type>=ThirstEnum.values().length)
-			return 0.0f;
+		if(type >= ThirstEnum.values().length)
+			return null;
 		
-		return ThirstEnum.values()[type].getThirstyChance();
+		return ThirstEnum.values()[type];
 	}
 	
-	private void createTag(ItemStack stack)
-	{
-		setTypeTag(stack,ThirstEnum.NORMAL.ordinal());
-	}
-	
-	private void setTypeTag(ItemStack stack, int tag)
-	{
-		stack.setTagInfo(CANTEENTYPE, new NBTTagInt(tag));
-	}
-	
-	private boolean isCanteenFull(ItemStack stack)
-	{
-		return stack.getItemDamage()==0;
-	}
-	
-	private boolean isCanteenEmpty(ItemStack stack)
-	{
-		return stack.getItemDamage()==stack.getMaxDamage();
-	}
-	
-	private void setCanteenFull(ItemStack stack)
-	{
-		stack.setItemDamage(0);
-	}
-	
-	private void setCanteenEmpty(ItemStack stack)
-	{
-		stack.setItemDamage(stack.getMaxDamage());
-	}
-	
-	private void removeDose(ItemStack stack)
-	{
-		if(!isCanteenEmpty(stack))
-		{
-			stack.setItemDamage(stack.getItemDamage()+1);
-		}
-	}
-	
-	private void setDoses(ItemStack stack, int amount)
-	{
-		if(amount<=0)
-		{
-			setCanteenEmpty(stack);
-		}
-		else
-		{
-			//setItemDamage takes care of negative results
-			stack.setItemDamage(stack.getMaxDamage()-amount);
-		}
-	}
-	
-	private void addDose(ItemStack stack)
-	{
-		//setItemDamage takes care of negative results
-		stack.setItemDamage(stack.getItemDamage()-1);
-	}
-	
-	private NBTTagInt getTypeTag(ItemStack stack)
+	public NBTTagInt getTypeTag(ItemStack stack)
 	{
 		if(stack.getTagCompound()==null)
 		{
@@ -286,5 +222,87 @@ public class ItemCanteen extends ItemDrinkBase
 			createTag(stack);
 			return new NBTTagInt(ThirstEnum.NORMAL.ordinal());
 		}
+	}
+	
+	private void setTypeTag(ItemStack stack, ThirstEnum thirstEnum)
+	{
+		setTypeTag(stack, thirstEnum.ordinal());
+	}
+	
+	private void createTag(ItemStack stack)
+	{
+		setTypeTag(stack,ThirstEnum.NORMAL.ordinal());
+	}
+	
+	private void setTypeTag(ItemStack stack, int tag)
+	{
+		stack.setTagInfo(CANTEENTYPE, new NBTTagInt(tag));
+	}
+	
+	public boolean isCanteenFull(ItemStack stack)
+	{
+		return stack.getItemDamage()==0;
+	}
+	
+	public boolean isCanteenEmpty(ItemStack stack)
+	{
+		return stack.getItemDamage()==stack.getMaxDamage();
+	}
+	
+	public void setCanteenFull(ItemStack stack)
+	{
+		stack.setItemDamage(0);
+	}
+	
+	public void setCanteenEmpty(ItemStack stack)
+	{
+		stack.setItemDamage(stack.getMaxDamage());
+	}
+	
+	public void removeDose(ItemStack stack)
+	{
+		if(!isCanteenEmpty(stack))
+		{
+			stack.setItemDamage(stack.getItemDamage()+1);
+		}
+	}
+	
+	public void setDoses(ItemStack stack, ThirstEnum thirstEnum, int amount)
+	{
+		formatCanteen(stack,thirstEnum);
+		
+		if(amount<=0)
+		{
+			setCanteenEmpty(stack);
+		}
+		else
+		{
+			//setItemDamage takes care of negative results
+			stack.setItemDamage(stack.getMaxDamage()-amount);
+		}
+	}
+	
+	public boolean tryAddDose(ItemStack stack, ThirstEnum thirstEnum)
+	{
+		int oldDamage = stack.getItemDamage();
+		
+		boolean format = formatCanteen(stack,thirstEnum);
+		//setItemDamage takes care of negative results
+		stack.setItemDamage(stack.getItemDamage()-1);
+		
+		return format || stack.getItemDamage() != oldDamage;
+	}
+	
+	private boolean formatCanteen(ItemStack stack, ThirstEnum thirstEnum)
+	{
+		if(thirstEnum != getThirstEnum(stack))
+		{
+			//Set canteen to empty and set new type
+			setCanteenEmpty(stack);
+			setTypeTag(stack,thirstEnum);
+			return true;
+		}
+		
+		return false;
 	}
 }

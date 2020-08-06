@@ -7,7 +7,7 @@ import net.minecraft.block.Block;
 
 public class SDBlocks
 {
-	//Fluid Blocks are stored in the ModFluids class 
+	//Fluid Blocks are stored in the SDFluids class 
 	
 	public static final Map<String, Block> blocks = new LinkedHashMap<String, Block>();
 	

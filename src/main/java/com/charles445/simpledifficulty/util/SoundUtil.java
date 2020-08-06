@@ -9,6 +9,9 @@ import net.minecraft.world.World;
 
 public class SoundUtil
 {
+	/**
+	 * Must be run on both sides to work as intended
+	 */
 	public static void commonPlayPlayerSound(EntityPlayer player, SoundEvent sound)
 	{
 		player.playSound(sound, 0.5f, 1.0f);

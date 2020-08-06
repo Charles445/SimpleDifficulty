@@ -16,8 +16,6 @@ public class ModifierTime extends ModifierBase
 	@Override
 	public float getWorldInfluence(World world, BlockPos pos)
 	{
-		//TODO shade?
-		
 		//Overworld only
 		if(!world.provider.isSurfaceWorld())
 			return 0.0f;
@@ -52,15 +50,23 @@ public class ModifierTime extends ModifierBase
 		if(time < 12000)
 			timetemperature *= -1.0f;
 		
-		//Should have a value that's -3 to 3
-		
 		//0 to 1 for getTempForBiome, plusminus to -1 to 1, absolute to 1 to 0 to 1
 		//Would result in 0 to 1.25
 		//So instead, result in 0 to 0.25, and then add 1.0f to get 1 to 1.25
 		
 		float biomeMultiplier = 1.0f + (Math.abs(normalizeToPlusMinus(getTempForBiome(world.getBiome(pos)))) * ((float)ModConfig.server.temperature.timeBiomeMultiplier - 1.0f));
+		timetemperature *= biomeMultiplier;
+		
+		//Shade calculation, runs AFTER the biome multiplier
+		//Should have a value that's -3 to 3, or configured value
+		int shadeConf = ModConfig.server.temperature.timeTemperatureShade;
+		//TODO don't do it like this
+		if(timetemperature > 0 && shadeConf != 0 && !world.canSeeSky(pos) && !world.canSeeSky(pos.up()))
+		{
+			timetemperature = Math.max(0, timetemperature + shadeConf);
+		}
 		
 		//Underground effect and result
-		return applyUndergroundEffect(timetemperature * biomeMultiplier, world, pos);
+		return applyUndergroundEffect(timetemperature, world, pos);
 	}
 }

@@ -17,7 +17,6 @@ import net.minecraftforge.registries.IForgeRegistry;
 
 public class RegisterFluids
 {
-	//TODO fix lighting issues
 	//TODO block placing sound
 	
 	@Mod.EventBusSubscriber(modid = SimpleDifficulty.MODID)

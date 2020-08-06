@@ -29,7 +29,6 @@ public class ThirstStorage implements IStorage<IThirstCapability>
 	@Override
 	public void readNBT(Capability<IThirstCapability> capability, IThirstCapability instance, EnumFacing side, NBTBase nbt)
 	{
-		//TODO failsafe?
 		if(nbt instanceof NBTTagCompound)
 		{
 			NBTTagCompound compound = (NBTTagCompound)nbt;

@@ -34,8 +34,6 @@ public class ModConfig
 	
 	//TODO Lang
 	
-	//TODO Is it possible to migrate these to separate files w/o breaking it all completely?
-	
 	public static class ConfigServerConfig
 	{
 		@Config.Comment("Built-in mod compatibility options")
@@ -143,6 +141,10 @@ public class ModConfig
 			@Config.Comment("Time Temperature Night - Whether time changes temperature during the night")
 			@Config.Name("TimeTemperatureNight")
 			public boolean timeTemperatureNight = true;
+			
+			@Config.Comment("Time Temperature Shade - Effect of shade on time temperature, only applies when time temperature is hot")
+			@Config.Name("TimeTemperatureShade")
+			public int timeTemperatureShade = -2;
 			
 			@Config.Comment("Time Biome Temperature Multiplier - How strongly different biomes effect day/night temperature")
 			@Config.Name("TimeBiomeMultiplier")
@@ -282,8 +284,8 @@ public class ModConfig
 		@Config.Name("DrawThirstSaturation")
 		public boolean drawThirstSaturation = true;
 		
-		@Config.Comment("Client config debug")
-		@Config.Name("ClientConfigDebug")
+		@Config.Comment("Debug mode for clients")
+		@Config.Name("Client DebugMode")
 		public boolean clientdebug = false;
 		
 		@Config.Comment("Debug temperature readout")

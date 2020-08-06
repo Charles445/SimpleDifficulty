@@ -79,6 +79,8 @@ public abstract class ItemDrinkBase extends Item
 		
 		EntityPlayer player = (EntityPlayer)entityLiving;
 		
+		
+		//Check if the JSON has overridden the drink's defaults, and if so, allow ThirstHandler to take over
 		List<JsonConsumableThirst> jctList = JsonConfig.consumableThirst.get(this.getRegistryName().toString());
 		
 		boolean override = false;

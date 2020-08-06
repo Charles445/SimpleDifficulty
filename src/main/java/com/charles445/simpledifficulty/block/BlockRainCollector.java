@@ -42,8 +42,6 @@ public class BlockRainCollector extends Block
 	 * It would be nice to just extend BlockCauldron but that's harder to manage
 	 */
 	
-	//TODO drinking straight from a rain collector? It'd be pretty funny
-	
 	//BlockCauldron.LEVEL
 	public static final PropertyInteger LEVEL = PropertyInteger.create("level", 0, 3);
 	
@@ -63,7 +61,6 @@ public class BlockRainCollector extends Block
 	@Override
 	public void randomTick(World world, BlockPos pos, IBlockState state, Random random)
 	{
-		//TODO balancing this to match what it should be
 		if (world.rand.nextInt(6) == 1 && world.isRainingAt(pos.up()))
 		{
 			float f = world.getBiome(pos).getTemperature(pos);
@@ -163,7 +160,7 @@ public class BlockRainCollector extends Block
 						{
 							player.dropItem(ThirstUtil.createPurifiedWaterBucket(), false);
 						}
-						//TODO should this also update the player's inventory like glass bottles do?
+						//Should this also update the player's inventory like glass bottles do?
 					}
 					this.setWaterLevel(world, pos, state, amount - 1);
 					SoundUtil.serverPlayBlockSound(world, pos, SoundEvents.ITEM_BUCKET_FILL);

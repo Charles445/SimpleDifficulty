@@ -183,18 +183,25 @@ public class ThirstCapability implements IThirstCapability
 	public void setThirstExhaustion(float exhaustion)
 	{
 		this.exhaustion=Math.max(exhaustion,0.0f);
+		
+		if(!Float.isFinite(this.exhaustion))
+			this.exhaustion = 0.0f;
 	}
 
 	@Override
 	public void setThirstLevel(int thirst)
 	{
 		this.thirst = MathHelper.clamp(thirst, 0, 20);
+		
 	}
 
 	@Override
 	public void setThirstSaturation(float saturation)
 	{
 		this.saturation = MathHelper.clamp(saturation, 0.0f, 20.0f);
+
+		if(!Float.isFinite(this.saturation))
+			this.saturation = 0.0f;
 	}
 
 	@Override

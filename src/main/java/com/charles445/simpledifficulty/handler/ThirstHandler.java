@@ -3,6 +3,7 @@ package com.charles445.simpledifficulty.handler;
 import java.util.List;
 
 import com.charles445.simpledifficulty.api.SDCapabilities;
+import com.charles445.simpledifficulty.api.SDItems;
 import com.charles445.simpledifficulty.api.SDPotions;
 import com.charles445.simpledifficulty.api.config.JsonConfig;
 import com.charles445.simpledifficulty.api.config.QuickConfig;
@@ -12,6 +13,7 @@ import com.charles445.simpledifficulty.api.thirst.ThirstEnum;
 import com.charles445.simpledifficulty.api.thirst.ThirstUtil;
 import com.charles445.simpledifficulty.compat.ModNames;
 import com.charles445.simpledifficulty.config.ModConfig;
+import com.charles445.simpledifficulty.item.ItemCanteen;
 import com.charles445.simpledifficulty.network.MessageDrinkWater;
 import com.charles445.simpledifficulty.network.PacketHandler;
 import com.charles445.simpledifficulty.util.SoundUtil;
@@ -31,6 +33,7 @@ import net.minecraft.potion.PotionUtils;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldServer;
 import net.minecraftforge.event.entity.living.LivingEntityUseItemEvent;
 import net.minecraftforge.event.entity.living.LivingEvent.LivingJumpEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
@@ -66,6 +69,22 @@ public class ThirstHandler
 			
 			ItemStack stack = event.getItem();
 			
+			//JSON
+			List<JsonConsumableThirst> consumableList = JsonConfig.consumableThirst.get(stack.getItem().getRegistryName().toString());
+			if(consumableList!=null)
+			{
+				for(JsonConsumableThirst jct : consumableList)
+				{
+					if(jct==null)
+						continue;
+					if(jct.matches(stack))
+					{
+						ThirstUtil.takeDrink(player, jct.amount, jct.saturation, jct.thirstyChance);
+						return;
+					}
+				}
+			}
+			
 			if(stack.getItem().equals(Items.POTIONITEM))
 			{
 				PotionType potionType = PotionUtils.getPotionFromItem(stack);
@@ -91,25 +110,6 @@ public class ThirstHandler
 					else if(SDPotions.potionTypes.containsValue(potionType))
 					{
 						ThirstUtil.takeDrink(player, ThirstEnum.POTION);
-						return;
-					}
-				}
-				
-				//Mod potion, do nothing
-				return;
-			}
-			
-			//JSON
-			List<JsonConsumableThirst> consumableList = JsonConfig.consumableThirst.get(stack.getItem().getRegistryName().toString());
-			if(consumableList!=null)
-			{
-				for(JsonConsumableThirst jct : consumableList)
-				{
-					if(jct==null)
-						continue;
-					if(jct.matches(stack))
-					{
-						ThirstUtil.takeDrink(player, jct.amount, jct.saturation, jct.thirstyChance);
 						return;
 					}
 				}
@@ -165,21 +165,52 @@ public class ThirstHandler
 		{
 			//Server side
 			EntityPlayer player = event.getEntityPlayer();
-			if(event.getHand()==EnumHand.MAIN_HAND && player.getHeldItemMainhand().isEmpty() && player.isSneaking())
+			EnumHand hand = event.getHand();
+			if(hand==EnumHand.MAIN_HAND)
 			{
-				World world = event.getWorld();
-				BlockPos pos = event.getPos();
-				IBlockState state = world.getBlockState(pos);
-					
-				if(state.getBlock() == Blocks.CAULDRON && SDCapabilities.getThirstData(player).isThirsty())
+				ItemStack heldItem = player.getHeldItemMainhand();
+				if(heldItem.isEmpty() && player.isSneaking())
 				{
-
-					//Sneak-right clicking on a cauldron with an empty hand, with a thirsty player
-					int level = state.getValue(BlockCauldron.LEVEL);
-					if(level > 0)
+					World world = event.getWorld();
+					BlockPos pos = event.getPos();
+					IBlockState state = world.getBlockState(pos);
+						
+					if(state.getBlock() == Blocks.CAULDRON && SDCapabilities.getThirstData(player).isThirsty())
 					{
-						ThirstUtil.takeDrink(player, ThirstEnum.NORMAL);
-						SoundUtil.serverPlayBlockSound(world, pos, SoundEvents.ENTITY_GENERIC_DRINK);
+	
+						//Sneak-right clicking on a cauldron with an empty hand, with a thirsty player
+						int level = state.getValue(BlockCauldron.LEVEL);
+						if(level > 0)
+						{
+							ThirstUtil.takeDrink(player, ThirstEnum.NORMAL);
+							SoundUtil.serverPlayBlockSound(world, pos, SoundEvents.ENTITY_GENERIC_DRINK);
+						}
+					}
+				}
+				else if(heldItem.getItem() == SDItems.canteen)
+				{
+					//TODO this is janky and probably not the right place for it anyway
+					
+					World world = event.getWorld();
+					BlockPos pos = event.getPos();
+					IBlockState state = world.getBlockState(pos);
+						
+					if(state.getBlock() == Blocks.CAULDRON)
+					{
+						int level = state.getValue(BlockCauldron.LEVEL);
+						if(level > 0)
+						{
+							ItemCanteen canteen = (ItemCanteen) heldItem.getItem();
+							
+							int dam = canteen.getDamage(heldItem);
+							if(canteen.tryAddDose(heldItem,ThirstEnum.NORMAL))
+							{
+								SoundUtil.serverPlayBlockSound(world, pos, SoundEvents.ITEM_BUCKET_FILL);
+								
+								//TODO Auto drink bug is present when using canteens on cauldrons
+								//Not sure how to fix, stop active hand and the scheduled variant don't seem to work
+							}
+						}
 					}
 				}
 			}

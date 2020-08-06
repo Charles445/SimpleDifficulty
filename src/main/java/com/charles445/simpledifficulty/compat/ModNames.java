@@ -9,6 +9,7 @@ public class ModNames
 	public static final String LYCANITESMOBS = "lycanitesmobs";
 	public static final String OREEXCAVATION = "oreexcavation";
 	public static final String PYROTECH = "pyrotech";
+	public static final String REALISTICTORCHES = "realistictorches";
 	public static final String RUSTIC = "rustic";
 	public static final String SERENESEASONS = "sereneseasons";
 	public static final String SIMPLECAMPFIRE = "campfire";
