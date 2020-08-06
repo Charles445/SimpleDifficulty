@@ -1,10 +1,11 @@
 {
 	"homepage": "https://www.curseforge.com/minecraft/mc-mods/simpledifficulty/files",
 	"promos": {
-		"1.12.2-latest":        "0.2.4",
-		"1.12.2-recommended":   "0.2.4"
+		"1.12.2-latest":        "0.3.0",
+		"1.12.2-recommended":   "0.3.0"
 	},
 	"1.12.2": {
+		"0.3.0": "Rustic, Pyrotech, cauldron drinking, lots of stuff, check CurseForge for details",
 		"0.2.4": "Hotfix for crash on server start that's been there since 0.1.0, oops",
 		"0.2.3": "OreExcavation, Tinker's Construct, Ice Armor reskin, Thermomter HUD config, bug fixes",
 		"0.2.2": "ArmorUnderwear, HarvestCraft, Harvest Festival, Held Item Temperature, Thirst Config, Help commands",
