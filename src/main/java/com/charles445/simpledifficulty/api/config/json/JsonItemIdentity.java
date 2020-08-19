@@ -2,12 +2,9 @@ package com.charles445.simpledifficulty.api.config.json;
 
 import javax.annotation.Nullable;
 
-import com.charles445.simpledifficulty.SimpleDifficulty;
-
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.JsonToNBT;
 import net.minecraft.nbt.NBTBase;
-import net.minecraft.nbt.NBTException;
 import net.minecraft.nbt.NBTTagCompound;
 
 public class JsonItemIdentity
@@ -58,11 +55,7 @@ public class JsonItemIdentity
 				}
 				catch (Exception e)
 				{
-					SimpleDifficulty.logger.error("Configuration failed with NBT string: "+nbt);
-					
 					//Remove the NBT from the item
-					//TODO this could cause a problem and cause error spam
-					
 					this.nbtCompound = null;
 					this.nbt = null;
 				}

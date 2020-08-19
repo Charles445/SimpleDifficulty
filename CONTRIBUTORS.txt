@@ -1,6 +1,13 @@
 
 List of contributors 
 
+Charles445 - anything not specified below
 
+ - Assets - 
 tehmadtitaan - Ice Armor Model Textures, Cloth Armor Model Textures
-Charles445 - everything else
+
+
+
+
+ - Translations - 
+WeiEAL - Chinese (Simplified) (zh_cn.lang)

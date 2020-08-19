@@ -76,6 +76,7 @@ public class CommandSimpleDifficulty extends CommandBase
 	private final String warn_noItem = "Not holding an item!";
 	private final String exportJsonReminder = "(Don't forget to exportJson !)";
 
+	@Override
 	public List<String> getAliases()
     {
 		return Arrays.asList(new String[]{"sd"});
@@ -645,6 +646,8 @@ public class CommandSimpleDifficulty extends CommandBase
 			message(sender, "Reloading SimpleDifficulty JSON");
 			JsonConfigInternal.jsonErrors.clear();
 			
+			//Clear the data containers
+			JsonConfigInternal.clearContainers();
 			
 			//Reload the json (do the startup routine)
 			JsonConfigInternal.init(SimpleDifficulty.jsonDirectory);

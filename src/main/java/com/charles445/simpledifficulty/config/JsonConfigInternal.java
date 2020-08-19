@@ -52,14 +52,6 @@ public class JsonConfigInternal
 	//postInit
 	public static void init(File jsonDirectory)
 	{
-		//Clear the containers first (in case this isn't the first run)
-		JsonConfig.armorTemperatures.clear();
-		JsonConfig.blockTemperatures.clear();
-		JsonConfig.consumableTemperature.clear();
-		JsonConfig.consumableThirst.clear();
-		JsonConfig.fluidTemperatures.clear();
-		JsonConfig.heldItemTemperatures.clear();
-		
 		//Setup default JSON
 		
 		JsonConfig.registerArmorTemperature(new ItemStack(SDItems.wool_helmet), 2.0f);
@@ -99,6 +91,18 @@ public class JsonConfigInternal
 		//TODO consider how fluidTemperatures should actually be stored. is Fluid name a reliable way to get their name? 
 		
 		processAllJson(jsonDirectory);
+	}
+	
+	/** Do NOT call this before load complete is finished!!**/
+	public static void clearContainers()
+	{
+		//Clear the containers (in case this isn't the first run)
+		JsonConfig.armorTemperatures.clear();
+		JsonConfig.blockTemperatures.clear();
+		JsonConfig.consumableTemperature.clear();
+		JsonConfig.consumableThirst.clear();
+		JsonConfig.fluidTemperatures.clear();
+		JsonConfig.heldItemTemperatures.clear();
 	}
 	
 	public static void processAllJson(File jsonDirectory)
