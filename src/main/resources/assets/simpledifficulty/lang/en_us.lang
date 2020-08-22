@@ -1,7 +1,13 @@
+death.attack.dehydration=%1$s died from dehydration
+death.attack.hyperthermia=%1$s died from hyperthermia
+death.attack.hypothermia=%1$s died from hypothermia
+death.attack.parasites=%1$s died from parasites
+
 effect.cold_resist=Cold Resistance
 effect.heat_resist=Heat Resistance
 effect.hyperthermia=Hyperthermia
 effect.hypothermia=Hypothermia
+effect.parasites=Parasites
 effect.thirsty=Thirsty
 
 enchantment.chilling=Chilling

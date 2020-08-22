@@ -6,6 +6,7 @@ import com.charles445.simpledifficulty.SimpleDifficulty;
 import com.charles445.simpledifficulty.api.SDPotions;
 import com.charles445.simpledifficulty.potion.PotionHyperthermia;
 import com.charles445.simpledifficulty.potion.PotionHypothermia;
+import com.charles445.simpledifficulty.potion.PotionParasites;
 import com.charles445.simpledifficulty.potion.PotionResistCold;
 import com.charles445.simpledifficulty.potion.PotionResistHeat;
 import com.charles445.simpledifficulty.potion.PotionThirsty;
@@ -31,6 +32,7 @@ public class RegisterPotions
 			hyperthermia = registerAs("hyperthermia", new PotionHyperthermia(), registry);
 			hypothermia = registerAs("hypothermia", new PotionHypothermia(), registry);
 			thirsty = registerAs("thirsty", new PotionThirsty(), registry);
+			parasites = registerAs("parasites", new PotionParasites(), registry);
 			
 			cold_resist = registerAs("cold_resist", new PotionResistCold(), registry);
 			heat_resist = registerAs("heat_resist", new PotionResistHeat(), registry);

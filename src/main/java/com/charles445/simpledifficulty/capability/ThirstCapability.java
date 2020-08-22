@@ -3,6 +3,7 @@ package com.charles445.simpledifficulty.capability;
 import javax.vecmath.Vector3d;
 
 import com.charles445.simpledifficulty.api.SDCapabilities;
+import com.charles445.simpledifficulty.api.SDDamageSources;
 import com.charles445.simpledifficulty.api.config.ServerConfig;
 import com.charles445.simpledifficulty.api.config.ServerOptions;
 import com.charles445.simpledifficulty.api.thirst.IThirstCapability;
@@ -120,7 +121,7 @@ public class ThirstCapability implements IThirstCapability
 				
 				if(DamageUtil.isModDangerous(world) && DamageUtil.healthAboveDifficulty(world, player))
 				{
-					player.attackEntityFrom(DamageSource.STARVE, 1.0f);
+					player.attackEntityFrom(SDDamageSources.DEHYDRATION, 1.0f);
 				}
 			}
 		}

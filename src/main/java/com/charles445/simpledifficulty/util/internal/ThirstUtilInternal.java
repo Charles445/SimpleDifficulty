@@ -13,6 +13,7 @@ import com.charles445.simpledifficulty.api.thirst.IThirstUtil;
 import com.charles445.simpledifficulty.api.thirst.ThirstEnum;
 import com.charles445.simpledifficulty.api.thirst.ThirstEnumBlockPos;
 import com.charles445.simpledifficulty.api.thirst.ThirstUtil;
+import com.charles445.simpledifficulty.config.ModConfig;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
@@ -138,6 +139,12 @@ public class ThirstUtilInternal implements IThirstUtil
 			if(dirtyChance != 0.0f && player.world.rand.nextFloat() < dirtyChance)
 			{
 				player.addPotionEffect(new PotionEffect(SDPotions.thirsty,600));
+				
+				//Test for parasites
+				if(ModConfig.server.thirst.thirstParasites && player.world.rand.nextDouble() < ModConfig.server.thirst.thirstParasitesChance)
+				{
+					player.addPotionEffect(new PotionEffect(SDPotions.parasites, ModConfig.server.thirst.thirstParasitesDuration));
+				}
 			}
 		}
 		else

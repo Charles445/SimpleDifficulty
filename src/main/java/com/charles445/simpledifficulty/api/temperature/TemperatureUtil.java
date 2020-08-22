@@ -12,7 +12,8 @@ public class TemperatureUtil
 	/**
 	 * Calculates the target temperature of a player. <br>
 	 * This is the target temperature, not the player's actual temperature! <br>
-	 * Calling this infrequently is recommended for the best performance.
+	 * Calling this infrequently is recommended for the best performance. <br>
+	 * If you want the player's actual temperature, check the player's temperature capability via the SDCapabilities class<br>
 	 * @param player
 	 * @return Player's target temperature
 	 */

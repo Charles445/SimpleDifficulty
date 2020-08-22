@@ -1,5 +1,6 @@
 package com.charles445.simpledifficulty.potion;
 
+import com.charles445.simpledifficulty.api.SDDamageSources;
 import com.charles445.simpledifficulty.api.SDPotions;
 import com.charles445.simpledifficulty.util.DamageUtil;
 
@@ -37,7 +38,7 @@ public class PotionHypothermia extends PotionBase
 			EntityPlayer player = (EntityPlayer) entity;
 			if(DamageUtil.isModDangerous(world) && DamageUtil.healthAboveDifficulty(world, player))
 			{
-				player.attackEntityFrom(DamageSource.GENERIC, 0.5f);
+				player.attackEntityFrom(SDDamageSources.HYPOTHERMIA, 0.5f);
 			}
 		}
 	}

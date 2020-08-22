@@ -7,11 +7,11 @@ import javax.annotation.Nullable;
 import com.charles445.simpledifficulty.SimpleDifficulty;
 import com.charles445.simpledifficulty.api.SDCapabilities;
 import com.charles445.simpledifficulty.api.config.QuickConfig;
+import com.charles445.simpledifficulty.api.item.IItemCanteen;
 import com.charles445.simpledifficulty.api.thirst.IThirstCapability;
 import com.charles445.simpledifficulty.api.thirst.ThirstEnum;
 import com.charles445.simpledifficulty.api.thirst.ThirstEnumBlockPos;
 import com.charles445.simpledifficulty.api.thirst.ThirstUtil;
-import com.charles445.simpledifficulty.capability.ThirstCapability;
 import com.charles445.simpledifficulty.util.SoundUtil;
 
 import net.minecraft.client.resources.I18n;
@@ -31,7 +31,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class ItemCanteen extends ItemDrinkBase
+public class ItemCanteen extends ItemDrinkBase implements IItemCanteen
 {
 	//TODO This code is terrible and can't be interfaced with
 	
@@ -193,7 +193,9 @@ public class ItemCanteen extends ItemDrinkBase
 		return thirstEnum==null ? 0.0f : thirstEnum.getThirstyChance();
 	}
 	
+	//TODO Nullable is not smart here
 	@Nullable
+	@Override
 	public ThirstEnum getThirstEnum(ItemStack stack)
 	{
 		int type = getTypeTag(stack).getInt();
@@ -239,26 +241,31 @@ public class ItemCanteen extends ItemDrinkBase
 		stack.setTagInfo(CANTEENTYPE, new NBTTagInt(tag));
 	}
 	
+	@Override
 	public boolean isCanteenFull(ItemStack stack)
 	{
 		return stack.getItemDamage()==0;
 	}
 	
+	@Override
 	public boolean isCanteenEmpty(ItemStack stack)
 	{
 		return stack.getItemDamage()==stack.getMaxDamage();
 	}
 	
+	@Override
 	public void setCanteenFull(ItemStack stack)
 	{
 		stack.setItemDamage(0);
 	}
 	
+	@Override
 	public void setCanteenEmpty(ItemStack stack)
 	{
 		stack.setItemDamage(stack.getMaxDamage());
 	}
 	
+	@Override
 	public void removeDose(ItemStack stack)
 	{
 		if(!isCanteenEmpty(stack))
@@ -267,6 +274,7 @@ public class ItemCanteen extends ItemDrinkBase
 		}
 	}
 	
+	@Override
 	public void setDoses(ItemStack stack, ThirstEnum thirstEnum, int amount)
 	{
 		formatCanteen(stack,thirstEnum);
@@ -282,6 +290,7 @@ public class ItemCanteen extends ItemDrinkBase
 		}
 	}
 	
+	@Override
 	public boolean tryAddDose(ItemStack stack, ThirstEnum thirstEnum)
 	{
 		int oldDamage = stack.getItemDamage();

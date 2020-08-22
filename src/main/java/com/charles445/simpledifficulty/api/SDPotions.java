@@ -14,6 +14,7 @@ public class SDPotions
 	public static Potion hyperthermia;
 	public static Potion hypothermia;
 	public static Potion thirsty;
+	public static Potion parasites;
 	
 	public static Potion cold_resist;
 	public static Potion heat_resist;

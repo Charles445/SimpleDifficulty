@@ -52,6 +52,7 @@ public class DebugVerifier
 		test(SDPotions.hyperthermia, SDPotions.potions.get("hyperthermia"));
 		test(SDPotions.hypothermia, SDPotions.potions.get("hypothermia"));
 		test(SDPotions.thirsty, SDPotions.potions.get("thirsty"));
+		test(SDPotions.parasites, SDPotions.potions.get("parasites"));
 		test(SDPotions.cold_resist, SDPotions.potions.get("cold_resist"));
 		test(SDPotions.heat_resist, SDPotions.potions.get("heat_resist"));
 		

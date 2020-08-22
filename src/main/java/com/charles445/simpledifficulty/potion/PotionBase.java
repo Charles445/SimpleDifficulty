@@ -62,7 +62,12 @@ public abstract class PotionBase extends Potion
 	public boolean isReady(int duration, int amplifier)
 	{
 		//Regeneration base
-		int k = 50 >> amplifier;
+		return isReadyVar(duration, amplifier, 50);
+	}
+	
+	public boolean isReadyVar(int duration, int amplifier, int var)
+	{
+		int k = var >> amplifier;
 
 		if (k > 0)
 		{

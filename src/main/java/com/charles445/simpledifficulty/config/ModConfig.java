@@ -252,7 +252,7 @@ public class ModConfig
 			public double thirstSwimmingMovement = 0.015d;
 			
 			@Config.Comment("Thirst Sprinting Movement - How exhausting sprinting movement is")
-			@Config.Name("ThristSprintingMovement")
+			@Config.Name("ThirstSprintingMovement")
 			@Config.RangeDouble(min=0.0)
 			public double thirstSprintingMovement = 0.1d;
 			
@@ -260,7 +260,30 @@ public class ModConfig
 			@Config.Name("ThirstWalkingMovement")
 			@Config.RangeDouble(min=0.0)
 			public double thirstWalkingMovement = 0.01d;
+
+			@Config.Comment("Whether the player can get parasites from drinking unclean water")
+			@Config.Name("ThirstParasites")
+			public boolean thirstParasites = false;
 			
+			@Config.Comment("The chance of parasites from drinking unclean water")
+			@Config.Name("ThirstParasitesChance")
+			@Config.RangeDouble(min=0.0, max=1.0)
+			public double thirstParasitesChance = 0.04d;
+			
+			@Config.Comment("The duration parasites last")
+			@Config.Name("ThirstParasitesDuration")
+			@Config.RangeInt(min=1)
+			public int thirstParasitesDuration = 1200;
+			
+			@Config.Comment("How strongly parasites make a player hungry (0.005 is same speed as hunger, 0 to disable")
+			@Config.Name("ThirstParasitesHunger")
+			@Config.RangeDouble(min=0.0)
+			public double thirstParasitesHunger = 0.02d;
+			
+			@Config.Comment("The chance a player takes damage from parasites (1 is poison speed, 0 to disable)")
+			@Config.Name("ThirstParasitesDamage")
+			@Config.RangeDouble(min=0.0, max=1.0)
+			public double thirstParasitesDamage = 0.2d;
 			
 			
 		}
