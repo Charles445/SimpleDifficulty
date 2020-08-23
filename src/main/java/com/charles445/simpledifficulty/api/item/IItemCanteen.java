@@ -8,9 +8,6 @@ import net.minecraft.item.ItemStack;
 
 /** Interface for ItemCanteen
  * <br>
- *  To check if a stack is a canteen use instanceof IItemCanteen on the ItemStack's item
- * <br>
- *
  */
 public interface IItemCanteen
 {

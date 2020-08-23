@@ -4,6 +4,7 @@ import java.util.Random;
 
 import javax.annotation.Nullable;
 
+import com.charles445.simpledifficulty.api.SDBlocks;
 import com.charles445.simpledifficulty.util.OreDictUtil;
 import com.charles445.simpledifficulty.util.SoundUtil;
 
@@ -17,7 +18,6 @@ import net.minecraft.block.properties.PropertyInteger;
 import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.audio.SoundRegistry;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -66,10 +66,24 @@ public class BlockCampfire extends Block implements IBlockStateIgnore
 	@Override
 	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ)
 	{
+		final ItemStack heldItemStack = player.getHeldItem(hand);
+		
+		//Return true on open hand
+		if(heldItemStack.isEmpty())
+			return true;
+		
+		final Item heldItem = heldItemStack.getItem();
+		
+		//Allow direct placement of a spit
+		if(Block.getBlockFromItem(heldItem).equals(SDBlocks.spit))
+			return false;
+		
+		//Always return true from this point onwards
+		
 		if(world.isRemote)
 		{
 			//Client Sound Handler
-			if(player.getHeldItem(hand).getItem()==Items.FLINT_AND_STEEL)
+			if(heldItem==Items.FLINT_AND_STEEL)
 			{
 				int age = state.getValue(AGE);
 				boolean burning = state.getValue(BURNING);
@@ -81,52 +95,48 @@ public class BlockCampfire extends Block implements IBlockStateIgnore
 			
 			return true;
 		}
-
-		final ItemStack heldItemStack = player.getHeldItem(hand);
-		if(!heldItemStack.isEmpty())
+		
+		//SERVER SIDE HANDLING
+		
+		int age = state.getValue(AGE);
+		boolean burning = state.getValue(BURNING);
+		
+		if(OreDictUtil.isOre(OreDictUtil.logWood,heldItemStack))
 		{
-			final Item heldItem = heldItemStack.getItem();
-			
-			int age = state.getValue(AGE);
-			boolean burning = state.getValue(BURNING);
-			
-			if(OreDictUtil.isOre(OreDictUtil.logWood,heldItemStack))
+			if(age > AGE_MIN)
 			{
-				if(age > AGE_MIN)
+				//Do logs
+				heldItemStack.shrink(1);
+				//Give it a little bit of a bump if it's all gone...
+				int refuelAmount = (LOG_REFUEL + (age == AGE_MAX? 1 : 0));
+				world.setBlockState(pos, state.withProperty(AGE, Math.max(AGE_MIN, age - refuelAmount)), 2);
+				//TODO feedback on log fueling?
+			}
+			
+			return true;
+		}
+		else if(!burning && age < AGE_MAX && !world.isRainingAt(pos.up()))
+		{
+			if(OreDictUtil.isOre(OreDictUtil.stick, heldItemStack) || heldItem == Items.STICK)
+			{
+				//Do stick
+				heldItemStack.shrink(1);
+				if(world.rand.nextInt(STICK_IGNITE_CHANCE)==0)
 				{
-					//Do logs
-					heldItemStack.shrink(1);
-					//Give it a little bit of a bump if it's all gone...
-					int refuelAmount = (LOG_REFUEL + (age == AGE_MAX? 1 : 0));
-					world.setBlockState(pos, state.withProperty(AGE, Math.max(AGE_MIN, age - refuelAmount)), 2);
-					//TODO feedback on log fueling?
+					world.setBlockState(pos, state.withProperty(BURNING, true), 2);
 				}
 				
 				return true;
 			}
-			else if(!burning && age < AGE_MAX && !world.isRainingAt(pos.up()))
+			else if(heldItem==Items.FLINT_AND_STEEL)
 			{
-				if(OreDictUtil.isOre(OreDictUtil.stick, heldItemStack) || heldItem == Items.STICK)
-				{
-					//Do stick
-					heldItemStack.shrink(1);
-					if(world.rand.nextInt(STICK_IGNITE_CHANCE)==0)
-					{
-						world.setBlockState(pos, state.withProperty(BURNING, true), 2);
-					}
-					
-					return true;
-				}
-				else if(heldItem==Items.FLINT_AND_STEEL)
-				{
-					//Do flint and steel
-					world.setBlockState(pos, state.withProperty(BURNING, true), 2);
-					
-					//Sound would normally go here but it's handled clientside instead
-					
-					heldItemStack.damageItem(1, player);
-					return true;
-				}
+				//Do flint and steel
+				world.setBlockState(pos, state.withProperty(BURNING, true), 2);
+				
+				//Sound would normally go here but it's handled clientside instead
+				
+				heldItemStack.damageItem(1, player);
+				return true;
 			}
 		}
 		
@@ -323,6 +333,4 @@ public class BlockCampfire extends Block implements IBlockStateIgnore
 	{
 		return ignoredProperties;
 	}
-	
-	
 }

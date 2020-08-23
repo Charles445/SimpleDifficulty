@@ -103,6 +103,11 @@ public class ModConfig
 			@Config.Name("RoutinePacketDelay")
 			@Config.RangeInt(min=0)
 			public int routinePacketDelay = 30;
+			
+			@Config.Comment("How many seconds it takes for a campfire spit to cook food")
+			@Config.Name("CampfireSpitDelay")
+			@Config.RangeInt(min=1)
+			public int campfireSpitDelay = 35;
 		}
 		
 		public class ConfigTemperature

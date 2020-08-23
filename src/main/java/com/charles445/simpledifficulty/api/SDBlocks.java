@@ -16,4 +16,6 @@ public class SDBlocks
 	
 	public static Block heater;
 	public static Block chiller;
+	
+	public static Block spit;
 }

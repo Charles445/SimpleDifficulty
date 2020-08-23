@@ -45,6 +45,7 @@ public class DebugVerifier
 		test(SDBlocks.rainCollector, SDBlocks.blocks.get("rain_collector"));
 		test(SDBlocks.heater, SDBlocks.blocks.get("heater"));
 		test(SDBlocks.chiller, SDBlocks.blocks.get("chiller"));
+		test(SDBlocks.spit, SDBlocks.blocks.get("spit"));
 		
 		test(SDEnchantments.chilling, SDEnchantments.enchantments.get("chilling"));
 		test(SDEnchantments.heating, SDEnchantments.enchantments.get("heating"));

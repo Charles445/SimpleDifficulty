@@ -6,7 +6,9 @@ import com.charles445.simpledifficulty.SimpleDifficulty;
 import com.charles445.simpledifficulty.api.SDBlocks;
 import com.charles445.simpledifficulty.block.BlockCampfire;
 import com.charles445.simpledifficulty.block.BlockRainCollector;
+import com.charles445.simpledifficulty.block.BlockSpit;
 import com.charles445.simpledifficulty.block.BlockTemperature;
+import com.charles445.simpledifficulty.tileentity.TileEntitySpit;
 import com.charles445.simpledifficulty.tileentity.TileEntityTemperature;
 
 import net.minecraft.block.Block;
@@ -35,7 +37,10 @@ public class RegisterBlocks
 			heater = registerAs("heater", new BlockTemperature(1.0f), registry);
 			chiller = registerAs("chiller", new BlockTemperature(-1.0f), registry);
 			
+			spit = registerAs("spit", new BlockSpit(), registry);
+			
 			//Tile Entities
+			GameRegistry.registerTileEntity(TileEntitySpit.class, new ResourceLocation(SimpleDifficulty.MODID, "campfirespit"));
 			GameRegistry.registerTileEntity(TileEntityTemperature.class, new ResourceLocation(SimpleDifficulty.MODID,"temperatureChanged"));
 			
 		}
@@ -49,6 +54,7 @@ public class RegisterBlocks
 			registerItemBlock(rainCollector, registry);
 			registerItemBlock(heater, registry);
 			registerItemBlock(chiller, registry);
+			registerItemBlock(spit, registry);
 			
 		}
 		
