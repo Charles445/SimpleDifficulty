@@ -25,14 +25,16 @@ import net.minecraftforge.items.ItemStackHandler;
 
 public class TileEntitySpit extends TileEntity implements ITickable
 {
-	private static final int SLOTS = 3;
+	//TODO configurable? Or is this going to be NBT hell
+	//NOTE: Having only 1 slot is going to divide by zero
+	public static final int SLOTS = 3;
 	
 	//NBT Name constants
 	private static final String NBT_INT_PROGRESS = "progress";
 	private static final String NBT_TAG_ITEMS = "items";
 	
-	//ItemStackHandler is a simple to serialize NBT container for items and slots
-	private ItemHandler items;
+	//ItemStackHandler is a simple NBT container for items and slots
+	public ItemHandler items;
 	
 	//Progress, in seconds, of the cooking
 	private int progress = 0;
@@ -269,18 +271,37 @@ public class TileEntitySpit extends TileEntity implements ITickable
 	
 	//NETWORKING
 	
+	@Override
+	public NBTTagCompound getUpdateTag()
+	{
+		return writeToNBT(new NBTTagCompound());
+		
+	}
+	
 	//Update packet... this is how these work, right?
 	//Anyway, this is the server creating the mssage
+	@Override
 	public SPacketUpdateTileEntity getUpdatePacket()
 	{
-		return new SPacketUpdateTileEntity(pos, 0, writeToNBT(new NBTTagCompound()));
+		return new SPacketUpdateTileEntity(pos, 0, getUpdateTag());
 	}
 	
 	//And this is the client receiving said package, right?
+	@Override
 	public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt)
 	{
 		super.onDataPacket(net, pkt);
 		readFromNBT(pkt.getNbtCompound());
+		
+		updateClients();
+	}
+	
+	public void updateClients()
+	{
+		IBlockState state = world.getBlockState(pos);
+		
+		//No block update, but send information to clients
+		world.notifyBlockUpdate(pos, state, state, 2);
 	}
 	
 	//ITEM HANDLING CLASS
@@ -300,6 +321,7 @@ public class TileEntitySpit extends TileEntity implements ITickable
 		{
 			super.onContentsChanged(slot);
 			TileEntitySpit.this.markDirty();
+			TileEntitySpit.this.updateClients();
 	    }
 		
 		@Override

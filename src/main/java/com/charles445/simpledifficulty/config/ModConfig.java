@@ -300,6 +300,19 @@ public class ModConfig
 	
 	public static class ConfigClientConfig
 	{
+		//Debug configuration for working on ingame models
+		
+		//public double xx = 0.0d;
+		//public double yy = 0.0d;
+		//public double zz = 0.0d;
+		//public double ra = 0.0d;
+		//public double rx = 0.0d;
+		//public double ry = 0.0d;
+		//public double rz = 0.0d;
+		//public double px = 0.0d;
+		//public double py = 0.0d;
+		//public double pz = 0.0d;
+		
 		@Config.Comment("Thermometer Configuration")
 		@Config.Name("Thermometer")
 		public final ConfigClientThermometer thermometer = new ConfigClientThermometer();
