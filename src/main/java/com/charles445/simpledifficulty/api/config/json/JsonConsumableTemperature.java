@@ -1,5 +1,7 @@
 package com.charles445.simpledifficulty.api.config.json;
 
+import java.util.Locale;
+
 import javax.annotation.Nullable;
 
 import net.minecraft.item.ItemStack;
@@ -27,7 +29,7 @@ public class JsonConsumableTemperature
 	{
 		this.temperature = temperature;
 		this.duration = duration;
-		this.group = group.toLowerCase();
+		this.group = group.toLowerCase(Locale.ENGLISH);
 		this.identity = identity;
 	}
 	

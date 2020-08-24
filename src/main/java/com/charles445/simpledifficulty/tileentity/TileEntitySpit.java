@@ -3,11 +3,13 @@ package com.charles445.simpledifficulty.tileentity;
 import com.charles445.simpledifficulty.api.SDBlocks;
 import com.charles445.simpledifficulty.block.BlockCampfire;
 import com.charles445.simpledifficulty.config.ModConfig;
+import com.charles445.simpledifficulty.util.SoundUtil;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemStack;
@@ -88,9 +90,11 @@ public class TileEntitySpit extends TileEntity implements ITickable
 		}
 	}
 	
-	private void playWorldSound(World world, BlockPos pos)
+	private boolean playWorldSound(World world, BlockPos pos, boolean deposit)
 	{
-		//TODO play sound
+		//Not differing it based on deposit for now
+		SoundUtil.serverPlayBlockSound(world, pos, SoundEvents.ENTITY_PLAYER_ATTACK_NODAMAGE, 0.4f, 0.9f);
+		return true;
 	}
 	
 	public void handleRightClick(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ)
@@ -99,8 +103,27 @@ public class TileEntitySpit extends TileEntity implements ITickable
 		
 		boolean rawWithdraw = heldItemStack.isEmpty();
 		
+		boolean playedSound = false;
+
+		boolean found = false;
+		boolean withdrewToHand = false;
+		//Withdraw
+		
+		//First look for cooked
+		for(int i=0; i < items.getSlots(); i++)
+		{
+			if(isCooked(items.getStackInSlot(i)))
+			{
+				withdrewToHand = withdrawFromSlot(player, hand, i);
+				if(!playedSound)
+					playedSound = playWorldSound(world, pos, false);
+				found = true;
+				break;
+			}
+		}
+		
 		//Deposit
-		if(isCookable(heldItemStack))
+		if(!withdrewToHand && isCookable(heldItemStack))
 		{
 			for(int i=0; i < items.getSlots(); i++)
 			{
@@ -114,25 +137,11 @@ public class TileEntitySpit extends TileEntity implements ITickable
 					//TODO individual slot progress? lol
 					progress = 0;
 					
-					playWorldSound(world, pos);
-					
+					if(!playedSound)
+						playedSound = playWorldSound(world, pos, true);
+					found = true;
 					break;
 				}
-			}
-		}
-		
-		//And withdraw
-		boolean found = false;
-		
-		//First look for cooked
-		for(int i=0; i < items.getSlots(); i++)
-		{
-			if(isCooked(items.getStackInSlot(i)))
-			{
-				withdrawFromSlot(player, hand, i);
-				playWorldSound(world, pos);
-				found = true;
-				break;
 			}
 		}
 		
@@ -144,29 +153,33 @@ public class TileEntitySpit extends TileEntity implements ITickable
 				if(!items.getStackInSlot(i).isEmpty())
 				{
 					withdrawFromSlot(player, hand, i);
-					playWorldSound(world, pos);
+					if(!playedSound)
+						playedSound = playWorldSound(world, pos, false);
 					break;
 				}
 			}
 		}
 	}
 	
-	private void withdrawFromSlot(EntityPlayer player, EnumHand hand, int slot)
+	private boolean withdrawFromSlot(EntityPlayer player, EnumHand hand, int slot)
 	{
 		ItemStack stack = items.extractItem(slot, 1, false);
 		
 		if(player.getHeldItem(hand).isEmpty())
 		{
 			player.setHeldItem(hand, stack);
+			return true;
 		}
 		else if(!player.inventory.addItemStackToInventory(stack))
 		{
 			player.dropItem(stack, false);
+			return false;
 		}
 		else
 		{
 			if(player instanceof EntityPlayerMP)
 				((EntityPlayerMP)player).sendContainerToPlayer(player.inventoryContainer);
+			return false;
 		}
 			
 	}

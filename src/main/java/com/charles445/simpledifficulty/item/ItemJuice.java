@@ -88,19 +88,25 @@ public class ItemJuice extends ItemDrinkBase
 	
 	public static enum JuiceEnum
 	{
-		APPLE(				8,	6.4f),
-		BEETROOT(			10,	8.0f),
-		CACTUS(				9,	2.7f),
-		CARROT(				8,	4.8f),
-		CHORUS_FRUIT(		12,	7.2f),
-		GOLDEN_APPLE(		20,	20.0f),
-		GOLDEN_CARROT(		14,	14.0f),
-		GOLDEN_MELON(		16,	16.0f),
-		MELON(				8,	4.0f),
-		PUMPKIN(			7,	4.9f);
-		
+		APPLE(			"apple",			8,	6.4f),
+		BEETROOT(		"beetroot",			10,	8.0f),
+		CACTUS(			"cactus", 			9,	2.7f),
+		CARROT(			"carrot", 			8, 4.8f),
+		CHORUS_FRUIT(	"chorus_fruit", 	12, 7.2f),
+		GOLDEN_APPLE(	"golden_apple",		20, 20.0f),
+		GOLDEN_CARROT(	"golden_carrot",	14,	14.0f),
+		GOLDEN_MELON(	"golden_melon",		16,	16.0f),
+		MELON(			"melon",			8,	4.0f),
+		PUMPKIN(		"pumpkin",			7,	4.9f);
+
+		private String name;
 		private int thirst;
 		private float saturation;
+		
+		public String getName()
+		{
+			return name;
+		}
 		
 		public int getThirstLevel()
 		{
@@ -117,15 +123,16 @@ public class ItemJuice extends ItemDrinkBase
 			return 0.0f;
 		}
 		
-		private JuiceEnum(int thirst, float saturation)
+		private JuiceEnum(String name, int thirst, float saturation)
 		{
+			this.name=name;
 			this.thirst=thirst;
 			this.saturation=saturation;
 		}
 		
 		public String toString()
 		{
-			return this.name().toLowerCase();
+			return this.getName();
 		}
 	}
 

@@ -76,6 +76,7 @@ tile.simpledifficulty:chiller.name=Chiller
 tile.simpledifficulty:heater.name=Heater
 tile.simpledifficulty:purifiedwater.name=Purified Water
 tile.simpledifficulty:rain_collector.name=Rain Collector
+tile.simpledifficulty:spit.name=Campfire Spit
 
 tipped_arrow.effect.cold_resist_type=Arrow of Cold Resistance
 tipped_arrow.effect.long_cold_resist_type=Arrow of Cold Resistance

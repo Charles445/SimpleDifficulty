@@ -28,6 +28,21 @@ public class SoundUtil
 			
 			world.playSound(null, pos, sound, SoundCategory.BLOCKS, volume, 1.0f);
 		}
-		
+	}
+	
+	public static void serverPlayBlockSound(World world, BlockPos pos, SoundEvent sound, float volume)
+	{
+		if(!world.isRemote)
+		{
+			world.playSound(null, pos, sound, SoundCategory.BLOCKS, volume, 1.0f);
+		}
+	}
+	
+	public static void serverPlayBlockSound(World world, BlockPos pos, SoundEvent sound, float volume, float pitch)
+	{
+		if(!world.isRemote)
+		{
+			world.playSound(null, pos, sound, SoundCategory.BLOCKS, volume, pitch);
+		}
 	}
 }

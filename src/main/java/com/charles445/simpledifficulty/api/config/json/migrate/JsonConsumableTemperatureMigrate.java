@@ -1,5 +1,7 @@
 package com.charles445.simpledifficulty.api.config.json.migrate;
 
+import java.util.Locale;
+
 import net.minecraft.item.ItemStack;
 
 public class JsonConsumableTemperatureMigrate
@@ -14,7 +16,7 @@ public class JsonConsumableTemperatureMigrate
 		this.temperature = temperature;
 		this.metadata = metadata;
 		this.duration = duration;
-		this.group = group.toLowerCase();
+		this.group = group.toLowerCase(Locale.ENGLISH);
 	}
 	
 	public boolean matches(ItemStack stack)

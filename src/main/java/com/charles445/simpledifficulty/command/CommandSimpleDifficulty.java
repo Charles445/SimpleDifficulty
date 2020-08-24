@@ -3,6 +3,7 @@ package com.charles445.simpledifficulty.command;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 
 import javax.annotation.Nullable;
 
@@ -126,7 +127,7 @@ public class CommandSimpleDifficulty extends CommandBase
 			return;
 		}
 		
-		switch(args[0].toLowerCase())
+		switch(args[0].toLowerCase(Locale.ENGLISH))
 		{
 			case "reloadjson": updateJson(server, sender, args); break;
 			
