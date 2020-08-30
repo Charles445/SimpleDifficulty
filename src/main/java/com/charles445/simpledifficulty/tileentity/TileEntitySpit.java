@@ -7,6 +7,7 @@ import com.charles445.simpledifficulty.util.SoundUtil;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.SoundEvents;
@@ -28,11 +29,12 @@ import net.minecraftforge.items.ItemStackHandler;
 public class TileEntitySpit extends TileEntity implements ITickable
 {
 	//TODO configurable? Or is this going to be NBT hell
-	//NOTE: Having only 1 slot is going to divide by zero
-	public static final int SLOTS = 3;
+	//public static final int SLOTS = 3;
+	
 	
 	//NBT Name constants
 	private static final String NBT_INT_PROGRESS = "progress";
+	private static final String NBT_DOUBLE_EXPERIENCE = "experience";
 	private static final String NBT_TAG_ITEMS = "items";
 	
 	//ItemStackHandler is a simple NBT container for items and slots
@@ -41,11 +43,14 @@ public class TileEntitySpit extends TileEntity implements ITickable
 	//Progress, in seconds, of the cooking
 	private int progress = 0;
 	
+	//Stored experience
+	private double experience = 0.0d;
+	
 	private int timer = 0;
 	
 	public TileEntitySpit()
 	{
-		items = new ItemHandler(SLOTS);
+		items = new ItemHandler(ModConfig.server.blocks.campfireSpitSize);
 	}
 	
 	//BEHAVIOR
@@ -69,7 +74,7 @@ public class TileEntitySpit extends TileEntity implements ITickable
 		if(shouldCook())
 		{
 			progress++;
-			if(progress >= ModConfig.server.miscellaneous.campfireSpitDelay)
+			if(progress >= ModConfig.server.blocks.campfireSpitDelay)
 			{
 				cookFood();
 				progress = 0;
@@ -85,7 +90,15 @@ public class TileEntitySpit extends TileEntity implements ITickable
 			
 			if(isCookable(stack))
 			{
-				items.setStackInSlot(i, FurnaceRecipes.instance().getSmeltingResult(stack).copy());
+				//Cook the food and give experience
+				ItemStack result = FurnaceRecipes.instance().getSmeltingResult(stack).copy();
+				
+				if(ModConfig.server.blocks.campfireSpitExperience)
+				{
+					experience += FurnaceRecipes.instance().getSmeltingExperience(result);
+				}
+				
+				items.setStackInSlot(i, result);
 			}
 		}
 	}
@@ -115,6 +128,7 @@ public class TileEntitySpit extends TileEntity implements ITickable
 			if(isCooked(items.getStackInSlot(i)))
 			{
 				withdrewToHand = withdrawFromSlot(player, hand, i);
+				dumpExperience(world, pos);
 				if(!playedSound)
 					playedSound = playWorldSound(world, pos, false);
 				found = true;
@@ -253,6 +267,22 @@ public class TileEntitySpit extends TileEntity implements ITickable
 		}
 	}
 	
+	public void dumpExperience(World world, BlockPos pos)
+	{
+		//Convert to int and subtract from experience
+		
+		int convExp = (int)experience;
+		experience -= convExp;
+		
+		//Dump experience (decimals get ignored)
+		while(convExp > 0)
+		{
+			int val = EntityXPOrb.getXPSplit(convExp);
+			convExp -= val;
+			this.world.spawnEntity(new EntityXPOrb(this.world, pos.getX()+0.5d, pos.getY()+0.5d, pos.getZ()+0.5d, val));
+		}
+	}
+	
 	//NBT HANDLING
 	public void readFromNBT(NBTTagCompound compound)
 	{
@@ -264,6 +294,9 @@ public class TileEntitySpit extends TileEntity implements ITickable
 		
 		//Items as compound
 		items.deserializeNBT(compound.getCompoundTag(NBT_TAG_ITEMS));
+		
+		//Experience as double
+		experience = compound.getDouble(NBT_DOUBLE_EXPERIENCE);;
 		
 		//Now read the other data necessary
 	}
@@ -279,6 +312,9 @@ public class TileEntitySpit extends TileEntity implements ITickable
 		//Items as compound (what's up with there being no setCompoundTag anyway?)
 		compound.setTag(NBT_TAG_ITEMS, items.serializeNBT());
 		
+		//Experience as double
+		compound.setDouble(NBT_DOUBLE_EXPERIENCE, experience);
+		
 		return compound;
 	}
 	
@@ -288,7 +324,6 @@ public class TileEntitySpit extends TileEntity implements ITickable
 	public NBTTagCompound getUpdateTag()
 	{
 		return writeToNBT(new NBTTagCompound());
-		
 	}
 	
 	//Update packet... this is how these work, right?
@@ -335,15 +370,12 @@ public class TileEntitySpit extends TileEntity implements ITickable
 			super.onContentsChanged(slot);
 			TileEntitySpit.this.markDirty();
 			TileEntitySpit.this.updateClients();
-	    }
+		}
 		
 		@Override
-	    public int getSlotLimit(int slot)
-	    {
-	        return 1;
-	    }
+		public int getSlotLimit(int slot)
+		{
+			return 1;
+		}
 	}
-
-	
-	
 }

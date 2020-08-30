@@ -52,6 +52,10 @@ public class ModConfig
 		@Config.Name("Thirst")
 		public final ConfigThirst thirst = new ConfigThirst();
 		
+		@Config.Comment("Block related configurations")
+		@Config.Name("Blocks")
+		public final ConfigBlocks blocks = new ConfigBlocks();
+		
 		///
 		/// Server Options
 		///
@@ -83,6 +87,35 @@ public class ModConfig
 		@Config.Name("DebugMode")
 		public boolean debug = false;
 		
+		public class ConfigBlocks
+		{
+			//Not synchronized with clients
+			
+			@Config.Comment("Campfire has a 1/X chance to lose fuel when ticked (default is 2, a 1/2 chance")
+			@Config.Name("CampfireDecayChance")
+			@Config.RangeInt(min=1)
+			public int campfireDecayChance = 2;
+			
+			@Config.Comment("Campfire has a 1/X chance to ignite with a stick (default is 5, a 1/5 chance")
+			@Config.Name("CampfireStickIgniteChance")
+			@Config.RangeInt(min=1)
+			public int campfireStickIgniteChance = 5;
+			
+			@Config.Comment("How many seconds it takes for a campfire spit to cook food")
+			@Config.Name("CampfireSpitDelay")
+			@Config.RangeInt(min=1)
+			public int campfireSpitDelay = 35;
+			
+			@Config.Comment("How many pieces of food can fit on a campfire spit (any existing spits won't change size)")
+			@Config.Name("CampfireSpitSize")
+			@Config.RangeInt(min=1, max=10)
+			public int campfireSpitSize = 3;
+			
+			@Config.Comment("Should cooking food on a campfire spit give experience like a furnace")
+			@Config.Name("CampfireSpitExperience")
+			public boolean campfireSpitExperience = true;
+		}
+		
 		public class ConfigMiscellaneous
 		{
 			//Not synchronized with clients
@@ -103,11 +136,6 @@ public class ModConfig
 			@Config.Name("RoutinePacketDelay")
 			@Config.RangeInt(min=0)
 			public int routinePacketDelay = 30;
-			
-			@Config.Comment("How many seconds it takes for a campfire spit to cook food")
-			@Config.Name("CampfireSpitDelay")
-			@Config.RangeInt(min=1)
-			public int campfireSpitDelay = 35;
 		}
 		
 		public class ConfigTemperature

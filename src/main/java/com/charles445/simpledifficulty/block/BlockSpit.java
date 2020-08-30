@@ -110,6 +110,7 @@ public class BlockSpit extends BlockContainer
 		if(te instanceof TileEntitySpit)
 		{
 			((TileEntitySpit) te).dumpItems(world, pos);
+			((TileEntitySpit) te).dumpExperience(world, pos);
 		}
 		
 		super.breakBlock(world, pos, state);

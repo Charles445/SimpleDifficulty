@@ -47,7 +47,9 @@ public class RenderSpit extends TileEntitySpecialRenderer<TileEntitySpit>
 		int slots = te.items.getSlots();
 		
 		//Computers are fast right?
-		double separationAmt = itemBoundSize / (double)(slots - 1);
+		double separationAmt = 0.0d;
+		if(slots > 1)
+			separationAmt = itemBoundSize / (double)(slots - 1);
 		
 		for(int i=0; i < slots; i++)
 		{

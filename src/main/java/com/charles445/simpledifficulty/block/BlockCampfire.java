@@ -5,6 +5,7 @@ import java.util.Random;
 import javax.annotation.Nullable;
 
 import com.charles445.simpledifficulty.api.SDBlocks;
+import com.charles445.simpledifficulty.config.ModConfig;
 import com.charles445.simpledifficulty.util.OreDictUtil;
 import com.charles445.simpledifficulty.util.SoundUtil;
 
@@ -41,9 +42,7 @@ public class BlockCampfire extends Block implements IBlockStateIgnore
 {
 	private static final int AGE_MIN = 0;
 	private static final int AGE_MAX = 7;
-	private static final int AGE_CHANCE = 2;
 	private static final int LOG_REFUEL = 3;
-	private static final int STICK_IGNITE_CHANCE = 5;
 	private static final int TICK_RATE = 10;
 	
 	public static final PropertyInteger AGE = PropertyInteger.create("age", AGE_MIN, AGE_MAX);
@@ -121,7 +120,7 @@ public class BlockCampfire extends Block implements IBlockStateIgnore
 			{
 				//Do stick
 				heldItemStack.shrink(1);
-				if(world.rand.nextInt(STICK_IGNITE_CHANCE)==0)
+				if(world.rand.nextInt(ModConfig.server.blocks.campfireStickIgniteChance)==0)
 				{
 					world.setBlockState(pos, state.withProperty(BURNING, true), 2);
 				}
@@ -163,7 +162,7 @@ public class BlockCampfire extends Block implements IBlockStateIgnore
 				world.setBlockState(pos, state.withProperty(BURNING, false), 2);
 				effectExtinguish(world,pos);
 			}
-			else if(rand.nextInt(AGE_CHANCE)==0)
+			else if(rand.nextInt(ModConfig.server.blocks.campfireDecayChance)==0)
 			{
 				age++;
 				if(age>=AGE_MAX)
