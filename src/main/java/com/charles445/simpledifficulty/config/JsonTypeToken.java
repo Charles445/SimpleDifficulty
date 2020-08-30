@@ -41,7 +41,7 @@ public class JsonTypeToken
 		
 		switch(jcfn)
 		{
-			case armorTemperatures: 	return new TypeToken<Map<String, JsonTemperature>>(){}.getType();
+			case armorTemperatures: 	return new TypeToken<Map<String, List<JsonTemperatureIdentity>>>(){}.getType();
 			case blockTemperatures: 	return new TypeToken<Map<String, List<JsonPropertyTemperature>>>(){}.getType();
 			case consumableTemperature: return new TypeToken<Map<String, List<JsonConsumableTemperature>>>(){}.getType();
 			case consumableThirst: 		return new TypeToken<Map<String, List<JsonConsumableThirst>>>(){}.getType();
@@ -49,6 +49,7 @@ public class JsonTypeToken
 			case heldItemTemperatures:	return new TypeToken<Map<String, List<JsonTemperatureIdentity>>>(){}.getType();
 			case materialTemperature: 	return new TypeToken<MaterialTemperature>(){}.getType();
 			
+			case armorTemperatures_MIGRATE: return new TypeToken<Map<String, JsonTemperature>>(){}.getType();
 			case consumableTemperature_MIGRATE: return new TypeToken<Map<String, List<JsonConsumableTemperatureMigrate>>>(){}.getType();
 			case consumableThirst_MIGRATE: return new TypeToken<Map<String, List<JsonConsumableThirstMigrate>>>(){}.getType();
 			case heldItemTemperatures_MIGRATE: return new TypeToken<Map<String, List<JsonTemperatureMetadataMigrate>>>(){}.getType();

@@ -28,6 +28,10 @@ public class ConfigServerCompatibility
 		@Config.Name("EnableArmorUnderwear")
 		public boolean armorUnderwear = true;
 		
+		@Config.Comment("Enable Baubles - Built-In Compatibility")
+		@Config.Name("EnableBaubles")
+		public boolean baubles = true;
+		
 		@Config.Comment("Enable Harvest Festival - Built-In Compatibility")
 		@Config.Name("EnableHarvestFestival")
 		public boolean harvestFestival = true;

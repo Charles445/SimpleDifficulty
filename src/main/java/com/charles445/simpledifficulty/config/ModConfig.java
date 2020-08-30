@@ -52,10 +52,6 @@ public class ModConfig
 		@Config.Name("Thirst")
 		public final ConfigThirst thirst = new ConfigThirst();
 		
-		@Config.Comment("Block related configurations")
-		@Config.Name("Blocks")
-		public final ConfigBlocks blocks = new ConfigBlocks();
-		
 		///
 		/// Server Options
 		///
@@ -87,10 +83,9 @@ public class ModConfig
 		@Config.Name("DebugMode")
 		public boolean debug = false;
 		
-		public class ConfigBlocks
+		public class ConfigMiscellaneous
 		{
 			//Not synchronized with clients
-			
 			@Config.Comment("Campfire has a 1/X chance to lose fuel when ticked (default is 2, a 1/2 chance")
 			@Config.Name("CampfireDecayChance")
 			@Config.RangeInt(min=1)
@@ -114,11 +109,10 @@ public class ModConfig
 			@Config.Comment("Should cooking food on a campfire spit give experience like a furnace")
 			@Config.Name("CampfireSpitExperience")
 			public boolean campfireSpitExperience = true;
-		}
-		
-		public class ConfigMiscellaneous
-		{
-			//Not synchronized with clients
+			
+			@Config.Comment("Whether Golden Apple Juice gives the golden apple effect")
+			@Config.Name("GoldenAppleJuiceEffect")
+			public boolean goldenAppleJuiceEffect = true;
 			
 			@Config.Comment("Whether Ice Blocks drop Ice Chunks")
 			@Config.Name("IceDropsChunks")
@@ -128,9 +122,17 @@ public class ModConfig
 			@Config.Name("MagmaDropsChunks")
 			public boolean magmaDropsChunks = true;
 			
-			@Config.Comment("Whether Golden Apple Juice gives the golden apple effect")
-			@Config.Name("GoldenAppleJuiceEffect")
-			public boolean goldenAppleJuiceEffect = true;
+			@Config.Comment("Duration of short heat/cold resistance potions, in ticks")
+			@Config.Name("ResistancePotionDurationShort")
+			@Config.RequiresMcRestart
+			@Config.RangeInt(min=1)
+			public int resistancePotionDurationShort = 1200;
+			
+			@Config.Comment("Duration of long heat/cold resistance potions, in ticks")
+			@Config.Name("ResistancePotionDurationLong")
+			@Config.RequiresMcRestart
+			@Config.RangeInt(min=1)
+			public int resistancePotionDurationLong = 2400;
 			
 			@Config.Comment("How often player temperature and thirst are regularly synced, in ticks")
 			@Config.Name("RoutinePacketDelay")

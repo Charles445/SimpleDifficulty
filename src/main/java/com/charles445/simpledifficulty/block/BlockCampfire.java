@@ -120,7 +120,7 @@ public class BlockCampfire extends Block implements IBlockStateIgnore
 			{
 				//Do stick
 				heldItemStack.shrink(1);
-				if(world.rand.nextInt(ModConfig.server.blocks.campfireStickIgniteChance)==0)
+				if(world.rand.nextInt(ModConfig.server.miscellaneous.campfireStickIgniteChance)==0)
 				{
 					world.setBlockState(pos, state.withProperty(BURNING, true), 2);
 				}
@@ -162,7 +162,7 @@ public class BlockCampfire extends Block implements IBlockStateIgnore
 				world.setBlockState(pos, state.withProperty(BURNING, false), 2);
 				effectExtinguish(world,pos);
 			}
-			else if(rand.nextInt(ModConfig.server.blocks.campfireDecayChance)==0)
+			else if(rand.nextInt(ModConfig.server.miscellaneous.campfireDecayChance)==0)
 			{
 				age++;
 				if(age>=AGE_MAX)

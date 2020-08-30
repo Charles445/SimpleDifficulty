@@ -21,6 +21,7 @@ public class JsonCompatDefaults
 	
 	public void populate()
 	{
+		populateBaubles();
 		populateBiomesOPlenty();
 		populateHarvestCraft();
 		populateLycanitesMobs();
@@ -35,6 +36,7 @@ public class JsonCompatDefaults
 	{
 		switch(modid)
 		{
+			case BAUBLES: return populateBaubles();
 			case BIOMESOPLENTY: return populateBiomesOPlenty();
 			case HARVESTCRAFT: return populateHarvestCraft();
 			case LYCANITESMOBS: return populateLycanitesMobs();
@@ -47,6 +49,18 @@ public class JsonCompatDefaults
 		
 			default: return false;
 		}
+	}
+	
+	//Baubles
+	private boolean populateBaubles()
+	{
+		if(!canUseModJsonDefaults(BAUBLES))
+			return false;
+		
+		//This is mostly to demonstrate where these go
+		JsonConfig.registerArmorTemperature("baubles:ring", -0.25f);
+		
+		return true;
 	}
 	
 	//Biomes O' Plenty

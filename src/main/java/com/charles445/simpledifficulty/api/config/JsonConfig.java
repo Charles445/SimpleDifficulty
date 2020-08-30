@@ -18,7 +18,7 @@ import net.minecraft.item.ItemStack;
 
 public class JsonConfig
 {
-	public static Map<String, JsonTemperature> armorTemperatures = new HashMap<>();	
+	public static Map<String, List<JsonTemperatureIdentity>> armorTemperatures = new HashMap<>();	
 	public static Map<String, List<JsonPropertyTemperature>> blockTemperatures = new HashMap<>();
 	public static Map<String, List<JsonConsumableTemperature>> consumableTemperature = new HashMap<>();
 	public static Map<String, List<JsonConsumableThirst>> consumableThirst = new HashMap<>();
@@ -31,12 +31,40 @@ public class JsonConfig
 	
 	public static void registerArmorTemperature(ItemStack stack, float temperature)
 	{
-		registerArmorTemperature(stack.getItem().getRegistryName().toString(), temperature);
+		String registryName = stack.getItem().getRegistryName().toString();
+		
+		int metadata = -1;	
+		if(stack.getHasSubtypes())
+			metadata = stack.getMetadata();
+		
+		registerArmorTemperature(stack.getItem().getRegistryName().toString(), temperature, new JsonItemIdentity(metadata));
 	}
 	
 	public static void registerArmorTemperature(String registryName, float temperature)
 	{
-		armorTemperatures.put(registryName, new JsonTemperature(temperature));
+		registerArmorTemperature(registryName, temperature, new JsonItemIdentity(-1));
+	}
+	
+	public static void registerArmorTemperature(String registryName, float temperature, JsonItemIdentity identity)
+	{
+		if(!armorTemperatures.containsKey(registryName))
+			armorTemperatures.put(registryName, new ArrayList<JsonTemperatureIdentity>());
+		
+		final List<JsonTemperatureIdentity> currentList = armorTemperatures.get(registryName);
+		
+		JsonTemperatureIdentity result = new JsonTemperatureIdentity(temperature, identity);
+		
+		for(int i=0; i<currentList.size(); i++)
+		{
+			JsonTemperatureIdentity jtm = currentList.get(i);
+			if(jtm.matches(identity))
+			{
+				currentList.set(i, result);
+				return;
+			}
+		}
+		
+		currentList.add(result);
 	}
 	
 	//Blocks

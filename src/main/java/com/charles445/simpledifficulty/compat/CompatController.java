@@ -38,6 +38,7 @@ public class CompatController
 		//Create compatibility objects
 		Object auwDynamicModifier = newCompatObject(ModNames.AUW, compatMod + "AUWDynamicModifier");
 		Object auwModifier = newCompatObject(ModNames.AUW, compatMod + "AUWModifier");
+		Object baublesModifier = newCompatObject(ModNames.BAUBLES, compatMod + "BaublesModifier");
 		Object harvestFestivalModifier = newCompatObject(ModNames.HARVESTFESTIVAL, compatMod + "HarvestFestivalModifier");
 		Object oreExcavationHandler = newCompatObject(ModNames.OREEXCAVATION, compatMod + "OreExcavationHandler");
 		Object sereneSeasonsModifier = newCompatObject(ModNames.SERENESEASONS, compatMod + "SereneSeasonsModifier");
@@ -50,6 +51,12 @@ public class CompatController
 			TemperatureRegistry.registerModifier((ITemperatureModifier)auwModifier);
 		}
 		
+		if(baublesModifier instanceof ITemperatureModifier)
+		{
+			SimpleDifficulty.logger.info("Baubles Modifier Enabled");
+			TemperatureRegistry.registerModifier((ITemperatureModifier)baublesModifier);
+		}
+		
 		if(harvestFestivalModifier instanceof ITemperatureModifier)
 		{
 			SimpleDifficulty.logger.info("Harvest Festival Modifier Enabled");
@@ -59,6 +66,7 @@ public class CompatController
 		if(oreExcavationHandler != null)
 		{
 			SimpleDifficulty.logger.info("OreExcavation Handler Enabled");
+			//This object registers itself as a handler
 		}
 		
 		if(sereneSeasonsModifier instanceof ITemperatureModifier)

@@ -606,12 +606,13 @@ public class CommandSimpleDifficulty extends CommandBase
 					message(sender, warn_noItem);
 					return;
 				}
-				
+				/* Commented out, since baubles don't extend ItemArmor, might as well remove this safety check entirely
 				if(!(stack.getItem() instanceof ItemArmor))
 				{
 					message(sender, "Not a piece of armor!");
 					return;
 				}
+				*/
 				
 				JsonConfig.registerArmorTemperature(stack, temperature);
 				message(sender, "Added armor to "+JsonFileName.armorTemperatures+"!\n"+exportJsonReminder);

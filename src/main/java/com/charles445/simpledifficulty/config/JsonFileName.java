@@ -13,7 +13,7 @@ public enum JsonFileName
 	
 	//TODO remove migration
 	
-	
+	armorTemperatures_MIGRATE("armorTemperatures.json"),
 	consumableTemperature_MIGRATE("consumableTemperature.json"),
 	consumableThirst_MIGRATE("consumableThirst.json"),
 	heldItemTemperatures_MIGRATE("heldItemTemperatures.json");

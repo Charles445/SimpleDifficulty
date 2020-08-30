@@ -128,12 +128,82 @@ public class JsonConfigInternal
 		
 		//Armor Temperatures
 		String jsonFileName = JsonFileName.armorTemperatures.get();
-		Map<String, JsonTemperature> jsonArmorTemperatures = processJson(JsonFileName.armorTemperatures, JsonConfig.armorTemperatures, jsonDirectory, true);
+		
+		//Check migration first...
+		Map<String, List<JsonTemperatureIdentity>> jsonArmorTemperatures = null;
+		
+		try
+		{
+			jsonArmorTemperatures = processUncaughtJson(JsonFileName.armorTemperatures, JsonConfig.armorTemperatures, jsonDirectory, true);
+		}
+		catch(Exception e)
+		{
+			//Json is broken, check migration
+			Map<String, JsonTemperature> migrateMap = new HashMap<>();
+			migrateMap = processJson(JsonFileName.armorTemperatures_MIGRATE, migrateMap, jsonDirectory, true);
+			
+			if(migrateMap != null)
+			{
+				boolean migrate = false;
+				
+				//Validate migration
+				for(JsonTemperature jt : migrateMap.values())
+				{
+					if(jt.temperature!=0.0f)
+					{
+						migrate = true;
+						break;
+					}
+				}
+				if(migrate)
+				{
+					//Do migration
+					SimpleDifficulty.logger.info("Attempting to migrate "+jsonFileName+" to new format");
+					
+					try
+					{
+						for(Map.Entry<String, JsonTemperature> registryEntry : migrateMap.entrySet())
+						{
+							JsonConfig.registerArmorTemperature(registryEntry.getKey(), registryEntry.getValue().temperature, new JsonItemIdentity(-1));
+						}
+						
+						try
+						{
+							manuallyWriteToJson(JsonFileName.armorTemperatures, JsonConfig.armorTemperatures, jsonDirectory);
+							SimpleDifficulty.logger.info("Migrated "+jsonFileName);
+						}
+						catch (Exception e1)
+						{
+							logMerge(jsonFileName,e1);
+						}
+						
+					}
+					catch (Exception e2)
+					{
+						SimpleDifficulty.logger.error("Migration failed, JSON of "+jsonFileName+" was likely already invalid");
+						logMerge(jsonFileName,e2);
+					}
+				}
+				else
+				{
+					//It's simply broken, just load it so it displays the error
+					jsonArmorTemperatures = processJson(JsonFileName.armorTemperatures, JsonConfig.armorTemperatures, jsonDirectory, true);
+				}
+			}
+		}
+		
 		if(jsonArmorTemperatures!=null)
 		{
-			for(Map.Entry<String, JsonTemperature> entry : jsonArmorTemperatures.entrySet())
+			for(Map.Entry<String, List<JsonTemperatureIdentity>> entry : jsonArmorTemperatures.entrySet())
 			{
-				JsonConfig.registerArmorTemperature(entry.getKey(), entry.getValue().temperature);
+				for(JsonTemperatureIdentity jtm : entry.getValue())
+				{
+					//Populate compound since it was lost during serialization
+					if(jtm.identity!=null)
+						jtm.identity.tryPopulateCompound();
+					
+					JsonConfig.registerArmorTemperature(entry.getKey(), jtm.temperature, jtm.identity==null?DEFAULT_ITEM_IDENTITY:jtm.identity);
+				}
 			}
 			
 			try

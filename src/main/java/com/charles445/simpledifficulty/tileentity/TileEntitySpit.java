@@ -28,9 +28,6 @@ import net.minecraftforge.items.ItemStackHandler;
 
 public class TileEntitySpit extends TileEntity implements ITickable
 {
-	//TODO configurable? Or is this going to be NBT hell
-	//public static final int SLOTS = 3;
-	
 	
 	//NBT Name constants
 	private static final String NBT_INT_PROGRESS = "progress";
@@ -50,7 +47,7 @@ public class TileEntitySpit extends TileEntity implements ITickable
 	
 	public TileEntitySpit()
 	{
-		items = new ItemHandler(ModConfig.server.blocks.campfireSpitSize);
+		items = new ItemHandler(ModConfig.server.miscellaneous.campfireSpitSize);
 	}
 	
 	//BEHAVIOR
@@ -74,7 +71,7 @@ public class TileEntitySpit extends TileEntity implements ITickable
 		if(shouldCook())
 		{
 			progress++;
-			if(progress >= ModConfig.server.blocks.campfireSpitDelay)
+			if(progress >= ModConfig.server.miscellaneous.campfireSpitDelay)
 			{
 				cookFood();
 				progress = 0;
@@ -93,7 +90,7 @@ public class TileEntitySpit extends TileEntity implements ITickable
 				//Cook the food and give experience
 				ItemStack result = FurnaceRecipes.instance().getSmeltingResult(stack).copy();
 				
-				if(ModConfig.server.blocks.campfireSpitExperience)
+				if(ModConfig.server.miscellaneous.campfireSpitExperience)
 				{
 					experience += FurnaceRecipes.instance().getSmeltingExperience(result);
 				}

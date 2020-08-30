@@ -1,8 +1,10 @@
 package com.charles445.simpledifficulty.temperature;
 
+import java.util.List;
+
 import com.charles445.simpledifficulty.api.SDEnchantments;
 import com.charles445.simpledifficulty.api.config.JsonConfig;
-import com.charles445.simpledifficulty.api.config.json.JsonTemperature;
+import com.charles445.simpledifficulty.api.config.json.JsonTemperatureIdentity;
 import com.charles445.simpledifficulty.api.temperature.TemperatureUtil;
 import com.charles445.simpledifficulty.config.ModConfig;
 
@@ -48,16 +50,33 @@ public class ModifierArmor extends ModifierBase
 			sum += ModConfig.server.temperature.enchantmentTemperature;
 		}
 		
-		//ArmorTemperature
-		JsonTemperature armorInfo = JsonConfig.armorTemperatures.get(stack.getItem().getRegistryName().toString());
-		if(armorInfo!=null)
-		{
-			sum += armorInfo.temperature;
-		}
+		//Process JSON
+		sum += processStackJSON(stack);
 		
 		//NBT
 		sum += TemperatureUtil.getArmorTemperatureTag(stack);
 		
 		return sum;
+	}
+	
+	private float processStackJSON(ItemStack stack)
+	{
+		List<JsonTemperatureIdentity> armorList = JsonConfig.armorTemperatures.get(stack.getItem().getRegistryName().toString());
+		
+		if(armorList!=null)
+		{
+			for(JsonTemperatureIdentity jtm : armorList)
+			{
+				if(jtm==null)
+					continue;
+				
+				if(jtm.matches(stack))
+				{
+					return jtm.temperature;
+				}
+			}
+		}
+		
+		return 0.0f;
 	}
 }
