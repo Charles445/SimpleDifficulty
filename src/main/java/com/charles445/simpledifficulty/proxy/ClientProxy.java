@@ -58,12 +58,20 @@ public class ClientProxy extends CommonProxy
 	}
 
 	@Override
+	/**
+	 * Try not to call this on logical server
+	 * Check world.isRemote if available
+	 */
 	public EntityPlayer getClientMinecraftPlayer()
 	{
 		return Minecraft.getMinecraft().player;
 	}
 
 	@Override
+	/**
+	 * Try not to call this on logical server
+	 * Check world.isRemote if available
+	 */
 	public Boolean isClientConnectedToServer()
 	{
 		return Minecraft.getMinecraft().getConnection().getNetworkManager().isChannelOpen();

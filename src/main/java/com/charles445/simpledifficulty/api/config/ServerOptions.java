@@ -8,7 +8,8 @@ public enum ServerOptions implements IConfigOption
 	/*Boolean*/ THIRST_DRINK_RAIN ("thirstDrinkRain"),
 	/*Boolean*/ PEACEFUL_DANGER ("peacefulDanger"),
 	/*Boolean*/ TEMPERATURE_ENABLED ("temperatureEnabled"),
-	/*Boolean*/ TEMPERATURE_TE_ENABLED ("temperatureTEEnabled");
+	/*Boolean*/ TEMPERATURE_TE_ENABLED ("temperatureTEEnabled"),
+	/*Integer*/ CANTEEN_DOSES ("canteenDoses");
 	
 	
 	String name;

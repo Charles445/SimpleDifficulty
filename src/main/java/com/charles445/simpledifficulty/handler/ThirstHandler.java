@@ -8,12 +8,12 @@ import com.charles445.simpledifficulty.api.SDPotions;
 import com.charles445.simpledifficulty.api.config.JsonConfig;
 import com.charles445.simpledifficulty.api.config.QuickConfig;
 import com.charles445.simpledifficulty.api.config.json.JsonConsumableThirst;
+import com.charles445.simpledifficulty.api.item.IItemCanteen;
 import com.charles445.simpledifficulty.api.thirst.IThirstCapability;
 import com.charles445.simpledifficulty.api.thirst.ThirstEnum;
 import com.charles445.simpledifficulty.api.thirst.ThirstUtil;
 import com.charles445.simpledifficulty.compat.ModNames;
 import com.charles445.simpledifficulty.config.ModConfig;
-import com.charles445.simpledifficulty.item.ItemCanteen;
 import com.charles445.simpledifficulty.network.MessageDrinkWater;
 import com.charles445.simpledifficulty.network.PacketHandler;
 import com.charles445.simpledifficulty.util.SoundUtil;
@@ -33,7 +33,6 @@ import net.minecraft.potion.PotionUtils;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraft.world.WorldServer;
 import net.minecraftforge.event.entity.living.LivingEntityUseItemEvent;
 import net.minecraftforge.event.entity.living.LivingEvent.LivingJumpEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
@@ -200,15 +199,17 @@ public class ThirstHandler
 						int level = state.getValue(BlockCauldron.LEVEL);
 						if(level > 0)
 						{
-							ItemCanteen canteen = (ItemCanteen) heldItem.getItem();
-							
-							int dam = canteen.getDamage(heldItem);
-							if(canteen.tryAddDose(heldItem,ThirstEnum.NORMAL))
+							if(heldItem.getItem() instanceof IItemCanteen)
 							{
-								SoundUtil.serverPlayBlockSound(world, pos, SoundEvents.ITEM_BUCKET_FILL);
+								IItemCanteen canteen = (IItemCanteen) heldItem.getItem();
 								
-								//TODO Auto drink bug is present when using canteens on cauldrons
-								//Not sure how to fix, stop active hand and the scheduled variant don't seem to work
+								if(canteen.tryAddDose(heldItem,ThirstEnum.NORMAL))
+								{
+									SoundUtil.serverPlayBlockSound(world, pos, SoundEvents.ITEM_BUCKET_FILL);
+									
+									//TODO Auto drink bug is present when using canteens on cauldrons
+									//Not sure how to fix, stop active hand and the scheduled variant don't seem to work
+								}
 							}
 						}
 					}

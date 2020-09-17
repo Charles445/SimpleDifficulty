@@ -79,6 +79,11 @@ public class ModConfig
 		@Config.Name("TemperatureTileEntities")
 		public boolean temperatureTEEnabled = true;
 		
+		@Config.Comment("Maximum number of doses in a canteen")
+		@Config.Name("CanteenDoses")
+		@Config.RangeInt(min=1)
+		public int canteenDoses = 3;
+		
 		@Config.Comment("Spams chat with debug messages, do not enable this unless you are testing!")
 		@Config.Name("DebugMode")
 		public boolean debug = false;
@@ -449,6 +454,7 @@ public class ModConfig
 		ServerConfig.instance.put(ServerOptions.PEACEFUL_DANGER, server.peacefulDanger);
 		ServerConfig.instance.put(ServerOptions.TEMPERATURE_ENABLED, server.temperatureEnabled);
 		ServerConfig.instance.put(ServerOptions.TEMPERATURE_TE_ENABLED, server.temperatureTEEnabled);
+		ServerConfig.instance.put(ServerOptions.CANTEEN_DOSES, server.canteenDoses);
 	}
 	
 	private static MessageUpdateConfig getNewConfigMessage()
@@ -462,6 +468,7 @@ public class ModConfig
 		compound.setString(ServerOptions.PEACEFUL_DANGER.getName(), ""+server.peacefulDanger);
 		compound.setString(ServerOptions.TEMPERATURE_ENABLED.getName(), ""+server.temperatureEnabled);
 		compound.setString(ServerOptions.TEMPERATURE_TE_ENABLED.getName(), ""+server.temperatureTEEnabled);
+		compound.setString(ServerOptions.CANTEEN_DOSES.getName(), ""+server.canteenDoses);
 		
 		return new MessageUpdateConfig(compound);
 	}

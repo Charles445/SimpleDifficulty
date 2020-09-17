@@ -27,6 +27,13 @@ public interface IItemCanteen
 	 */
 	public void setDoses(ItemStack stack, ThirstEnum thirstEnum, int amount);
 	
+	/** Sets the canteen's doses without changing water type
+	 * 
+	 * @param stack (canteen's ItemStack)
+	 * @param amount (number of doses)
+	 */
+	public void setDoses(ItemStack stack, int amount);
+	
 	/** Tries to add a dose to the canteen with the specified water type, returns true if successful
 	 * 
 	 * @param stack (canteen's ItemStack)
@@ -67,4 +74,18 @@ public interface IItemCanteen
 	 * @return boolean (is the canteen empty?)
 	 */
 	public boolean isCanteenEmpty(ItemStack stack);
+	
+	/** Returns maximum doses of the canteen
+	 * 
+	 * @param stack (canteen's ItemStack)
+	 * @return int (number of doses)
+	 */
+	public int getMaxDoses(ItemStack stack);
+	
+	/** Returns the number of doses in the canteen
+	 * 
+	 * @param stack (canteen's ItemStack)
+	 * @return int (number of doses)
+	 */
+	public int getDoses(ItemStack stack);
 }

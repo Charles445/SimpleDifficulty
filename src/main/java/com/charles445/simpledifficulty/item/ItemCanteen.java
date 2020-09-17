@@ -7,6 +7,8 @@ import javax.annotation.Nullable;
 import com.charles445.simpledifficulty.SimpleDifficulty;
 import com.charles445.simpledifficulty.api.SDCapabilities;
 import com.charles445.simpledifficulty.api.config.QuickConfig;
+import com.charles445.simpledifficulty.api.config.ServerConfig;
+import com.charles445.simpledifficulty.api.config.ServerOptions;
 import com.charles445.simpledifficulty.api.item.IItemCanteen;
 import com.charles445.simpledifficulty.api.thirst.IThirstCapability;
 import com.charles445.simpledifficulty.api.thirst.ThirstEnum;
@@ -36,6 +38,7 @@ public class ItemCanteen extends ItemDrinkBase implements IItemCanteen
 	//TODO This code is terrible and can't be interfaced with
 	
 	public static final String CANTEENTYPE = "CanteenType";
+	public static final String DOSES = "Doses";
 	
 	public ItemCanteen()
 	{
@@ -51,7 +54,7 @@ public class ItemCanteen extends ItemDrinkBase implements IItemCanteen
 		if (this.isInCreativeTab(tab))
 		{
 			ItemStack emptyCanteen = new ItemStack(this, 1, 0);
-			createTag(emptyCanteen);
+			createTypeTag(emptyCanteen);
 			setCanteenEmpty(emptyCanteen);
 			
 			ItemStack fullCanteen = emptyCanteen.copy();
@@ -147,7 +150,11 @@ public class ItemCanteen extends ItemDrinkBase implements IItemCanteen
 	public void addInformation(ItemStack stack, @Nullable World world, List<String> tooltip, ITooltipFlag flag)
 	{
 		//Add durability information
+		int max = getMaxDoses(stack);
 		
+		tooltip.add(I18n.format("item.durability", getDoses(stack), max));
+		
+		/*
 		boolean drawDurability = true;
 		
 		if(flag.isAdvanced())
@@ -162,9 +169,22 @@ public class ItemCanteen extends ItemDrinkBase implements IItemCanteen
 		
 		if(drawDurability)
 		{
-			tooltip.add(I18n.format("item.durability", stack.getMaxDamage()-stack.getItemDamage(), stack.getMaxDamage()));
+			tooltip.add(I18n.format("item.durability", getMaxDoses(stack) - getDoses(stack), getMaxDoses(stack)));
+			//tooltip.add(I18n.format("item.durability", stack.getMaxDamage()-stack.getItemDamage(), stack.getMaxDamage()));
 		}
+		*/
 	}
+	
+	@Override
+	public double getDurabilityForDisplay(ItemStack stack)
+    {
+		double max = (double)this.getMaxDoses(stack);
+		if(max == 0.0d)
+			return 1.0d;
+		
+		
+        return (max - (double)getDoses(stack)) / max;
+    }
 	
 	@Override
 	public boolean showDurabilityBar(ItemStack stack)
@@ -205,11 +225,11 @@ public class ItemCanteen extends ItemDrinkBase implements IItemCanteen
 		return ThirstEnum.values()[type];
 	}
 	
-	public NBTTagInt getTypeTag(ItemStack stack)
+	private NBTTagInt getTypeTag(ItemStack stack)
 	{
 		if(stack.getTagCompound()==null)
 		{
-			createTag(stack);
+			createTypeTag(stack);
 			setCanteenEmpty(stack);
 		}
 		
@@ -221,7 +241,7 @@ public class ItemCanteen extends ItemDrinkBase implements IItemCanteen
 		else
 		{
 			stack.getTagCompound().removeTag(CANTEENTYPE);
-			createTag(stack);
+			createTypeTag(stack);
 			return new NBTTagInt(ThirstEnum.NORMAL.ordinal());
 		}
 	}
@@ -231,38 +251,81 @@ public class ItemCanteen extends ItemDrinkBase implements IItemCanteen
 		setTypeTag(stack, thirstEnum.ordinal());
 	}
 	
-	private void createTag(ItemStack stack)
-	{
-		setTypeTag(stack,ThirstEnum.NORMAL.ordinal());
-	}
-	
 	private void setTypeTag(ItemStack stack, int tag)
 	{
 		stack.setTagInfo(CANTEENTYPE, new NBTTagInt(tag));
 	}
 	
+	private void createTypeTag(ItemStack stack)
+	{
+		setTypeTag(stack,ThirstEnum.NORMAL.ordinal());
+	}
+	
+	private NBTTagInt getDosesTag(ItemStack stack)
+	{
+		if(stack.getTagCompound()==null)
+		{
+			createDosesTag(stack);
+			setCanteenEmpty(stack);
+		}
+		
+		NBTBase tag = stack.getTagCompound().getTag(DOSES);
+		if(tag instanceof NBTTagInt)
+		{
+			return (NBTTagInt)tag;
+		}
+		else
+		{
+			stack.getTagCompound().removeTag(DOSES);
+			createDosesTag(stack);
+			return new NBTTagInt(0);
+		}
+	}
+	
+	private void setDosesTag(ItemStack stack, int doses)
+	{
+		stack.setTagInfo(DOSES, new NBTTagInt(doses));
+	}
+	
+	private void createDosesTag(ItemStack stack)
+	{
+		setDosesTag(stack, 0);
+	}
+	
+	@Override
+	public int getDoses(ItemStack stack)
+	{
+		return getDosesTag(stack).getInt();
+	}
+	
+	@Override
+	public int getMaxDoses(ItemStack stack)
+	{
+		return ServerConfig.instance.getInteger(ServerOptions.CANTEEN_DOSES);
+	}
+	
 	@Override
 	public boolean isCanteenFull(ItemStack stack)
 	{
-		return stack.getItemDamage()==0;
+		return getDoses(stack) >= getMaxDoses(stack);
 	}
 	
 	@Override
 	public boolean isCanteenEmpty(ItemStack stack)
 	{
-		return stack.getItemDamage()==stack.getMaxDamage();
+		return getDoses(stack) <= 0;
 	}
 	
 	@Override
 	public void setCanteenFull(ItemStack stack)
 	{
-		stack.setItemDamage(0);
+		setDosesInternal(stack, getMaxDoses(stack));
 	}
 	
 	@Override
 	public void setCanteenEmpty(ItemStack stack)
 	{
-		stack.setItemDamage(stack.getMaxDamage());
+		setDosesInternal(stack, 0);
 	}
 	
 	@Override
@@ -270,8 +333,16 @@ public class ItemCanteen extends ItemDrinkBase implements IItemCanteen
 	{
 		if(!isCanteenEmpty(stack))
 		{
-			stack.setItemDamage(stack.getItemDamage()+1);
+			//setDosesInternal takes care of invalid results
+			setDosesInternal(stack, getDoses(stack)-1);
 		}
+	}
+	
+	@Override
+	public void setDoses(ItemStack stack, int amount)
+	{
+		//setDosesInternal takes care of invalid results
+		setDosesInternal(stack, amount);
 	}
 	
 	@Override
@@ -279,27 +350,24 @@ public class ItemCanteen extends ItemDrinkBase implements IItemCanteen
 	{
 		formatCanteen(stack,thirstEnum);
 		
-		if(amount<=0)
-		{
-			setCanteenEmpty(stack);
-		}
-		else
-		{
-			//setItemDamage takes care of negative results
-			stack.setItemDamage(stack.getMaxDamage()-amount);
-		}
+		//setDosesInternal takes care of invalid results
+		setDosesInternal(stack, amount);
 	}
 	
 	@Override
 	public boolean tryAddDose(ItemStack stack, ThirstEnum thirstEnum)
 	{
-		int oldDamage = stack.getItemDamage();
+		int oldDamage = getDoses(stack);
+		if(oldDamage < 0)
+			oldDamage = 0;
 		
 		boolean format = formatCanteen(stack,thirstEnum);
-		//setItemDamage takes care of negative results
-		stack.setItemDamage(stack.getItemDamage()-1);
+		//setDosesInternal takes care of invalid results
 		
-		return format || stack.getItemDamage() != oldDamage;
+		//getDoses again, as it has possibly changed since formatCanteen
+		setDosesInternal(stack, getDoses(stack) + 1);
+		
+		return format || getDoses(stack) != oldDamage;
 	}
 	
 	private boolean formatCanteen(ItemStack stack, ThirstEnum thirstEnum)
@@ -312,6 +380,29 @@ public class ItemCanteen extends ItemDrinkBase implements IItemCanteen
 			return true;
 		}
 		
+		//Preload doses
+		getDoses(stack);
+		
 		return false;
+	}
+	
+	private void setDosesInternal(ItemStack stack, int amount)
+	{
+		
+		if(amount<=0)
+		{
+			this.setDosesTag(stack, 0);
+			return;
+		}
+		
+		int max = this.getMaxDoses(stack);
+		
+		if(amount > max)
+		{
+			this.setDosesTag(stack, max);
+			return;
+		}
+		
+		this.setDosesTag(stack, amount);
 	}
 }

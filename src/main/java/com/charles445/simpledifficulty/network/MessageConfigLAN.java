@@ -54,7 +54,14 @@ public class MessageConfigLAN implements IMessage
 					if(FMLCommonHandler.instance().getSide().isClient())
 					{
 						//Physical Client, Logical Server
-						//Should be able to access Logical Client things here...
+						
+						//TODO somehow avoid this next part...
+						
+						// * * *
+						// NOTE: This is retrieving EntityPlayerSP with the logical server thread!
+						// Be wary of possible concurrency issues!
+						// * * *
+						
 						EntityPlayer receiver = SimpleDifficulty.proxy.getClientMinecraftPlayer();
 						if(receiver==null)
 						{
