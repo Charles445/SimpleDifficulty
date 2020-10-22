@@ -24,7 +24,6 @@ public class PotionParasites extends PotionBase
 		xOffset = 0;
 		yOffset = 0;
 		texture = formatTexture("parasites");
-		drawHUD=false;
 	}
 	
 	@Override

@@ -13,9 +13,9 @@
         "type": "minecraft:item_nbt",
         "item": "simpledifficulty:canteen",
         "count": 1,
-        "data": 3,
         "nbt":
         {
+            "Doses": 0,
             "CanteenType": 0
         }
     }

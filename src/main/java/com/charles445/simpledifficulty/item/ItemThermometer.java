@@ -276,6 +276,7 @@ public class ItemThermometer extends Item
 			@SideOnly(Side.CLIENT)
 			private float calculateTemperature(World world, Entity entity)
 			{
+				//TODO phase this out
 				int tempRange = TemperatureEnum.BURNING.getUpperBound() - TemperatureEnum.FREEZING.getLowerBound() + 1;
 				return (float)WorldUtil.calculateClientWorldEntityTemperature(world, entity) / (float)tempRange;
 			}

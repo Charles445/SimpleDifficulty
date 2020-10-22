@@ -11,6 +11,7 @@ import com.charles445.simpledifficulty.api.temperature.ITemperatureTileEntity;
 import com.charles445.simpledifficulty.api.temperature.TemperatureEnum;
 import com.charles445.simpledifficulty.config.JsonConfigInternal;
 import com.charles445.simpledifficulty.config.ModConfig;
+import com.charles445.simpledifficulty.util.WorldUtil;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -24,10 +25,6 @@ import net.minecraft.world.chunk.Chunk;
 
 public class ModifierBlocksTiles extends ModifierBase
 {
-	private final float rangeMax = TemperatureEnum.BURNING.getUpperBound() - TemperatureEnum.FREEZING.getLowerBound();
-	private final float maxTemp = TemperatureEnum.BURNING.getUpperBound();
-	private final float minTemp = TemperatureEnum.FREEZING.getLowerBound();
-	
 	private float coldestValue = 0.0f;
 	private float hottestValue = 0.0f;
 	private float coldestResultValue = 0.0f;
@@ -277,7 +274,7 @@ public class ModifierBlocksTiles extends ModifierBase
 	
 	private void checkChunkAndProcess(FloatPair pair, World world, BlockPos pos, BlockPos selfPos)
 	{
-		if(isChunkLoaded(world, pos))
+		if(WorldUtil.isChunkLoaded(world, pos))
 		{
 			Chunk chunk = world.getChunkProvider().provideChunk(pos.getX() >> 4, pos.getZ() >> 4);
 			for(Map.Entry<BlockPos, TileEntity> entry : chunk.getTileEntityMap().entrySet())
@@ -314,21 +311,6 @@ public class ModifierBlocksTiles extends ModifierBase
 			}
 		}
 		return 0.0f;
-	}
-	
-	private boolean isChunkLoaded(World world, BlockPos pos)
-	{
-		if(world.isRemote)
-		{
-			//WorldClient don't care
-			return true;
-		}
-		else
-		{
-			//WorldServer
-			return ((WorldServer)world).getChunkProvider().chunkExists(pos.getX() >> 4, pos.getZ() >> 4);
-		}
-		
 	}
 	
 	private class FloatPair

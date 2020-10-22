@@ -11,6 +11,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldServer;
 
 public class WorldUtil
 {
@@ -50,5 +51,19 @@ public class WorldUtil
 	public static int calculateClientWorldEntityTemperature(World world, Entity entity)
 	{
 		return TemperatureUtil.clampTemperature(TemperatureUtil.getWorldTemperature(world, WorldUtil.getSidedBlockPos(world,entity)));
+	}
+	
+	public static boolean isChunkLoaded(World world, BlockPos pos)
+	{
+		if(world.isRemote)
+		{
+			//WorldClient don't care
+			return true;
+		}
+		else
+		{
+			//WorldServer
+			return ((WorldServer)world).getChunkProvider().chunkExists(pos.getX() >> 4, pos.getZ() >> 4);
+		}
 	}
 }

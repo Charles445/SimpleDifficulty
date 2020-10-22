@@ -20,7 +20,6 @@ public class PotionHypothermia extends PotionBase
 		xOffset = 0;
 		yOffset = 0;
 		texture = formatTexture("hypothermia");
-		drawHUD=false;
 	}
 	
 	@Override

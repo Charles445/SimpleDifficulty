@@ -19,7 +19,6 @@ public class PotionThirsty extends PotionBase
 		xOffset = 0;
 		yOffset = 0;
 		texture = formatTexture("thirsty");
-		drawHUD=false;
 	}
 	
 	@Override

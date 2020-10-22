@@ -217,6 +217,7 @@ public class TemperatureCapability implements ITemperatureCapability
 		//TAN clamps the targettemp, this doesn't
 		
 		int tickrange = ModConfig.server.temperature.temperatureTickMax - ModConfig.server.temperature.temperatureTickMin;
+		//TODO phase this out also this is wrong
 		int temprange = TemperatureEnum.BURNING.getUpperBound() - TemperatureEnum.FREEZING.getLowerBound();
 		
 		//Distance of temperature range

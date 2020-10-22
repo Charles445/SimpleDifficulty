@@ -4,6 +4,7 @@ import java.util.Random;
 
 import com.charles445.simpledifficulty.api.SDCapabilities;
 import com.charles445.simpledifficulty.api.SDItems;
+import com.charles445.simpledifficulty.api.item.IItemCanteen;
 import com.charles445.simpledifficulty.api.thirst.ThirstEnum;
 import com.charles445.simpledifficulty.api.thirst.ThirstUtil;
 import com.charles445.simpledifficulty.item.ItemCanteen;
@@ -26,7 +27,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
-import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
@@ -201,38 +201,18 @@ public class BlockRainCollector extends Block
 				{
 					if(!player.capabilities.isCreativeMode)
 					{
-						//TODO some sort of canteen utility? Canteen code is awful for usability
-						if(itemstack.getTagCompound()!=null)
+						IItemCanteen canteen = (IItemCanteen)item;
+						
+						ThirstEnum type = canteen.getThirstEnum(itemstack);
+						
+						//Try to add a dose of purified water
+						if(canteen.tryAddDose(itemstack, ThirstEnum.PURIFIED))
 						{
-							//If it's missing, getting 0 is fine
-							int type = itemstack.getTagCompound().getInteger(ItemCanteen.CANTEENTYPE);
+							//Drain collector
+							this.setWaterLevel(world, pos, state, amount - 1);
 							
-							if(type!=ThirstEnum.PURIFIED.ordinal())
-							{
-								//Replace it
-								itemstack.getTagCompound().setInteger(ItemCanteen.CANTEENTYPE, ThirstEnum.PURIFIED.ordinal());
-								
-								//Set damage
-								itemstack.setItemDamage(itemstack.getMaxDamage()-1);
-								
-								//Drain collector
-								this.setWaterLevel(world, pos, state, amount - 1);
-								
-								//Play sound
-								SoundUtil.serverPlayBlockSound(world, pos, SoundEvents.ITEM_BUCKET_FILL);
-							}
-							else if(itemstack.getItemDamage() > 0)
-							{
-								//It has purified water in it, and it needs another dose
-								itemstack.setItemDamage(itemstack.getItemDamage()-1);
-								
-								//Drain collector
-								this.setWaterLevel(world, pos, state, amount - 1);
-								
-								//Play sound
-								SoundUtil.serverPlayBlockSound(world, pos, SoundEvents.ITEM_BUCKET_FILL);
-							}
-							
+							//Play sound
+							SoundUtil.serverPlayBlockSound(world, pos, SoundEvents.ITEM_BUCKET_FILL);
 						}
 					}
 				}
@@ -301,16 +281,16 @@ public class BlockRainCollector extends Block
 		return false;
 	}
 
-  	//BlockCauldron.isFullCube
-  	@Override
-  	public boolean isFullCube(IBlockState state)
-  	{
-  		return false;
-  	}
-  	
-  	@SideOnly(Side.CLIENT)
+	//BlockCauldron.isFullCube
 	@Override
-  	public BlockRenderLayer getBlockLayer()
+	public boolean isFullCube(IBlockState state)
+	{
+		return false;
+	}
+	
+	@SideOnly(Side.CLIENT)
+	@Override
+	public BlockRenderLayer getBlockLayer()
 	{
 		return BlockRenderLayer.CUTOUT;
 	}
