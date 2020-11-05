@@ -1,14 +1,20 @@
+death.attack.dehydration=%1$s脱水而亡
+death.attack.hyperthermia=%1$s热死了
+death.attack.hypothermia=%1$s冻死了
+death.attack.parasites=%1$s死于寄生虫
+
 effect.cold_resist=严寒抗性
 effect.heat_resist=炎热抗性
 effect.hyperthermia=中暑
 effect.hypothermia=伤寒
+effect.parasites=寄生虫
 effect.thirsty=脱水
 
-enchantment.chilling=寒冷
-enchantment.heating=炎热
+enchantment.chilling=降温
+enchantment.heating=加热
 
-enchantment.simpledifficulty.chilling.desc=穿戴时降低玩家体温
-enchantment.simpledifficulty.heating.desc=穿戴时提高玩家体温
+enchantment.simpledifficulty.chilling.desc=穿戴时降低自身体温
+enchantment.simpledifficulty.heating.desc=穿戴时提高自身体温
 
 fluid.purifiedwater=纯净水
 
@@ -21,7 +27,7 @@ item.simpledifficulty:canteen_purified.name=纯净水壶
 
 item.simpledifficulty:charcoal_filter.name=木炭过滤器
 
-item.simpledifficulty:ice_chunk.name=冰块
+item.simpledifficulty:ice_chunk.name=碎冰块
 
 item.simpledifficulty:ice_helmet.name=冰头盔
 item.simpledifficulty:ice_chestplate.name=冰胸甲
@@ -39,7 +45,7 @@ item.simpledifficulty:juice_golden_carrot.name=金萝卜汁
 item.simpledifficulty:juice_melon.name=西瓜汁
 item.simpledifficulty:juice_pumpkin.name=南瓜汁
 
-item.simpledifficulty:magma_chunk.name=岩浆块
+item.simpledifficulty:magma_chunk.name=碎岩浆块
 
 item.simpledifficulty:purified_water_bottle.name=纯净水瓶
 
@@ -65,11 +71,12 @@ splash_potion.effect.long_cold_resist_type=喷溅型抗寒药水
 splash_potion.effect.heat_resist_type=喷溅型耐热药水
 splash_potion.effect.long_heat_resist_type=喷溅型耐热药水
 
-tile.simpledifficulty:campfire.name=营火
+tile.simpledifficulty:campfire.name=篝火
 tile.simpledifficulty:chiller.name=降温器
 tile.simpledifficulty:heater.name=加热器
 tile.simpledifficulty:purifiedwater.name=纯净水
 tile.simpledifficulty:rain_collector.name=雨水收集器
+tile.simpledifficulty:spit.name=篝火烤架
 
 tipped_arrow.effect.cold_resist_type=抗寒箭
 tipped_arrow.effect.long_cold_resist_type=抗寒箭
