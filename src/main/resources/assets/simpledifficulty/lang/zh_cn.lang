@@ -7,7 +7,7 @@ effect.cold_resist=严寒抗性
 effect.heat_resist=炎热抗性
 effect.hyperthermia=中暑
 effect.hypothermia=伤寒
-effect.parasites=寄生虫
+effect.parasites=感染寄生虫
 effect.thirsty=脱水
 
 enchantment.chilling=降温
