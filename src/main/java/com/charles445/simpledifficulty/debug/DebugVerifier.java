@@ -7,6 +7,7 @@ import com.charles445.simpledifficulty.api.SDEnchantments;
 import com.charles445.simpledifficulty.api.SDFluids;
 import com.charles445.simpledifficulty.api.SDItems;
 import com.charles445.simpledifficulty.api.SDPotions;
+import com.charles445.simpledifficulty.config.ModConfig;
 
 public class DebugVerifier
 {
@@ -54,13 +55,21 @@ public class DebugVerifier
 		test(SDPotions.hypothermia, SDPotions.potions.get("hypothermia"));
 		test(SDPotions.thirsty, SDPotions.potions.get("thirsty"));
 		test(SDPotions.parasites, SDPotions.potions.get("parasites"));
-		test(SDPotions.cold_resist, SDPotions.potions.get("cold_resist"));
-		test(SDPotions.heat_resist, SDPotions.potions.get("heat_resist"));
-		
-		test(SDPotions.cold_resist_type, SDPotions.potionTypes.get("cold_resist_type"));
-		test(SDPotions.long_cold_resist_type, SDPotions.potionTypes.get("long_cold_resist_type"));
-		test(SDPotions.heat_resist_type, SDPotions.potionTypes.get("heat_resist_type"));
-		test(SDPotions.long_heat_resist_type, SDPotions.potionTypes.get("long_heat_resist_type"));
+		if (ModConfig.enable.coldPotionEnabled)
+			test(SDPotions.cold_resist, SDPotions.potions.get("cold_resist"));
+		if (ModConfig.enable.heatPotionEnabled)
+			test(SDPotions.heat_resist, SDPotions.potions.get("heat_resist"));
+
+		if (ModConfig.enable.coldPotionEnabled)
+		{
+			test(SDPotions.cold_resist_type, SDPotions.potionTypes.get("cold_resist_type"));
+			test(SDPotions.long_cold_resist_type, SDPotions.potionTypes.get("long_cold_resist_type"));
+		}
+		if (ModConfig.enable.heatPotionEnabled)
+		{
+			test(SDPotions.heat_resist_type, SDPotions.potionTypes.get("heat_resist_type"));
+			test(SDPotions.long_heat_resist_type, SDPotions.potionTypes.get("long_heat_resist_type"));
+		}
 		
 		
 		SimpleDifficulty.logger.debug("Stopping DebugVerifier");

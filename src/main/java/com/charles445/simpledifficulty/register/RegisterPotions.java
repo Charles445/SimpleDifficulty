@@ -34,22 +34,29 @@ public class RegisterPotions
 			hypothermia = registerAs("hypothermia", new PotionHypothermia(), registry);
 			thirsty = registerAs("thirsty", new PotionThirsty(), registry);
 			parasites = registerAs("parasites", new PotionParasites(), registry);
-			
-			cold_resist = registerAs("cold_resist", new PotionResistCold(), registry);
-			heat_resist = registerAs("heat_resist", new PotionResistHeat(), registry);
+
+			if (ModConfig.enable.coldPotionEnabled)
+				cold_resist = registerAs("cold_resist", new PotionResistCold(), registry);
+			if (ModConfig.enable.heatPotionEnabled)
+				heat_resist = registerAs("heat_resist", new PotionResistHeat(), registry);
 		}
 		
 		@SubscribeEvent
 		public static void registerTypes(final RegistryEvent.Register<PotionType> event)
 		{
 			final IForgeRegistry<PotionType> registry = event.getRegistry();
-			
-			cold_resist_type = registerTypeAs("cold_resist_type", SDPotions.cold_resist, ModConfig.server.miscellaneous.resistancePotionDurationShort, registry);
-			long_cold_resist_type = registerTypeAs("long_cold_resist_type", SDPotions.cold_resist, ModConfig.server.miscellaneous.resistancePotionDurationLong, registry);
-			
-			heat_resist_type = registerTypeAs("heat_resist_type", SDPotions.heat_resist, ModConfig.server.miscellaneous.resistancePotionDurationShort, registry);
-			long_heat_resist_type = registerTypeAs("long_heat_resist_type", SDPotions.heat_resist, ModConfig.server.miscellaneous.resistancePotionDurationLong, registry);
-			
+
+			if (ModConfig.enable.coldPotionEnabled)
+			{
+				cold_resist_type = registerTypeAs("cold_resist_type", SDPotions.cold_resist, ModConfig.server.miscellaneous.resistancePotionDurationShort, registry);
+				long_cold_resist_type = registerTypeAs("long_cold_resist_type", SDPotions.cold_resist, ModConfig.server.miscellaneous.resistancePotionDurationLong, registry);
+			}
+
+			if (ModConfig.enable.heatPotionEnabled)
+			{
+				heat_resist_type = registerTypeAs("heat_resist_type", SDPotions.heat_resist, ModConfig.server.miscellaneous.resistancePotionDurationShort, registry);
+				long_heat_resist_type = registerTypeAs("long_heat_resist_type", SDPotions.heat_resist, ModConfig.server.miscellaneous.resistancePotionDurationLong, registry);
+			}
 		}
 		
 		private static PotionType registerTypeAs(String name, final Potion potion, int duration, IForgeRegistry<PotionType> registry)

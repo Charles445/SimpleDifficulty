@@ -31,6 +31,10 @@ public class ModConfig
 	@Config.Comment("Server configuration")
 	@Config.Name("Server")
 	public static final ConfigServerConfig server = new ConfigServerConfig();
+
+	@Config.Comment("Enable or disable features.")
+	@Config.Name("Enable")
+	public static final ConfigEnable enable = new ConfigEnable();
 	
 	//TODO Lang
 	
@@ -388,6 +392,15 @@ public class ModConfig
 			
 		}
 	}
+
+	public static class ConfigEnable
+	{
+		@Config.Name("ColdPotionEnabled")
+		public boolean coldPotionEnabled = true;
+
+		@Config.Name("HeatPotionEnabled")
+		public boolean heatPotionEnabled = true;
+	}
 	
 	///
 	/// Event Handler
@@ -484,4 +497,5 @@ public class ModConfig
 		SimpleDifficulty.logger.info("Sending Configuration to all players");
 		PacketHandler.instance.sendToAll(getNewConfigMessage());
 	}
+
 }

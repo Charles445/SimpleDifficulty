@@ -31,7 +31,7 @@ public class PotionHyperthermia extends PotionBase
 	@Override
 	public void performEffect(EntityLivingBase entity, int amplifier)
 	{
-		if(entity instanceof EntityPlayer && !entity.isPotionActive(SDPotions.heat_resist))
+		if(entity instanceof EntityPlayer && (SDPotions.heat_resist == null || !entity.isPotionActive(SDPotions.heat_resist)))
 		{
 			World world = entity.getEntityWorld();
 			EntityPlayer player = (EntityPlayer) entity;

@@ -131,7 +131,7 @@ public class TemperatureCapability implements ITemperatureCapability
 			TemperatureEnum tempEnum = getTemperatureEnum();
 			if(tempEnum==TemperatureEnum.BURNING)
 			{
-				if(TemperatureEnum.BURNING.getMiddle() < getTemperatureLevel() && !player.isPotionActive(SDPotions.heat_resist) && !player.isSpectator() && !player.isCreative())
+				if(TemperatureEnum.BURNING.getMiddle() < getTemperatureLevel() && (SDPotions.heat_resist == null || !player.isPotionActive(SDPotions.heat_resist)) && !player.isSpectator() && !player.isCreative())
 				{
 					//Hyperthermia
 					player.removePotionEffect(SDPotions.hyperthermia);
@@ -140,7 +140,7 @@ public class TemperatureCapability implements ITemperatureCapability
 			}
 			else if(tempEnum==TemperatureEnum.FREEZING)
 			{
-				if(TemperatureEnum.FREEZING.getMiddle() >= getTemperatureLevel() && !player.isPotionActive(SDPotions.cold_resist) && !player.isSpectator() && !player.isCreative())
+				if(TemperatureEnum.FREEZING.getMiddle() >= getTemperatureLevel() && (SDPotions.cold_resist == null || !player.isPotionActive(SDPotions.cold_resist)) && !player.isSpectator() && !player.isCreative())
 				{
 					//Hypothermia
 					player.removePotionEffect(SDPotions.hypothermia);

@@ -16,12 +16,12 @@ public class SDPotions
 	public static Potion thirsty;
 	public static Potion parasites;
 	
-	public static Potion cold_resist;
-	public static Potion heat_resist;
+	public static Potion cold_resist = null;
+	public static Potion heat_resist = null;
 	
-	public static PotionType cold_resist_type;
-	public static PotionType long_cold_resist_type;
-	public static PotionType heat_resist_type;
-	public static PotionType long_heat_resist_type;
+	public static PotionType cold_resist_type = null;
+	public static PotionType long_cold_resist_type = null;
+	public static PotionType heat_resist_type = null;
+	public static PotionType long_heat_resist_type = null;
 	
 }
