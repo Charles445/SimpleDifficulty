@@ -3,6 +3,7 @@ package com.charles445.simpledifficulty.register;
 import com.charles445.simpledifficulty.api.SDFluids;
 import com.charles445.simpledifficulty.api.SDItems;
 import com.charles445.simpledifficulty.api.SDPotions;
+import com.charles445.simpledifficulty.config.ModConfig;
 import com.charles445.simpledifficulty.register.crafting.FixedBrewingOreRecipe;
 
 import net.minecraft.init.Items;
@@ -46,20 +47,28 @@ public class RegisterRecipes
 			
 			//Potions
 			//Avoiding using PotionHelper.addMix
-			
-			//Awkward to normal
-			registerSameItemPotionRecipes(PotionTypes.AWKWARD, SDItems.ice_chunk, SDPotions.cold_resist_type);
-			registerSameItemPotionRecipes(PotionTypes.AWKWARD, SDItems.magma_chunk, SDPotions.heat_resist_type);
-			
-			//Normal to long
-			registerSameItemPotionRecipes(SDPotions.cold_resist_type, Items.REDSTONE, SDPotions.long_cold_resist_type);
-			registerSameItemPotionRecipes(SDPotions.heat_resist_type, Items.REDSTONE, SDPotions.long_heat_resist_type);
-			
-			//Item to Item
-			registerConversionPotionRecipes(SDPotions.cold_resist_type);
-			registerConversionPotionRecipes(SDPotions.heat_resist_type);
-			registerConversionPotionRecipes(SDPotions.long_cold_resist_type);
-			registerConversionPotionRecipes(SDPotions.long_heat_resist_type);
+
+			if (ModConfig.enable.coldPotionEnabled)
+			{
+				//Awkward to normal
+				registerSameItemPotionRecipes(PotionTypes.AWKWARD, SDItems.ice_chunk, SDPotions.cold_resist_type);
+				//Normal to long
+				registerSameItemPotionRecipes(SDPotions.cold_resist_type, Items.REDSTONE, SDPotions.long_cold_resist_type);
+				//Item to Item
+				registerConversionPotionRecipes(SDPotions.cold_resist_type);
+				registerConversionPotionRecipes(SDPotions.cold_resist_type);
+			}
+
+			if (ModConfig.enable.heatPotionEnabled)
+			{
+				//Awkward to normal
+				registerSameItemPotionRecipes(PotionTypes.AWKWARD, SDItems.magma_chunk, SDPotions.heat_resist_type);
+				//Normal to long
+				registerSameItemPotionRecipes(SDPotions.heat_resist_type, Items.REDSTONE, SDPotions.long_heat_resist_type);
+				//Item to Item
+				registerConversionPotionRecipes(SDPotions.heat_resist_type);
+				registerConversionPotionRecipes(SDPotions.long_heat_resist_type);
+			}
 		}
 		
 		private static void registerConversionPotionRecipes(PotionType potionType)
