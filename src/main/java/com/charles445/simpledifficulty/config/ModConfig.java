@@ -1,6 +1,10 @@
 package com.charles445.simpledifficulty.config;
 
 
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+
 import com.charles445.simpledifficulty.SimpleDifficulty;
 import com.charles445.simpledifficulty.api.config.ClientConfig;
 import com.charles445.simpledifficulty.api.config.ClientOptions;
@@ -114,6 +118,14 @@ public class ModConfig
 			@Config.Comment("Should cooking food on a campfire spit give experience like a furnace")
 			@Config.Name("CampfireSpitExperience")
 			public boolean campfireSpitExperience = true;
+			
+			@Config.Comment("Blacklisted items in the campfire spit (ex. minecraft:beef")
+			@Config.Name("CampfireSpitBlacklist")
+			public String[] campfireSpitBlacklist = new String[0];
+			
+			@Config.Comment("Whether the campfire spit blacklist is a whitelist instead")
+			@Config.Name("CampfireSpitBlacklistIsWhitelist")
+			public boolean campfireSpitBlacklistIsWhitelist = false;
 			
 			@Config.Comment("Whether Golden Apple Juice gives the golden apple effect")
 			@Config.Name("GoldenAppleJuiceEffect")

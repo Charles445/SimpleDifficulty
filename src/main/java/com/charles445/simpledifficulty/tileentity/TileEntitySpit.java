@@ -136,22 +136,41 @@ public class TileEntitySpit extends TileEntity implements ITickable
 		//Deposit
 		if(!withdrewToHand && isCookable(heldItemStack))
 		{
-			for(int i=0; i < items.getSlots(); i++)
+			//Check the blacklist
+			String heldItemName = heldItemStack.getItem().getRegistryName().toString();
+			boolean isBlacklisted = false;
+			String[] spitBlacklist = ModConfig.server.miscellaneous.campfireSpitBlacklist;
+			for(int i = 0; i < spitBlacklist.length; i++)
 			{
-				if(items.getStackInSlot(i).isEmpty())
+				if(spitBlacklist[i].equals(heldItemName))
 				{
-					//Insert and break
-					items.insertItem(i, new ItemStack(heldItemStack.getItem(), 1, heldItemStack.getItemDamage()), false);
-					heldItemStack.shrink(1);
-					
-					//Reset Progress
-					//TODO individual slot progress? lol
-					progress = 0;
-					
-					if(!playedSound)
-						playedSound = playWorldSound(world, pos, true);
-					found = true;
+					isBlacklisted = true;
 					break;
+				}
+			}
+			
+			//If it's in the blacklist, but it's a whitelist, then it's acceptable
+			//If it's not in the blacklist, and it's a blacklist, it's also acceptable
+			
+			if(isBlacklisted == ModConfig.server.miscellaneous.campfireSpitBlacklistIsWhitelist)
+			{
+				for(int i=0; i < items.getSlots(); i++)
+				{
+					if(items.getStackInSlot(i).isEmpty())
+					{
+						//Insert and break
+						items.insertItem(i, new ItemStack(heldItemStack.getItem(), 1, heldItemStack.getItemDamage()), false);
+						heldItemStack.shrink(1);
+						
+						//Reset Progress
+						//TODO individual slot progress? lol
+						progress = 0;
+						
+						if(!playedSound)
+							playedSound = playWorldSound(world, pos, true);
+						found = true;
+						break;
+					}
 				}
 			}
 		}
