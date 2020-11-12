@@ -10,6 +10,7 @@ import net.minecraft.init.PotionTypes;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.potion.PotionHelper;
 import net.minecraft.potion.PotionType;
 import net.minecraft.potion.PotionUtils;
 import net.minecraftforge.common.brewing.BrewingRecipeRegistry;
@@ -23,6 +24,8 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 
 public class RegisterRecipes
 {
+	public static boolean POTION_RECIPES_AS_VANILLA = true;
+	
 	@Mod.EventBusSubscriber
 	public static class Registrar
 	{
@@ -43,23 +46,38 @@ public class RegisterRecipes
 					FluidUtil.getFilledBucket(new FluidStack(SDFluids.purifiedWater, Fluid.BUCKET_VOLUME)),
 					0.0f);
 			
-			
+
 			//Potions
-			//Avoiding using PotionHelper.addMix
-			
-			//Awkward to normal
-			registerSameItemPotionRecipes(PotionTypes.AWKWARD, SDItems.ice_chunk, SDPotions.cold_resist_type);
-			registerSameItemPotionRecipes(PotionTypes.AWKWARD, SDItems.magma_chunk, SDPotions.heat_resist_type);
-			
-			//Normal to long
-			registerSameItemPotionRecipes(SDPotions.cold_resist_type, Items.REDSTONE, SDPotions.long_cold_resist_type);
-			registerSameItemPotionRecipes(SDPotions.heat_resist_type, Items.REDSTONE, SDPotions.long_heat_resist_type);
-			
-			//Item to Item
-			registerConversionPotionRecipes(SDPotions.cold_resist_type);
-			registerConversionPotionRecipes(SDPotions.heat_resist_type);
-			registerConversionPotionRecipes(SDPotions.long_cold_resist_type);
-			registerConversionPotionRecipes(SDPotions.long_heat_resist_type);
+			if(POTION_RECIPES_AS_VANILLA)
+			{
+				//This is done to allow for CraftTweaker support
+				
+				//Awkward to normal
+				PotionHelper.addMix(PotionTypes.AWKWARD, SDItems.ice_chunk, SDPotions.cold_resist_type);
+				PotionHelper.addMix(PotionTypes.AWKWARD, SDItems.magma_chunk, SDPotions.heat_resist_type);
+				
+				PotionHelper.addMix(SDPotions.cold_resist_type, Items.REDSTONE, SDPotions.long_cold_resist_type);
+				PotionHelper.addMix(SDPotions.heat_resist_type, Items.REDSTONE, SDPotions.long_heat_resist_type);
+			}
+			else
+			{
+				//Avoiding using PotionHelper.addMix
+				//This is the "proper" way to do this, but it does not allow CraftTweaker to remove them
+				
+				//Awkward to normal
+				registerSameItemPotionRecipes(PotionTypes.AWKWARD, SDItems.ice_chunk, SDPotions.cold_resist_type);
+				registerSameItemPotionRecipes(PotionTypes.AWKWARD, SDItems.magma_chunk, SDPotions.heat_resist_type);
+				
+				//Normal to long
+				registerSameItemPotionRecipes(SDPotions.cold_resist_type, Items.REDSTONE, SDPotions.long_cold_resist_type);
+				registerSameItemPotionRecipes(SDPotions.heat_resist_type, Items.REDSTONE, SDPotions.long_heat_resist_type);
+				
+				//Item to Item
+				registerConversionPotionRecipes(SDPotions.cold_resist_type);
+				registerConversionPotionRecipes(SDPotions.heat_resist_type);
+				registerConversionPotionRecipes(SDPotions.long_cold_resist_type);
+				registerConversionPotionRecipes(SDPotions.long_heat_resist_type);
+			}
 		}
 		
 		private static void registerConversionPotionRecipes(PotionType potionType)
