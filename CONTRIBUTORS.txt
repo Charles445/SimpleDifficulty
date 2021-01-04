@@ -10,4 +10,5 @@ tehmadtitaan - Ice Armor Model Textures, Cloth Armor Model Textures
 
 
  - Translations - 
+lex1975 - Russian (ru_ru.lang)
 WeiAL - Chinese (Simplified) (zh_cn.lang)
