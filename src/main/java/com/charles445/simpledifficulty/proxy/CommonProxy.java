@@ -33,6 +33,7 @@ import com.charles445.simpledifficulty.temperature.ModifierWet;
 import com.charles445.simpledifficulty.util.internal.TemperatureUtilInternal;
 import com.charles445.simpledifficulty.util.internal.ThirstUtilInternal;
 
+import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 
@@ -92,5 +93,11 @@ public abstract class CommonProxy implements IProxy
 		
 		//Setup Mod Compatibility
 		CompatController.setupCommon();
+	}
+	
+	@Override
+	public void spawnClientParticle(World world, String type, double xPos, double yPos, double zPos, double motionX, double motionY, double motionZ)
+	{
+		
 	}
 }

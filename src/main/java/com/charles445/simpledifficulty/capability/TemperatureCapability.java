@@ -135,7 +135,7 @@ public class TemperatureCapability implements ITemperatureCapability
 				{
 					//Hyperthermia
 					player.removePotionEffect(SDPotions.hyperthermia);
-					player.addPotionEffect(new PotionEffect(SDPotions.hyperthermia, 300, 0));
+					player.addPotionEffect(new PotionEffect(SDPotions.hyperthermia, 450, 0));
 				}
 			}
 			else if(tempEnum==TemperatureEnum.FREEZING)
@@ -144,7 +144,7 @@ public class TemperatureCapability implements ITemperatureCapability
 				{
 					//Hypothermia
 					player.removePotionEffect(SDPotions.hypothermia);
-					player.addPotionEffect(new PotionEffect(SDPotions.hypothermia, 300, 0));
+					player.addPotionEffect(new PotionEffect(SDPotions.hypothermia, 450, 0));
 				}
 			}
 		}

@@ -21,6 +21,7 @@ public class SDItems
 	
 	public static Item ice_chunk;
 	public static Item magma_chunk;
+	public static Item ice_rod;
 	
 	public static Item thermometer;
 	

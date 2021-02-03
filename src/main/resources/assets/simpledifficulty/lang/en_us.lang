@@ -82,3 +82,5 @@ tipped_arrow.effect.cold_resist_type=Arrow of Cold Resistance
 tipped_arrow.effect.long_cold_resist_type=Arrow of Cold Resistance
 tipped_arrow.effect.heat_resist_type=Arrow of Heat Resistance
 tipped_arrow.effect.long_heat_resist_type=Arrow of Heat Resistance
+
+item.simpledifficulty:ice_rod.name=Ice Rod

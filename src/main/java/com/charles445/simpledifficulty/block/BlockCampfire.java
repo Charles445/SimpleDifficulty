@@ -271,6 +271,8 @@ public class BlockCampfire extends Block implements IBlockStateIgnore
 	@Override
 	public void randomDisplayTick(IBlockState state, World world, BlockPos pos, Random rand)
 	{
+		super.randomDisplayTick(state, world, pos, rand);
+		
 		//So this function is called very strangely? Enchanting tables use this for the bookcase effect I think
 		
 		if(state.getValue(BURNING))

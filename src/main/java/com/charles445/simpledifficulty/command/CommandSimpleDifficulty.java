@@ -11,6 +11,7 @@ import com.charles445.simpledifficulty.SimpleDifficulty;
 import com.charles445.simpledifficulty.api.SDCapabilities;
 import com.charles445.simpledifficulty.api.SDCompatibility;
 import com.charles445.simpledifficulty.api.config.JsonConfig;
+import com.charles445.simpledifficulty.api.config.json.JsonItemIdentity;
 import com.charles445.simpledifficulty.api.temperature.ITemperatureCapability;
 import com.charles445.simpledifficulty.api.thirst.IThirstCapability;
 import com.charles445.simpledifficulty.compat.JsonCompatDefaults;
@@ -179,12 +180,12 @@ public class CommandSimpleDifficulty extends CommandBase
 		case "help":message(sender, "If you need more help, you can contact the mod author on CurseForge or GitHub");return;
 		case "exportjson":message(sender, "Exports your in-game JSON changes to the config folder");return;
 		case "reloadjson":message(sender, "Discards any unexported in-game JSON changes.\nReloads the JSON from the config folder");return;
-		case "addarmor":message(sender, "Adds the held armor to the armor JSON\n(changes temperature when worn)");return;
+		case "addarmor":message(sender, "Adds the held armor to the armor JSON\n(changes temperature when worn)\nAdd argument --nbt to include NBT tag");return;
 		case "addblock":message(sender, "Adds the held block to the block JSON\n(changes temperature when near the block)");return;
-		case "addconsumabletemperature":message(sender, "Adds the held item to the consumableTemperature JSON\n(modifies temperature over time when consumed)");return;
-		case "addconsumablethirst":message(sender, "Adds the held item to the consumableThirst JSON\n(replenishes thirst when consumed)");return;
+		case "addconsumabletemperature":message(sender, "Adds the held item to the consumableTemperature JSON\n(modifies temperature over time when consumed)\nAdd argument --nbt to include NBT tag");return;
+		case "addconsumablethirst":message(sender, "Adds the held item to the consumableThirst JSON\n(replenishes thirst when consumed)\nAdd argument --nbt to include NBT tag");return;
 		case "addfluid":message(sender, "Adds the held fluid item to the fluid JSON\n(changes temperature when inside the fluid)");return;
-		case "addhelditem":message(sender, "Adds the held item to the heldItems JSON\n(changes player temperature when held in mainhand or offhand)");return;
+		case "addhelditem":message(sender, "Adds the held item to the heldItems JSON\n(changes player temperature when held in mainhand or offhand)\nAdd argument --nbt to include NBT tag");return;
 		//case "loaddefaultmodconfig":message(sender, "Loads a mod's built-in default JSON config.\nThis will overwrite any matching settings! Use caution.");return;
 		case "nbt":message(sender, "Gets an item's NBT tag as a string for config use");return;
 		case "setthirst":message(sender, "Sets the player's thirst");return;
@@ -273,7 +274,7 @@ public class CommandSimpleDifficulty extends CommandBase
 				
 				TextComponentString tc = new TextComponentString(compString);
 				
-				int metadata = stack.getHasSubtypes()?stack.getMetadata():-1;
+				int metadata = getMetadataFromStack(stack);
 				
 				//Clickable style
 				Style style = new Style();
@@ -336,6 +337,11 @@ public class CommandSimpleDifficulty extends CommandBase
 		}
 	}
 	*/
+	
+	private int getMetadataFromStack(ItemStack stack)
+	{
+		return stack.getHasSubtypes()?stack.getMetadata():-1;
+	}
 	
 	private void addBlock(MinecraftServer server, ICommandSender sender, String[] args)
 	{
@@ -485,8 +491,17 @@ public class CommandSimpleDifficulty extends CommandBase
 					return;
 				}
 				
-				JsonConfig.registerConsumableThirst(stack, amount, saturation, thirstyChance);
-				message(sender, "Added consumable item to "+JsonFileName.consumableThirst+"!\n"+exportJsonReminder);
+				boolean nbtArgument = hasNBTArgument(args);
+				if(nbtArgument && stack.hasTagCompound())
+				{
+					JsonConfig.registerConsumableThirst(getRegistryName(stack), amount, saturation, thirstyChance, getFullIdentity(stack));
+					message(sender, "Added consumable item with nbt to "+JsonFileName.consumableThirst+"!\n"+exportJsonReminder);
+				}
+				else
+				{
+					JsonConfig.registerConsumableThirst(stack, amount, saturation, thirstyChance);
+					message(sender, "Added consumable item to "+JsonFileName.consumableThirst+"!\n"+exportJsonReminder);
+				}
 			}
 			catch(NumberFormatException e)
 			{
@@ -525,8 +540,18 @@ public class CommandSimpleDifficulty extends CommandBase
 				
 				//Okay, so it can either be a block or an item this time around
 				//JSON should be storing the block's registry if it is a block
-				JsonConfig.registerHeldItem(stack, temperature);
-				message(sender, "Added held item to "+JsonFileName.heldItemTemperatures+"!\n"+exportJsonReminder);
+				
+				boolean nbtArgument = hasNBTArgument(args);
+				if(nbtArgument && stack.hasTagCompound())
+				{
+					JsonConfig.registerHeldItem(getRegistryName(stack), temperature, getFullIdentity(stack));
+					message(sender, "Added held item with nbt to "+JsonFileName.heldItemTemperatures+"!\n"+exportJsonReminder);
+				}
+				else
+				{
+					JsonConfig.registerHeldItem(stack, temperature);
+					message(sender, "Added held item to "+JsonFileName.heldItemTemperatures+"!\n"+exportJsonReminder);
+				}
 			}
 			catch(NumberFormatException e)
 			{
@@ -568,8 +593,19 @@ public class CommandSimpleDifficulty extends CommandBase
 					return;
 				}
 				
-				JsonConfig.registerConsumableTemperature(group, stack, temperature, duration);
-				message(sender, "Added consumable item to "+JsonFileName.consumableTemperature+"!\n"+exportJsonReminder);
+				boolean nbtArgument = hasNBTArgument(args);
+				
+				if(nbtArgument && stack.hasTagCompound())
+				{
+					JsonConfig.registerConsumableTemperature(group, getRegistryName(stack), temperature, duration, getFullIdentity(stack));
+					message(sender, "Added consumable item with nbt to "+JsonFileName.consumableTemperature+"!\n"+exportJsonReminder);
+				}
+				else
+				{
+				
+					JsonConfig.registerConsumableTemperature(group, stack, temperature, duration);
+					message(sender, "Added consumable item to "+JsonFileName.consumableTemperature+"!\n"+exportJsonReminder);
+				}
 			}
 			catch(NumberFormatException e)
 			{
@@ -614,9 +650,18 @@ public class CommandSimpleDifficulty extends CommandBase
 				}
 				*/
 				
-				JsonConfig.registerArmorTemperature(stack, temperature);
-				message(sender, "Added armor to "+JsonFileName.armorTemperatures+"!\n"+exportJsonReminder);
+				boolean nbtArgument = hasNBTArgument(args);
 				
+				if(nbtArgument && stack.hasTagCompound())
+				{
+					JsonConfig.registerArmorTemperature(getRegistryName(stack), temperature, getFullIdentity(stack));
+					message(sender, "Added armor with nbt to "+JsonFileName.armorTemperatures+"!\n"+exportJsonReminder);
+				}
+				else
+				{
+					JsonConfig.registerArmorTemperature(stack, temperature);
+					message(sender, "Added armor to "+JsonFileName.armorTemperatures+"!\n"+exportJsonReminder);
+				}
 				
 			}
 			catch(NumberFormatException e)
@@ -629,6 +674,19 @@ public class CommandSimpleDifficulty extends CommandBase
 		{
 			message(sender, warn_notPlayerAdmin);
 		}
+	}
+	
+	private String getRegistryName(ItemStack stack)
+	{
+		return stack.getItem().getRegistryName().toString();
+	}
+	
+	private JsonItemIdentity getFullIdentity(ItemStack stack)
+	{
+		if(stack.hasTagCompound())
+			return new JsonItemIdentity(getMetadataFromStack(stack), stack.getTagCompound().toString());
+			
+		return new JsonItemIdentity(getMetadataFromStack(stack));
 	}
 
 	private void exportJson(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException
@@ -691,5 +749,26 @@ public class CommandSimpleDifficulty extends CommandBase
 	private boolean hasPermissionLevel(ICommandSender sender, int permLevel)
 	{
 		return sender.canUseCommand(permLevel, "simpledifficulty");
+	}
+	
+	private boolean hasNBTArgument(String[] input)
+	{
+		return hasArgument("--nbt", input);
+	}
+	
+	private boolean hasArgument(String argument, String[] input)
+	{
+		if(input==null)
+			return false;
+		
+		for(String s : input)
+		{
+			if(s.equals(argument))
+			{
+				return true;
+			}
+		}
+		
+		return false;
 	}
 }

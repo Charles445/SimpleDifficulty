@@ -51,6 +51,7 @@ public class RegisterItems
 			
 			ice_chunk = registerAs("ice_chunk", new Item(), registry);
 			magma_chunk = registerAs("magma_chunk", new Item(), registry);
+			ice_rod = registerAs("ice_rod", new Item(), registry);
 			
 			thermometer = registerAs("thermometer", new ItemThermometer(), registry);
 			

@@ -2,6 +2,8 @@ package com.charles445.simpledifficulty.block;
 
 import java.util.Random;
 
+import com.charles445.simpledifficulty.SimpleDifficulty;
+import com.charles445.simpledifficulty.debug.DebugUtil;
 import com.charles445.simpledifficulty.tileentity.TileEntityTemperature;
 
 import net.minecraft.block.Block;
@@ -15,6 +17,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumBlockRenderType;
+import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -130,6 +133,63 @@ public class BlockTemperature extends BlockContainer
 	*/
 	
 	//RENDER
+	
+	@SideOnly(Side.CLIENT)
+	@Override
+	public void randomDisplayTick(IBlockState state, World world, BlockPos pos, Random rand)
+	{
+		super.randomDisplayTick(state, world, pos, rand);
+		
+		if(state.getValue(ENABLED))
+		{
+			if(rand.nextFloat() <= 0.33f)
+			{
+				createRandomParticle(world, pos, rand);
+			}
+		}
+	}
+	
+	private void createRandomParticle(World world, BlockPos pos, Random rand)
+	{
+		double x_a = 0.125d;
+		double z_a = 0.125d;
+		double x_b = 0.0d;
+		double z_b = 0.0d;
+		double endoff = 0.875d;
+		double thickness = 0.2d;
+		
+		switch(rand.nextInt(4))
+		{
+			case 0: 
+				x_b = endoff;
+				z_b = thickness;
+				break;
+			case 1: 
+				x_a = endoff - thickness;
+				x_b = endoff;
+				z_b = endoff;
+				break;
+			case 2:
+				x_b = endoff;
+				z_a = endoff - thickness;
+				z_b = endoff;
+				break;
+			case 3:
+				x_b = thickness;
+				z_b = endoff;
+				break;
+			default: break;
+		}
+		
+		double x_r = rand.nextDouble() * (x_b - x_a);
+		double z_r = rand.nextDouble() * (z_b - z_a);
+		
+		//DebugUtil.messageAll(" "+(int)(100d*(x_a+x_r))+ " " + (int)(100d*(z_a+z_r)));
+		
+		SimpleDifficulty.proxy.spawnClientParticle(world, temperature>=0.0f?"HEATER":"CHILLER", x_a + x_r + pos.getX(), 0.775d + pos.getY(), z_a + z_r + pos.getZ(), 0.0d, 0.05d, 0.0d);
+		
+		//world.spawnParticle(EnumParticleTypes.END_ROD, x_a + x_r + pos.getX(), 0.775d + pos.getY(), z_a + z_r + pos.getZ(), 0.0d, 0.05d, 0.0d);
+	}
 	
 	@Override
 	public EnumBlockRenderType getRenderType(IBlockState state)

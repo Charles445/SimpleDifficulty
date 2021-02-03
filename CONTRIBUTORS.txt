@@ -4,9 +4,10 @@ List of contributors
 Charles445 - anything not specified below
 
  - Assets - 
+Artsydgy/Artsydy - Temperature HUD Textures
+HoontsArt - Thermometer Textures
+Shivaxi - Thirst HUD Textures
 tehmadtitaan - Ice Armor Model Textures, Cloth Armor Model Textures
-
-
 
 
  - Translations - 

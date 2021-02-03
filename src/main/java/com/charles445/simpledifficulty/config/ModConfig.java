@@ -88,6 +88,10 @@ public class ModConfig
 		@Config.RangeInt(min=1)
 		public int canteenDoses = 3;
 		
+		@Config.Comment("Whether heaters and chillers only work indoors")
+		@Config.Name("StrictHeaters")
+		public boolean strictHeaters = true;
+		
 		@Config.Comment("Spams chat with debug messages, do not enable this unless you are testing!")
 		@Config.Name("DebugMode")
 		public boolean debug = false;
@@ -138,6 +142,11 @@ public class ModConfig
 			@Config.Comment("Whether Magma Blocks drop Magma Chunks")
 			@Config.Name("MagmaDropsChunks")
 			public boolean magmaDropsChunks = true;
+			
+			@Config.Comment("Chance for rain collector to fill (1/n chance, default is 6")
+			@Config.Name("RainCollectorFillChance")
+			@Config.RangeInt(min=1)
+			public int rainCollectorFillChance = 6;
 			
 			@Config.Comment("Duration of short heat/cold resistance potions, in ticks")
 			@Config.Name("ResistancePotionDurationShort")
@@ -380,6 +389,14 @@ public class ModConfig
 		@Config.Name("TemperatureReadout")
 		public boolean temperatureReadout = false;
 		
+		@Config.Comment("Enables the classic temperature icon")
+		@Config.Name("ClassicHUDTemperature")
+		public boolean classicHUDTemperature = false;
+		
+		@Config.Comment("Enables the classic thirst bar")
+		@Config.Name("ClassicHUDThirst")
+		public boolean classicHUDThirst = false;
+		
 		public class ConfigClientThermometer
 		{
 			@Config.Comment("Whether thermometers display the correct temperature. Only disable this if you are trying to determine what's lagging.")
@@ -453,6 +470,8 @@ public class ModConfig
 		ClientConfig.instance.put(ClientOptions.HUD_THERMOMETERX, client.thermometer.hudThermometerX);
 		ClientConfig.instance.put(ClientOptions.HUD_THERMOMETERY, client.thermometer.hudThermometerY);
 		ClientConfig.instance.put(ClientOptions.TEMPERATURE_READOUT, client.temperatureReadout);
+		ClientConfig.instance.put(ClientOptions.CLASSICHUD_TEMPERATURE, client.classicHUDTemperature);
+		ClientConfig.instance.put(ClientOptions.CLASSICHUD_THIRST, client.classicHUDThirst);
 	}
 	
 	public static void sendLocalServerConfigToAPI()
@@ -467,6 +486,7 @@ public class ModConfig
 		ServerConfig.instance.put(ServerOptions.TEMPERATURE_ENABLED, server.temperatureEnabled);
 		ServerConfig.instance.put(ServerOptions.TEMPERATURE_TE_ENABLED, server.temperatureTEEnabled);
 		ServerConfig.instance.put(ServerOptions.CANTEEN_DOSES, server.canteenDoses);
+		ServerConfig.instance.put(ServerOptions.STRICT_HEATERS, server.strictHeaters);
 	}
 	
 	private static MessageUpdateConfig getNewConfigMessage()
@@ -481,6 +501,7 @@ public class ModConfig
 		compound.setString(ServerOptions.TEMPERATURE_ENABLED.getName(), ""+server.temperatureEnabled);
 		compound.setString(ServerOptions.TEMPERATURE_TE_ENABLED.getName(), ""+server.temperatureTEEnabled);
 		compound.setString(ServerOptions.CANTEEN_DOSES.getName(), ""+server.canteenDoses);
+		compound.setString(ServerOptions.STRICT_HEATERS.getName(), ""+server.strictHeaters);
 		
 		return new MessageUpdateConfig(compound);
 	}

@@ -5,13 +5,17 @@ import com.charles445.simpledifficulty.client.command.ClientCommandIdentityCopy;
 import com.charles445.simpledifficulty.client.gui.TemperatureGui;
 import com.charles445.simpledifficulty.client.gui.TemperatureInfoGui;
 import com.charles445.simpledifficulty.client.gui.ThirstGui;
+import com.charles445.simpledifficulty.client.particle.ParticleChiller;
+import com.charles445.simpledifficulty.client.particle.ParticleHeater;
 import com.charles445.simpledifficulty.client.render.RenderSpit;
 import com.charles445.simpledifficulty.compat.CompatController;
 import com.charles445.simpledifficulty.handler.TooltipHandler;
 import com.charles445.simpledifficulty.tileentity.TileEntitySpit;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.particle.Particle;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.world.World;
 import net.minecraftforge.client.ClientCommandHandler;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
@@ -75,5 +79,32 @@ public class ClientProxy extends CommonProxy
 	public Boolean isClientConnectedToServer()
 	{
 		return Minecraft.getMinecraft().getConnection().getNetworkManager().isChannelOpen();
+	}
+	
+	@Override
+	public void spawnClientParticle(World world, String type, double xPos, double yPos, double zPos, double motionX, double motionY, double motionZ)
+	{
+		if(!world.isRemote)
+			return;
+		
+		Particle particle = null;
+		
+		switch(type)
+		{
+			case "HEATER":
+				particle = new ParticleHeater(world, xPos, yPos, zPos, motionX, motionY, motionZ);
+				break;
+			case "CHILLER": 
+				particle = new ParticleChiller(world, xPos, yPos, zPos, motionX, motionY, motionZ);
+				break;
+			default:
+				
+				break;
+		}
+		
+		if(particle != null)
+		{
+			Minecraft.getMinecraft().effectRenderer.addEffect(particle);
+		}
 	}
 }

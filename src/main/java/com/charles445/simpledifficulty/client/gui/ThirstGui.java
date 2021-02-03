@@ -30,6 +30,7 @@ public class ThirstGui
 	private int updateCounter = 0;
 	private final Random rand = new Random();
 	public static final ResourceLocation ICONS = new ResourceLocation("simpledifficulty:textures/gui/icons.png");
+	public static final ResourceLocation THIRSTHUD = new ResourceLocation("simpledifficulty:textures/gui/thirsthud.png");
 	
 	//Position on the icons sheet
 	private static final int texturepos_X = 0;
@@ -46,8 +47,13 @@ public class ThirstGui
 			//Set the seed to avoid shaking during pausing
 			rand.setSeed((long)(updateCounter * 445));
 			
+			boolean classic = ClientConfig.instance.getBoolean(ClientOptions.CLASSICHUD_THIRST);
+			
 			//Bind to custom icons image
-			bind(ICONS);
+			if(classic)
+				bind(ICONS);
+			else
+				bind(THIRSTHUD);
 			
 			//Render thirst at the scaled resolution
 			
