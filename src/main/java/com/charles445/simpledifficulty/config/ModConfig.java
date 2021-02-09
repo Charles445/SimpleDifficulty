@@ -397,6 +397,10 @@ public class ModConfig
 		@Config.Name("ClassicHUDThirst")
 		public boolean classicHUDThirst = false;
 		
+		@Config.Comment("Enables chiller and heater particles")
+		@Config.Name("MachineParticles")
+		public boolean machineParticles = true;
+		
 		public class ConfigClientThermometer
 		{
 			@Config.Comment("Whether thermometers display the correct temperature. Only disable this if you are trying to determine what's lagging.")
@@ -472,6 +476,7 @@ public class ModConfig
 		ClientConfig.instance.put(ClientOptions.TEMPERATURE_READOUT, client.temperatureReadout);
 		ClientConfig.instance.put(ClientOptions.CLASSICHUD_TEMPERATURE, client.classicHUDTemperature);
 		ClientConfig.instance.put(ClientOptions.CLASSICHUD_THIRST, client.classicHUDThirst);
+		ClientConfig.instance.put(ClientOptions.MACHINE_PARTICLES, client.machineParticles);
 	}
 	
 	public static void sendLocalServerConfigToAPI()

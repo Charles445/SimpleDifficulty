@@ -10,6 +10,7 @@ import com.charles445.simpledifficulty.api.config.QuickConfig;
 import com.charles445.simpledifficulty.api.temperature.ITemperatureCapability;
 import com.charles445.simpledifficulty.api.temperature.TemperatureEnum;
 import com.charles445.simpledifficulty.api.temperature.TemperatureUtil;
+import com.charles445.simpledifficulty.config.ModConfig;
 import com.charles445.simpledifficulty.util.RenderUtil;
 import com.charles445.simpledifficulty.util.WorldUtil;
 
@@ -82,7 +83,7 @@ public class TemperatureGui
 			rand.setSeed((long)(updateCounter * 445));
 			
 			
-			boolean classic = ClientConfig.instance.getBoolean(ClientOptions.CLASSICHUD_TEMPERATURE);
+			boolean classic = ModConfig.client.classicHUDTemperature;
 			
 			//Bind to custom icons image
 			if(classic)
@@ -96,6 +97,10 @@ public class TemperatureGui
 			
 
 			GlStateManager.enableBlend();
+
+			//Many mods set this and forget to set it back.
+			//I'm setting it back pre-emptively because this has been reported with two mods.
+			GlStateManager.color(1.0f, 1.0f, 1.0f);
 			
 			//Rendering start
 			if(classic)
@@ -209,7 +214,7 @@ public class TemperatureGui
 			xOffset = shakeSide?1:-1;
 		}
 		
-		if(ClientConfig.instance.getBoolean(ClientOptions.ALTERNATE_TEMP))
+		if(ModConfig.client.alternateTemp)
 		{
 			//TODO
 			RenderUtil.drawTexturedModalRect(x - 8 + xOffset, y - 8 + yOffset, modernFeelPos_X + this.getTempHudFeelBGX(alternateTemperature), modernFeelPos_Y + this.getTempHudFeelBGY(alternateTemperature), modernFeelWidth, modernFeelHeight);
@@ -257,7 +262,7 @@ public class TemperatureGui
 			xOffset = shakeSide?1:-1;
 		}
 		
-		if(ClientConfig.instance.getBoolean(ClientOptions.ALTERNATE_TEMP))
+		if(ModConfig.client.alternateTemp)
 		{
 			//Alternate, shows core and outside feeling
 			
@@ -322,7 +327,7 @@ public class TemperatureGui
 
 		//Thermometer
 		
-		if(hasThermometer && ClientConfig.instance.getBoolean(ClientOptions.HUD_THERMOMETER) && ClientConfig.instance.getBoolean(ClientOptions.ENABLE_THERMOMETER))
+		if(hasThermometer && ModConfig.client.thermometer.hudThermometer && ModConfig.client.thermometer.enableThermometer)
 		{
 			int therm_position = worldThermometerTemperature - TemperatureEnum.FREEZING.getLowerBound();
 			
@@ -332,8 +337,8 @@ public class TemperatureGui
 			
 			//Configure where this thing draws
 			
-			int therm_xOffset = ClientConfig.instance.getInteger(ClientOptions.HUD_THERMOMETERX);
-			int therm_yOffset = ClientConfig.instance.getInteger(ClientOptions.HUD_THERMOMETERY);
+			int therm_xOffset = ModConfig.client.thermometer.hudThermometerX;
+			int therm_yOffset = ModConfig.client.thermometer.hudThermometerY;
 			
 			RenderUtil.drawTexturedModalRect(x + therm_xOffset, y - 18 + therm_yOffset, therm_x, therm_y, textureWidthTherm, textureHeightTherm);
 		}
@@ -414,12 +419,12 @@ public class TemperatureGui
 						EntityPlayer player = mc.player;
 						World world = player.getEntityWorld();
 						
-						if(ClientConfig.instance.getBoolean(ClientOptions.ALTERNATE_TEMP))
+						if(ModConfig.client.alternateTemp)
 						{
 							alternateTemperature = TemperatureUtil.clampTemperature(TemperatureUtil.getPlayerTargetTemperature(player));
 						}
 						
-						if(ClientConfig.instance.getBoolean(ClientOptions.HUD_THERMOMETER) && ClientConfig.instance.getBoolean(ClientOptions.ENABLE_THERMOMETER))
+						if(ModConfig.client.thermometer.hudThermometer && ModConfig.client.thermometer.enableThermometer)
 						{
 							
 							worldThermometerTemperature = TemperatureUtil.clampTemperature((int)WorldUtil.calculateClientWorldEntityTemperature(world, player));

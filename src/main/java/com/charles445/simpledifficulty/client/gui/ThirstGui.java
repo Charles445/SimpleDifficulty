@@ -9,6 +9,7 @@ import com.charles445.simpledifficulty.api.config.ClientConfig;
 import com.charles445.simpledifficulty.api.config.ClientOptions;
 import com.charles445.simpledifficulty.api.config.QuickConfig;
 import com.charles445.simpledifficulty.api.thirst.IThirstCapability;
+import com.charles445.simpledifficulty.config.ModConfig;
 import com.charles445.simpledifficulty.util.RenderUtil;
 
 import net.minecraft.client.Minecraft;
@@ -47,7 +48,7 @@ public class ThirstGui
 			//Set the seed to avoid shaking during pausing
 			rand.setSeed((long)(updateCounter * 445));
 			
-			boolean classic = ClientConfig.instance.getBoolean(ClientOptions.CLASSICHUD_THIRST);
+			boolean classic = ModConfig.client.classicHUDThirst;
 			
 			//Bind to custom icons image
 			if(classic)
@@ -94,6 +95,10 @@ public class ThirstGui
 		//thirst is 0 - 20
 		GlStateManager.enableBlend();
 		
+		//Many mods set this and forget to set it back.
+		//I'm setting it back pre-emptively because this has been reported with two mods.
+		GlStateManager.color(1.0f, 1.0f, 1.0f);
+		
 		int left = width / 2 + 82; //Same x offset as the hunger bar
 		int top = height - GuiIngameForge.right_height;
 		
@@ -135,7 +140,7 @@ public class ThirstGui
 		int thirstSaturationInt = (int)thirstSaturation;
 		if(thirstSaturationInt > 0)
 		{
-			if(ClientConfig.instance.getBoolean(ClientOptions.DRAW_THIRST_SATURATION))
+			if(ModConfig.client.drawThirstSaturation)
 			{
 				for(int i = 0; i < 10; i++)
 				{

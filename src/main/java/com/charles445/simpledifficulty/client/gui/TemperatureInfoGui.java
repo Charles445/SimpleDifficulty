@@ -11,6 +11,7 @@ import com.charles445.simpledifficulty.api.temperature.ITemperatureModifier;
 import com.charles445.simpledifficulty.api.temperature.TemperatureEnum;
 import com.charles445.simpledifficulty.api.temperature.TemperatureRegistry;
 import com.charles445.simpledifficulty.api.temperature.TemperatureUtil;
+import com.charles445.simpledifficulty.config.ModConfig;
 import com.charles445.simpledifficulty.util.WorldUtil;
 
 import net.minecraft.client.Minecraft;
@@ -45,7 +46,7 @@ public class TemperatureInfoGui
 	@SubscribeEvent
 	public void onPostRenderGameOverlay(RenderGameOverlayEvent.Post event)
 	{
-		if(event.getType() == ElementType.TEXT && QuickConfig.isTemperatureEnabled() && ClientConfig.instance.getBoolean(ClientOptions.TEMPERATURE_READOUT) && !mc.gameSettings.showDebugInfo)
+		if(event.getType() == ElementType.TEXT && QuickConfig.isTemperatureEnabled() && ModConfig.client.temperatureReadout && !mc.gameSettings.showDebugInfo)
 		{
 			//Check permissions 
 			
@@ -65,7 +66,7 @@ public class TemperatureInfoGui
 		{
 			updateCounter++;
 			
-			if(updateCounter % 10 == 0 && ClientConfig.instance.getBoolean(ClientOptions.TEMPERATURE_READOUT))
+			if(updateCounter % 10 == 0 && ModConfig.client.temperatureReadout)
 			{
 				updateTemperature();
 			}

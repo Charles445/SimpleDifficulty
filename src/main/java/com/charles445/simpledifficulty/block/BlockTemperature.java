@@ -3,6 +3,7 @@ package com.charles445.simpledifficulty.block;
 import java.util.Random;
 
 import com.charles445.simpledifficulty.SimpleDifficulty;
+import com.charles445.simpledifficulty.config.ModConfig;
 import com.charles445.simpledifficulty.debug.DebugUtil;
 import com.charles445.simpledifficulty.tileentity.TileEntityTemperature;
 
@@ -185,8 +186,9 @@ public class BlockTemperature extends BlockContainer
 		double z_r = rand.nextDouble() * (z_b - z_a);
 		
 		//DebugUtil.messageAll(" "+(int)(100d*(x_a+x_r))+ " " + (int)(100d*(z_a+z_r)));
-		
-		SimpleDifficulty.proxy.spawnClientParticle(world, temperature>=0.0f?"HEATER":"CHILLER", x_a + x_r + pos.getX(), 0.775d + pos.getY(), z_a + z_r + pos.getZ(), 0.0d, 0.05d, 0.0d);
+
+		if(ModConfig.client.machineParticles)
+			SimpleDifficulty.proxy.spawnClientParticle(world, temperature>=0.0f?"HEATER":"CHILLER", x_a + x_r + pos.getX(), 0.775d + pos.getY(), z_a + z_r + pos.getZ(), 0.0d, 0.05d, 0.0d);
 		
 		//world.spawnParticle(EnumParticleTypes.END_ROD, x_a + x_r + pos.getX(), 0.775d + pos.getY(), z_a + z_r + pos.getZ(), 0.0d, 0.05d, 0.0d);
 	}

@@ -13,6 +13,7 @@ import com.charles445.simpledifficulty.api.config.ClientOptions;
 import com.charles445.simpledifficulty.api.config.QuickConfig;
 import com.charles445.simpledifficulty.api.temperature.TemperatureEnum;
 import com.charles445.simpledifficulty.api.temperature.TemperatureUtil;
+import com.charles445.simpledifficulty.config.ModConfig;
 import com.charles445.simpledifficulty.debug.DebugUtil;
 import com.charles445.simpledifficulty.util.WorldUtil;
 
@@ -132,7 +133,7 @@ public class ItemThermometer extends Item
 					return 0.0f;
 				}
 				
-				if(QuickConfig.isTemperatureEnabled() && ClientConfig.instance.getBoolean(ClientOptions.ENABLE_THERMOMETER))
+				if(QuickConfig.isTemperatureEnabled() && ModConfig.client.thermometer.enableThermometer)
 				{
 					return wobble(world, entity, stack.hashCode());
 				}
