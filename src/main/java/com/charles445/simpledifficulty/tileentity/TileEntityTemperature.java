@@ -78,7 +78,7 @@ public class TileEntityTemperature extends TileEntity implements ITemperatureTil
 		int zinc = curZ<destZ?1:-1;
 		
 		//But first check both the start and the destination
-		if(canSeeSky(new BlockPos(curX,curY,curZ)) || canSeeSky(new BlockPos(destX,destY,destZ)))
+		if(isUnprotected(new BlockPos(curX,curY,curZ)) || isUnprotected(new BlockPos(destX,destY,destZ)))
 			return 0.0f;
 		
 		while(curX != destX || curZ != destZ || curY != destY)
@@ -92,7 +92,7 @@ public class TileEntityTemperature extends TileEntity implements ITemperatureTil
 			if(curZ != destZ)
 				curZ += zinc;
 			
-			if(canSeeSky(new BlockPos(curX,curY,curZ)))
+			if(isUnprotected(new BlockPos(curX,curY,curZ)))
 				return 0.0f;
 		}
 		
@@ -101,13 +101,20 @@ public class TileEntityTemperature extends TileEntity implements ITemperatureTil
 		return distanceTemp;
 	}
 	
-	private boolean canSeeSky(BlockPos pos)
+	private boolean isUnprotected(BlockPos pos)
 	{
 		if(!WorldUtil.isChunkLoaded(this.world, pos))
 			return true;
 		
 		Chunk chunk = this.world.getChunkProvider().provideChunk(pos.getX() >> 4, pos.getZ() >> 4);
-		return chunk.canSeeSky(pos);
+		
+		if(!chunk.canSeeSky(pos))
+			return false;
+		
+		if (chunk.getPrecipitationHeight(pos).getY() > pos.getY())
+			return false;
+		
+		return true;
 	}
 	
 	private double sq(double d)

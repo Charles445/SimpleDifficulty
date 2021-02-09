@@ -187,7 +187,7 @@ public class BlockTemperature extends BlockContainer
 		
 		//DebugUtil.messageAll(" "+(int)(100d*(x_a+x_r))+ " " + (int)(100d*(z_a+z_r)));
 
-		if(ModConfig.client.machineParticles)
+		if(ModConfig.client.heaterParticles)
 			SimpleDifficulty.proxy.spawnClientParticle(world, temperature>=0.0f?"HEATER":"CHILLER", x_a + x_r + pos.getX(), 0.775d + pos.getY(), z_a + z_r + pos.getZ(), 0.0d, 0.05d, 0.0d);
 		
 		//world.spawnParticle(EnumParticleTypes.END_ROD, x_a + x_r + pos.getX(), 0.775d + pos.getY(), z_a + z_r + pos.getZ(), 0.0d, 0.05d, 0.0d);

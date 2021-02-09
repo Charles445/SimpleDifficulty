@@ -398,8 +398,8 @@ public class ModConfig
 		public boolean classicHUDThirst = false;
 		
 		@Config.Comment("Enables chiller and heater particles")
-		@Config.Name("MachineParticles")
-		public boolean machineParticles = true;
+		@Config.Name("HeaterParticles")
+		public boolean heaterParticles = true;
 		
 		public class ConfigClientThermometer
 		{
@@ -476,7 +476,7 @@ public class ModConfig
 		ClientConfig.instance.put(ClientOptions.TEMPERATURE_READOUT, client.temperatureReadout);
 		ClientConfig.instance.put(ClientOptions.CLASSICHUD_TEMPERATURE, client.classicHUDTemperature);
 		ClientConfig.instance.put(ClientOptions.CLASSICHUD_THIRST, client.classicHUDThirst);
-		ClientConfig.instance.put(ClientOptions.MACHINE_PARTICLES, client.machineParticles);
+		ClientConfig.instance.put(ClientOptions.HEATER_PARTICLES, client.heaterParticles);
 	}
 	
 	public static void sendLocalServerConfigToAPI()
