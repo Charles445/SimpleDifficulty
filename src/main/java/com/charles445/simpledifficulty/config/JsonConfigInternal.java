@@ -603,7 +603,16 @@ public class JsonConfigInternal
 		
 		Gson gson = buildNewGson();
 		File jsonFile = new File(jsonDirectory,jsonFileName);
-		FileUtils.write(jsonFile, gson.toJson(container, type),(String)null);
+		
+		//Allow for files to be set to read only to prevent writing to JSON
+		if(jsonFile.exists() && !jsonFile.canWrite())
+		{
+			SimpleDifficulty.logger.warn(jfn.toString()+" is set to Read Only! Merged file will not be written.");
+		}
+		else
+		{
+			FileUtils.write(jsonFile, gson.toJson(container, type),(String)null);
+		}
 	}
 	
 	private static Gson buildNewGson()
