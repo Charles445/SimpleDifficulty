@@ -53,7 +53,7 @@ public class BlockCampfire extends Block implements IBlockStateIgnore
 	
 	public BlockCampfire()
 	{
-		super(Material.WOOD, MapColor.WOOD);
+		super(Material.CIRCUITS, MapColor.WOOD);
 		setDefaultState(blockState.getBaseState().withProperty(AGE, AGE_MIN).withProperty(BURNING, false));
 		setHardness(0.5f);
 		setSoundType(SoundType.WOOD);
