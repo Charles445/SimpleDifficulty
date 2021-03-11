@@ -10,14 +10,17 @@ public interface ITemperatureCapability
 {
 	public int getTemperatureLevel();
 	public int getTemperatureTickTimer();
+	public int getTemperatureDamageCounter();
 	public ImmutableMap<String, TemporaryModifier> getTemporaryModifiers();
 	
 	public void setTemperatureLevel(int temperature);
 	public void setTemperatureTickTimer(int ticktimer);
 	public void setTemporaryModifier(String name, float temperature, int duration);
+	public void setTemperatureDamageCounter(int damagecounter);
 	
 	public void addTemperatureLevel(int temperature);
 	public void addTemperatureTickTimer(int ticktimer);
+	public void addTemperatureDamageCounter(int damagecounter);
 	
 	public void clearTemporaryModifiers();
 	

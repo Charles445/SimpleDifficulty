@@ -25,6 +25,7 @@ public class ThirstCapability implements IThirstCapability
 	private int thirst = 20;
 	private float saturation = 0.0f;
 	private int ticktimer = 0;
+	private int damagecounter = 0;
 	
 	//Unsaved data
 	private int oldthirst = 0;
@@ -121,7 +122,9 @@ public class ThirstCapability implements IThirstCapability
 				
 				if(DamageUtil.isModDangerous(world) && DamageUtil.healthAboveDifficulty(world, player))
 				{
-					player.attackEntityFrom(SDDamageSources.DEHYDRATION, 1.0f);
+					float thirstDamageToApply = 1.0f + (1.0f * (float)this.getThirstDamageCounter() * (float)ModConfig.server.thirst.thirstDamageScaling);
+					player.attackEntityFrom(SDDamageSources.DEHYDRATION, thirstDamageToApply);
+					this.addThirstDamageCounter(1);
 				}
 			}
 		}
@@ -129,6 +132,7 @@ public class ThirstCapability implements IThirstCapability
 		{
 			//Reset the timer if not dying of thirst
 			this.setThirstTickTimer(0);
+			this.setThirstDamageCounter(0);
 		}
 		
 		//checkSprint(player);
@@ -179,6 +183,12 @@ public class ThirstCapability implements IThirstCapability
 	{
 		return ticktimer;
 	}
+	
+	@Override
+	public int getThirstDamageCounter()
+	{
+		return damagecounter;
+	}
 
 	@Override
 	public void setThirstExhaustion(float exhaustion)
@@ -210,6 +220,12 @@ public class ThirstCapability implements IThirstCapability
 	{
 		this.ticktimer=ticktimer;
 	}
+	
+	@Override
+	public void setThirstDamageCounter(int damagecounter)
+	{
+		this.damagecounter = damagecounter;
+	}
 
 	@Override
 	public void addThirstExhaustion(float exhaustion)
@@ -233,6 +249,12 @@ public class ThirstCapability implements IThirstCapability
 	public void addThirstTickTimer(int ticktimer)
 	{
 		this.setThirstTickTimer(this.getThirstTickTimer() + ticktimer);
+	}
+	
+	@Override
+	public void addThirstDamageCounter(int damagecounter)
+	{
+		this.setThirstDamageCounter(this.getThirstDamageCounter() + damagecounter);
 	}
 	
 	@Override

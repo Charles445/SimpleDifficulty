@@ -266,6 +266,11 @@ public class ModConfig
 			@Config.RangeDouble(min=0, max = 1000000)
 			public double stackingTemperatureLimit = 3;
 			
+			@Config.Comment("Temperature Damage Scaling - Extra damage from hyperthermia and hypothermia over time")
+			@Config.Name("TemperatureDamageScaling")
+			@Config.RangeDouble(min=0.0)
+			public double temperatureDamageScaling = 0.0d;
+			
 		}
 		public class ConfigThirst
 		{
@@ -345,6 +350,11 @@ public class ModConfig
 			@Config.Name("ThirstParasitesDamage")
 			@Config.RangeDouble(min=0.0, max=1.0)
 			public double thirstParasitesDamage = 0.2d;
+			
+			@Config.Comment("Thirst Damage Scaling - Extra damage from thirst over time")
+			@Config.Name("ThirstDamageScaling")
+			@Config.RangeDouble(min=0.0)
+			public double thirstDamageScaling = 0.0d;
 			
 			
 		}

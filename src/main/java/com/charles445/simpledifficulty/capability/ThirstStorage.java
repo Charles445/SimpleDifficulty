@@ -13,6 +13,7 @@ public class ThirstStorage implements IStorage<IThirstCapability>
 	private static final String thirstLevel = "thirstLevel";
 	private static final String thirstSaturation = "thirstSaturation";
 	private static final String thirstTickTimer = "thirstTickTimer";
+	private static final String thirstDamageCounter = "thirstDamageCounter";
 	
 
 	@Override
@@ -23,6 +24,7 @@ public class ThirstStorage implements IStorage<IThirstCapability>
 		compound.setInteger(thirstLevel, instance.getThirstLevel());
 		compound.setFloat(thirstSaturation,instance.getThirstSaturation());
 		compound.setInteger(thirstTickTimer,instance.getThirstTickTimer());
+		compound.setInteger(thirstDamageCounter,instance.getThirstDamageCounter());
 		return compound;
 	}
 
@@ -41,6 +43,8 @@ public class ThirstStorage implements IStorage<IThirstCapability>
 				instance.setThirstSaturation(compound.getFloat(thirstSaturation));
 			if(compound.hasKey(thirstTickTimer))
 				instance.setThirstTickTimer(compound.getInteger(thirstTickTimer));
+			if(compound.hasKey(thirstDamageCounter))
+				instance.setThirstDamageCounter(compound.getInteger(thirstDamageCounter));
 		}
 	}
 

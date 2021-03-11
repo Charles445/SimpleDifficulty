@@ -28,6 +28,7 @@ public class TemperatureCapability implements ITemperatureCapability
 {
 	private int temperature = 12;
 	private int ticktimer = 0;
+	private int damagecounter = 0;
 	
 	private Map<String, TemporaryModifier> temporaryModifiers = new HashMap<String, TemporaryModifier>();
 	
@@ -51,6 +52,12 @@ public class TemperatureCapability implements ITemperatureCapability
 	{
 		return ticktimer;
 	}
+	
+	@Override
+	public int getTemperatureDamageCounter()
+	{
+		return damagecounter;
+	}
 
 	@Override
 	public void setTemperatureLevel(int temperature)
@@ -63,6 +70,12 @@ public class TemperatureCapability implements ITemperatureCapability
 	{
 		this.ticktimer=ticktimer;	
 	}
+	
+	@Override
+	public void setTemperatureDamageCounter(int damagecounter)
+	{
+		this.damagecounter = damagecounter;
+	}
 
 	@Override
 	public void addTemperatureLevel(int temperature)
@@ -74,6 +87,12 @@ public class TemperatureCapability implements ITemperatureCapability
 	public void addTemperatureTickTimer(int ticktimer)
 	{
 		this.setTemperatureTickTimer(this.getTemperatureTickTimer() + ticktimer);
+	}
+	
+	@Override
+	public void addTemperatureDamageCounter(int damagecounter)
+	{
+		this.setTemperatureDamageCounter(this.getTemperatureDamageCounter() + damagecounter);
 	}
 
 	@Override
@@ -128,6 +147,8 @@ public class TemperatureCapability implements ITemperatureCapability
 			
 			//Effects
 			
+			boolean appliedEffect = false;
+			
 			TemperatureEnum tempEnum = getTemperatureEnum();
 			if(tempEnum==TemperatureEnum.BURNING)
 			{
@@ -136,6 +157,7 @@ public class TemperatureCapability implements ITemperatureCapability
 					//Hyperthermia
 					player.removePotionEffect(SDPotions.hyperthermia);
 					player.addPotionEffect(new PotionEffect(SDPotions.hyperthermia, 450, 0));
+					appliedEffect = true;
 				}
 			}
 			else if(tempEnum==TemperatureEnum.FREEZING)
@@ -145,6 +167,22 @@ public class TemperatureCapability implements ITemperatureCapability
 					//Hypothermia
 					player.removePotionEffect(SDPotions.hypothermia);
 					player.addPotionEffect(new PotionEffect(SDPotions.hypothermia, 450, 0));
+					appliedEffect = true;
+				}
+			}
+			
+			if(!appliedEffect)
+			{
+				if(this.getTemperatureDamageCounter() != 0)
+				{
+					//Test whether to reset the temperature damage counter
+					boolean hasHypothermia = player.isPotionActive(SDPotions.hypothermia);
+					boolean hasHyperthermia = player.isPotionActive(SDPotions.hyperthermia);
+					if(!hasHypothermia && !hasHyperthermia)
+					{
+						//Reset the temperature damage counter
+						this.setTemperatureDamageCounter(0);
+					}
 				}
 			}
 		}

@@ -18,6 +18,7 @@ public class TemperatureStorage implements IStorage<ITemperatureCapability>
 	private static final String temperatureLevel = "temperatureLevel";
 	private static final String temperatureTickTimer = "temperatureTickTimer";
 	private static final String temporaryModifiers = "temporaryModifiers";
+	private static final String temperatureDamageCounter = "temperatureDamageCounter";
 	private static final String NBT_name = "name";
 	private static final String NBT_temperature = "temperature";
 	private static final String NBT_duration = "duration";
@@ -42,6 +43,7 @@ public class TemperatureStorage implements IStorage<ITemperatureCapability>
 		
 		compound.setInteger(temperatureLevel, instance.getTemperatureLevel());
 		compound.setInteger(temperatureTickTimer,instance.getTemperatureTickTimer());
+		compound.setInteger(temperatureDamageCounter, instance.getTemperatureDamageCounter());
 		compound.setTag(temporaryModifiers, temporaryList);
 		return compound;
 	}
@@ -57,6 +59,8 @@ public class TemperatureStorage implements IStorage<ITemperatureCapability>
 				instance.setTemperatureLevel(compound.getInteger(temperatureLevel));
 			if(compound.hasKey(temperatureTickTimer))
 				instance.setTemperatureTickTimer(compound.getInteger(temperatureTickTimer));
+			if(compound.hasKey(temperatureDamageCounter))
+				instance.setTemperatureDamageCounter(compound.getInteger(temperatureDamageCounter));
 			if(compound.hasKey(temporaryModifiers))
 			{
 				instance.clearTemporaryModifiers();

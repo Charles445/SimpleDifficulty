@@ -10,16 +10,19 @@ public interface IThirstCapability
 	public int getThirstLevel();
 	public float getThirstSaturation();
 	public int getThirstTickTimer();
+	public int getThirstDamageCounter();
 	
 	public void setThirstExhaustion(float exhaustion);
 	public void setThirstLevel(int thirst);
 	public void setThirstSaturation(float saturation);
 	public void setThirstTickTimer(int ticktimer);
+	public void setThirstDamageCounter(int damagecounter);
 	
 	public void addThirstExhaustion(float exhaustion);
 	public void addThirstLevel(int thirst);
 	public void addThirstSaturation(float saturation);
 	public void addThirstTickTimer(int ticktimer);
+	public void addThirstDamageCounter(int damagecounter);
 
 	/**
 	 * Check whether the thirst level isn't maximum
