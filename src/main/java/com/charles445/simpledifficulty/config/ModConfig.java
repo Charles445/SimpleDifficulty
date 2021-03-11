@@ -351,7 +351,7 @@ public class ModConfig
 			@Config.RangeDouble(min=0.0, max=1.0)
 			public double thirstParasitesDamage = 0.2d;
 			
-			@Config.Comment("Thirst Damage Scaling - Extra damage from thirst over time")
+			@Config.Comment("Thirst Damage Scaling - Extra damage from dehydration over time")
 			@Config.Name("ThirstDamageScaling")
 			@Config.RangeDouble(min=0.0)
 			public double thirstDamageScaling = 0.0d;

@@ -129,6 +129,8 @@ public class TemperatureCapability implements ITemperatureCapability
 		//Increment tick timer
 		addTemperatureTickTimer(1);
 		
+		boolean appliedEffect = false;
+		
 		if(getTemperatureTickTimer() >= getTemperatureTickLimit())
 		{
 			setTemperatureTickTimer(0);
@@ -146,8 +148,6 @@ public class TemperatureCapability implements ITemperatureCapability
 			}
 			
 			//Effects
-			
-			boolean appliedEffect = false;
 			
 			TemperatureEnum tempEnum = getTemperatureEnum();
 			if(tempEnum==TemperatureEnum.BURNING)
@@ -170,19 +170,19 @@ public class TemperatureCapability implements ITemperatureCapability
 					appliedEffect = true;
 				}
 			}
-			
-			if(!appliedEffect)
+		}
+		
+		if(!appliedEffect)
+		{
+			if(this.getTemperatureDamageCounter() != 0)
 			{
-				if(this.getTemperatureDamageCounter() != 0)
+				//Test whether to reset the temperature damage counter
+				boolean hasHypothermia = player.isPotionActive(SDPotions.hypothermia);
+				boolean hasHyperthermia = player.isPotionActive(SDPotions.hyperthermia);
+				if(!hasHypothermia && !hasHyperthermia)
 				{
-					//Test whether to reset the temperature damage counter
-					boolean hasHypothermia = player.isPotionActive(SDPotions.hypothermia);
-					boolean hasHyperthermia = player.isPotionActive(SDPotions.hyperthermia);
-					if(!hasHypothermia && !hasHyperthermia)
-					{
-						//Reset the temperature damage counter
-						this.setTemperatureDamageCounter(0);
-					}
+					//Reset the temperature damage counter
+					this.setTemperatureDamageCounter(0);
 				}
 			}
 		}
