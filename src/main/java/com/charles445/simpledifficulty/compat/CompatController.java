@@ -3,14 +3,10 @@ package com.charles445.simpledifficulty.compat;
 import javax.annotation.Nullable;
 
 import com.charles445.simpledifficulty.SimpleDifficulty;
-import com.charles445.simpledifficulty.api.SDCompatibility;
 import com.charles445.simpledifficulty.api.temperature.ITemperatureDynamicModifier;
 import com.charles445.simpledifficulty.api.temperature.ITemperatureModifier;
 import com.charles445.simpledifficulty.api.temperature.TemperatureRegistry;
-import com.charles445.simpledifficulty.config.ModConfig;
 import com.charles445.simpledifficulty.util.CompatUtil;
-
-import net.minecraftforge.fml.common.Loader;
 
 public class CompatController
 {
@@ -20,7 +16,22 @@ public class CompatController
 	//Compatibility is set up to be completely detached from the rest of the project
 	//So this mod's own compatibility classes are only interacted with via reflection
 	//This will allow for the use of hard dependencies if needed at a later time
-	
+
+
+	public static void setupCommonInit()
+	{
+		if (CompatUtil.canUseMod("firstaid"))
+		{
+			try
+			{
+				FirstAidCompat.init();
+			}
+			catch (Exception e)
+			{
+				SimpleDifficulty.logger.error("Failed to init firstaid compat!", e);
+			}
+		}
+	}
 	
 	
 	//Dependency Type Quick Reference
@@ -33,7 +44,7 @@ public class CompatController
 	
 	
 	//postInit
-	public static void setupCommon()
+	public static void setupCommonPostInit()
 	{
 		//Create compatibility objects
 		Object auwDynamicModifier = newCompatObject(ModNames.AUW, compatMod + "AUWDynamicModifier");

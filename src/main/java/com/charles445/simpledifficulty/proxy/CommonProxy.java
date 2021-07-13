@@ -82,7 +82,7 @@ public abstract class CommonProxy implements IProxy
 	@Override
 	public void init()
 	{
-		
+		CompatController.setupCommonInit();
 	}
 	
 	@Override
@@ -92,7 +92,7 @@ public abstract class CommonProxy implements IProxy
 		JsonConfigInternal.init(SimpleDifficulty.jsonDirectory);
 		
 		//Setup Mod Compatibility
-		CompatController.setupCommon();
+		CompatController.setupCommonPostInit();
 	}
 	
 	@Override
