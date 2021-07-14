@@ -25,8 +25,8 @@ import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 	name = SimpleDifficulty.NAME, 
 	version = SimpleDifficulty.VERSION,
 	acceptedMinecraftVersions = "[1.12]",
-	updateJSON = "https://raw.githubusercontent.com/Charles445/SimpleDifficulty/master/modupdatechecker.json"
-	
+	updateJSON = "https://raw.githubusercontent.com/Charles445/SimpleDifficulty/master/modupdatechecker.json",
+	dependencies = "after:firstaid@[1.6.16,)"
 )
 public class SimpleDifficulty 
 {
