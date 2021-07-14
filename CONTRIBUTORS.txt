@@ -9,6 +9,8 @@ HoontsArt - Thermometer Textures
 Shivaxi - Thirst HUD Textures
 tehmadtitaan - Ice Armor Model Textures, Cloth Armor Model Textures
 
+ - Features - 
+ichttt - First Aid Compatibility
 
  - Translations - 
 lex1975 - Russian (ru_ru.lang)

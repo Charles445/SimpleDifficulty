@@ -82,7 +82,7 @@ public abstract class CommonProxy implements IProxy
 	@Override
 	public void init()
 	{
-		CompatController.setupCommonInit();
+		
 	}
 	
 	@Override

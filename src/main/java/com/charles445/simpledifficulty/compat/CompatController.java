@@ -16,22 +16,7 @@ public class CompatController
 	//Compatibility is set up to be completely detached from the rest of the project
 	//So this mod's own compatibility classes are only interacted with via reflection
 	//This will allow for the use of hard dependencies if needed at a later time
-
-
-	public static void setupCommonInit()
-	{
-		if (CompatUtil.canUseMod("firstaid"))
-		{
-			try
-			{
-				FirstAidCompat.init();
-			}
-			catch (Exception e)
-			{
-				SimpleDifficulty.logger.error("Failed to init firstaid compat!", e);
-			}
-		}
-	}
+	
 	
 	
 	//Dependency Type Quick Reference
@@ -50,6 +35,7 @@ public class CompatController
 		Object auwDynamicModifier = newCompatObject(ModNames.AUW, compatMod + "AUWDynamicModifier");
 		Object auwModifier = newCompatObject(ModNames.AUW, compatMod + "AUWModifier");
 		Object baublesModifier = newCompatObject(ModNames.BAUBLES, compatMod + "BaublesModifier");
+		Object firstAidCompat = newCompatObject(ModNames.FIRSTAID, compatMod + "FirstAidCompat");
 		Object harvestFestivalModifier = newCompatObject(ModNames.HARVESTFESTIVAL, compatMod + "HarvestFestivalModifier");
 		Object oreExcavationHandler = newCompatObject(ModNames.OREEXCAVATION, compatMod + "OreExcavationHandler");
 		Object sereneSeasonsModifier = newCompatObject(ModNames.SERENESEASONS, compatMod + "SereneSeasonsModifier");
