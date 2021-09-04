@@ -68,7 +68,7 @@ public class ItemJuice extends ItemDrinkBase
 		return getEnumForStack(stack).getDirtyChance();
 	}
 	
-	private JuiceEnum getEnumForStack(ItemStack stack)
+	protected JuiceEnum getEnumForStack(ItemStack stack)
 	{
 		if(stack.getMetadata()>=JuiceEnum.values().length)
 			return JuiceEnum.values()[0];

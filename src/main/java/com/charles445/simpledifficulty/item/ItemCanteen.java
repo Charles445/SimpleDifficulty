@@ -14,6 +14,7 @@ import com.charles445.simpledifficulty.api.thirst.IThirstCapability;
 import com.charles445.simpledifficulty.api.thirst.ThirstEnum;
 import com.charles445.simpledifficulty.api.thirst.ThirstEnumBlockPos;
 import com.charles445.simpledifficulty.api.thirst.ThirstUtil;
+import com.charles445.simpledifficulty.register.crafting.CanteenCharcoalRecipe;
 import com.charles445.simpledifficulty.util.SoundUtil;
 
 import net.minecraft.client.resources.I18n;
@@ -43,8 +44,6 @@ public class ItemCanteen extends ItemDrinkBase implements IItemCanteen
 	public ItemCanteen()
 	{
 		//Doesn't super the constructor
-		setMaxDamage(3);
-		setNoRepair();
 		setMaxStackSize(1);
 	}
 	
@@ -225,7 +224,7 @@ public class ItemCanteen extends ItemDrinkBase implements IItemCanteen
 		return ThirstEnum.values()[type];
 	}
 	
-	private NBTTagInt getTypeTag(ItemStack stack)
+	protected NBTTagInt getTypeTag(ItemStack stack)
 	{
 		if(stack.getTagCompound()==null)
 		{
@@ -246,22 +245,22 @@ public class ItemCanteen extends ItemDrinkBase implements IItemCanteen
 		}
 	}
 	
-	private void setTypeTag(ItemStack stack, ThirstEnum thirstEnum)
+	protected void setTypeTag(ItemStack stack, ThirstEnum thirstEnum)
 	{
 		setTypeTag(stack, thirstEnum.ordinal());
 	}
 	
-	private void setTypeTag(ItemStack stack, int tag)
+	protected void setTypeTag(ItemStack stack, int tag)
 	{
 		stack.setTagInfo(CANTEENTYPE, new NBTTagInt(tag));
 	}
 	
-	private void createTypeTag(ItemStack stack)
+	protected void createTypeTag(ItemStack stack)
 	{
 		setTypeTag(stack,ThirstEnum.NORMAL.ordinal());
 	}
 	
-	private NBTTagInt getDosesTag(ItemStack stack)
+	protected NBTTagInt getDosesTag(ItemStack stack)
 	{
 		if(stack.getTagCompound()==null)
 		{
@@ -282,12 +281,12 @@ public class ItemCanteen extends ItemDrinkBase implements IItemCanteen
 		}
 	}
 	
-	private void setDosesTag(ItemStack stack, int doses)
+	protected void setDosesTag(ItemStack stack, int doses)
 	{
 		stack.setTagInfo(DOSES, new NBTTagInt(doses));
 	}
 	
-	private void createDosesTag(ItemStack stack)
+	protected void createDosesTag(ItemStack stack)
 	{
 		setDosesTag(stack, 0);
 	}
@@ -365,12 +364,21 @@ public class ItemCanteen extends ItemDrinkBase implements IItemCanteen
 		//setDosesInternal takes care of invalid results
 		
 		//getDoses again, as it has possibly changed since formatCanteen
-		setDosesInternal(stack, getDoses(stack) + 1);
+		
+		//Oh also try to fill up the whole thing if it's normal water
+		if(thirstEnum == ThirstEnum.NORMAL)
+		{
+			setDosesInternal(stack, getMaxDoses(stack));
+		}
+		else
+		{
+			setDosesInternal(stack, getDoses(stack) + 1);
+		}
 		
 		return format || getDoses(stack) != oldDamage;
 	}
 	
-	private boolean formatCanteen(ItemStack stack, ThirstEnum thirstEnum)
+	protected boolean formatCanteen(ItemStack stack, ThirstEnum thirstEnum)
 	{
 		if(thirstEnum != getThirstEnum(stack))
 		{
@@ -386,7 +394,7 @@ public class ItemCanteen extends ItemDrinkBase implements IItemCanteen
 		return false;
 	}
 	
-	private void setDosesInternal(ItemStack stack, int amount)
+	protected void setDosesInternal(ItemStack stack, int amount)
 	{
 		
 		if(amount<=0)

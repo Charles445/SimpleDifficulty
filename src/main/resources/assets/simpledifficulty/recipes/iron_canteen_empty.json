@@ -1,0 +1,32 @@
+{
+    "type": "forge:ore_shaped",
+    "pattern":
+    [
+        " I ",
+        "ICI",
+        "III"
+    ],
+    "key":
+    {
+        "C":
+        {
+            "item": "simpledifficulty:canteen"
+        },
+        "I":
+        {
+            "type": "forge:ore_dict",
+            "ore": "ingotIron"
+        }
+    },
+    "result":
+    {
+        "type": "minecraft:item_nbt",
+        "item": "simpledifficulty:iron_canteen",
+        "count": 1,
+        "nbt":
+        {
+            "Doses": 0,
+            "CanteenType": 0
+        }
+    }
+}

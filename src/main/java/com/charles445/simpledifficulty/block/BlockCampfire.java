@@ -309,12 +309,23 @@ public class BlockCampfire extends Block implements IBlockStateIgnore
 	
 	private void createFlameParticle(World world, BlockPos pos, Random rand)
 	{
+		/*
+		//Box shape
 		double xOffset = rand.nextDouble() * 0.8d + 0.1d;
 		double zOffset = rand.nextDouble() * 0.8d + 0.1d;
 		double yOffset = rand.nextDouble() * 0.2d + 0.35d;
-		//double yOffset = rand.nextDouble() * 0.1d + 0.75d - (Math.abs(xOffset + zOffset - 1d)*0.5d);
+		*/
 		
-		world.spawnParticle(EnumParticleTypes.FLAME, xOffset + pos.getX(), yOffset + pos.getY(), zOffset + pos.getZ(), 0.0d, 0.0d, 0.0d);
+		//Pyramid shape
+		double yOffset = rand.nextDouble() * 0.35d + 0.35d;
+		double offAdj = (0.7d - yOffset) * 2.28571428d;
+		
+		double xOffset = (rand.nextDouble() - 0.5d) * offAdj + 0.5d;
+		double zOffset = (rand.nextDouble() - 0.5d) * offAdj + 0.5d;
+
+		
+		
+		world.spawnParticle(EnumParticleTypes.FLAME, xOffset + pos.getX(), yOffset + pos.getY(), zOffset + pos.getZ(), 0.0d, rand.nextDouble() * 0.015d, 0.0d);
 	}
 	
 	@Override

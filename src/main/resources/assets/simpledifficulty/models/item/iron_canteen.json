@@ -1,0 +1,10 @@
+{
+    "parent": "item/generated",
+    "textures": {
+        "layer0": "simpledifficulty:items/iron_canteen"
+    },
+    "overrides": [
+        { "predicate": { "contain": 0.00 }, "model": "simpledifficulty:item/iron_canteen" },
+        { "predicate": { "contain": 0.99 }, "model": "simpledifficulty:item/iron_canteen_full" }
+    ]
+}

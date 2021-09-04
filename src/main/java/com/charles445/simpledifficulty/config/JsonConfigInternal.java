@@ -29,8 +29,10 @@ import com.charles445.simpledifficulty.api.config.json.migrate.JsonConsumableThi
 import com.charles445.simpledifficulty.api.config.json.migrate.JsonTemperatureMetadataMigrate;
 import com.charles445.simpledifficulty.api.temperature.TemporaryModifierGroupEnum;
 import com.charles445.simpledifficulty.compat.JsonCompatDefaults;
+import com.charles445.simpledifficulty.config.json.ExtraItem;
 import com.charles445.simpledifficulty.config.json.MaterialTemperature;
 import com.charles445.simpledifficulty.item.ItemJuice.JuiceEnum;
+import com.charles445.simpledifficulty.register.ExtraItemNames;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -45,12 +47,29 @@ public class JsonConfigInternal
 	//TODO customizable materials? Probably not
 	public static MaterialTemperature materialTemperature = new MaterialTemperature();
 	
+	public static Map<String, ExtraItem> extraItems = new HashMap<>();
+	
 	public static List<String> jsonErrors = new ArrayList<String>();
 	
 	public static final JsonItemIdentity DEFAULT_ITEM_IDENTITY = new JsonItemIdentity(-1);
 	
+	//preInit
+	public static void preInit(File jsonDirectory)
+	{
+		//Extra Items Initialization
+		SimpleDifficulty.logger.info("Extra Items Initialization");
+		
+		makeExtraItem(ExtraItemNames.FROST_ROD, "Frost Rod - For recipes");
+		makeExtraItem(ExtraItemNames.FROST_POWDER, "Frost Powder - For recipes");
+		makeExtraItem(ExtraItemNames.DRAGON_CANTEEN, "Dragon Canteen - Automatically purifies water")
+			.put("capacity", "8");
+		
+		//Extra Items JSON Handling
+		extraItems = processJson(JsonFileName.extraItems, extraItems, jsonDirectory, false);
+	}
+	
 	//postInit
-	public static void init(File jsonDirectory)
+	public static void postInit(File jsonDirectory)
 	{
 		//Setup default JSON
 		
@@ -619,5 +638,12 @@ public class JsonConfigInternal
 	{
 		//Pretty printing, and private modifiers are not serialized
 		return new GsonBuilder().setPrettyPrinting().excludeFieldsWithModifiers(Modifier.PRIVATE).create();
+	}
+	
+	private static ExtraItem makeExtraItem(String itemName, String description)
+	{
+		ExtraItem extra = new ExtraItem(description, false);
+		extraItems.put(itemName, extra);
+		return extra;
 	}
 }

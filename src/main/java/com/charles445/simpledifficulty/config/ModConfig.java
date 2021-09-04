@@ -92,6 +92,11 @@ public class ModConfig
 		@Config.Name("StrictHeaters")
 		public boolean strictHeaters = true;
 		
+		@Config.Comment("Maximum number of doses in an iron canteen")
+		@Config.Name("IronCanteenDoses")
+		@Config.RangeInt(min=1)
+		public int ironCanteenDoses = 8;
+		
 		@Config.Comment("Spams chat with debug messages, do not enable this unless you are testing!")
 		@Config.Name("DebugMode")
 		public boolean debug = false;
@@ -237,6 +242,11 @@ public class ModConfig
 			@Config.RangeInt(min=20)
 			public int temperatureTickMin = 20;
 			
+			@Config.Comment("TemperatureTickDangerBoost - How much faster in ticks temperature changes happen when escaping dangerous temperatures")
+			@Config.Name("TemperatureTickDangerBoost")
+			@Config.RangeInt(min=0)
+			public int temperatureTickDangerBoost = 60;
+			
 			@Config.Comment("Enchantment Temperature Change - Effect of temperature enchantments")
 			@Config.Name("EnchantmentTemperature")
 			@Config.RangeInt
@@ -270,6 +280,12 @@ public class ModConfig
 			@Config.Name("TemperatureDamageScaling")
 			@Config.RangeDouble(min=0.0)
 			public double temperatureDamageScaling = 0.0d;
+			
+			@Config.Comment("TemperatureDamageDuration - Duration in ticks of hypothermia and hyperthermia")
+			@Config.Name("TemperatureDamageDuration")
+			@Config.RangeInt(min=0)
+			public int temperatureDamageDuration = 400;
+			
 			
 		}
 		public class ConfigThirst
@@ -502,6 +518,7 @@ public class ModConfig
 		ServerConfig.instance.put(ServerOptions.TEMPERATURE_TE_ENABLED, server.temperatureTEEnabled);
 		ServerConfig.instance.put(ServerOptions.CANTEEN_DOSES, server.canteenDoses);
 		ServerConfig.instance.put(ServerOptions.STRICT_HEATERS, server.strictHeaters);
+		ServerConfig.instance.put(ServerOptions.IRON_CANTEEN_DOSES, server.ironCanteenDoses);
 	}
 	
 	private static MessageUpdateConfig getNewConfigMessage()
@@ -517,6 +534,7 @@ public class ModConfig
 		compound.setString(ServerOptions.TEMPERATURE_TE_ENABLED.getName(), ""+server.temperatureTEEnabled);
 		compound.setString(ServerOptions.CANTEEN_DOSES.getName(), ""+server.canteenDoses);
 		compound.setString(ServerOptions.STRICT_HEATERS.getName(), ""+server.strictHeaters);
+		compound.setString(ServerOptions.IRON_CANTEEN_DOSES.getName(), ""+server.ironCanteenDoses);
 		
 		return new MessageUpdateConfig(compound);
 	}

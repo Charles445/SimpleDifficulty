@@ -156,7 +156,7 @@ public class TemperatureCapability implements ITemperatureCapability
 				{
 					//Hyperthermia
 					player.removePotionEffect(SDPotions.hyperthermia);
-					player.addPotionEffect(new PotionEffect(SDPotions.hyperthermia, 450, 0));
+					player.addPotionEffect(new PotionEffect(SDPotions.hyperthermia, ModConfig.server.temperature.temperatureDamageDuration, 0));
 					appliedEffect = true;
 				}
 			}
@@ -166,7 +166,7 @@ public class TemperatureCapability implements ITemperatureCapability
 				{
 					//Hypothermia
 					player.removePotionEffect(SDPotions.hypothermia);
-					player.addPotionEffect(new PotionEffect(SDPotions.hypothermia, 450, 0));
+					player.addPotionEffect(new PotionEffect(SDPotions.hypothermia, ModConfig.server.temperature.temperatureDamageDuration, 0));
 					appliedEffect = true;
 				}
 			}
@@ -261,7 +261,11 @@ public class TemperatureCapability implements ITemperatureCapability
 		//Distance of temperature range
 		int currentrange = Math.abs(getTemperatureLevel() - targettemp);
 		
-		return Math.max(ModConfig.server.temperature.temperatureTickMin, ModConfig.server.temperature.temperatureTickMax - ((currentrange * tickrange) / temprange));
+		//Whether player is escaping temperature danger
+		boolean escapingDanger = getTemperatureLevel() <= targettemp ? getTemperatureEnum() == TemperatureEnum.FREEZING : getTemperatureEnum() == TemperatureEnum.BURNING;
+		
+		
+		return Math.max(ModConfig.server.temperature.temperatureTickMin, ModConfig.server.temperature.temperatureTickMax - ((currentrange * tickrange) / temprange) - (escapingDanger ? ModConfig.server.temperature.temperatureTickDangerBoost : 0));
 	}
 
 	@Override

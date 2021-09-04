@@ -83,4 +83,13 @@ tipped_arrow.effect.long_cold_resist_type=Arrow of Cold Resistance
 tipped_arrow.effect.heat_resist_type=Arrow of Heat Resistance
 tipped_arrow.effect.long_heat_resist_type=Arrow of Heat Resistance
 
-item.simpledifficulty:ice_rod.name=Ice Rod
+item.simpledifficulty:frost_rod.name=Frost Rod
+item.simpledifficulty:frost_powder.name=Frost Powder
+item.simpledifficulty:iron_canteen_broken.name=Broken Iron Canteen
+item.simpledifficulty:iron_canteen_empty.name=Empty Iron Canteen
+item.simpledifficulty:iron_canteen_normal.name=Water Iron Canteen
+item.simpledifficulty:iron_canteen_purified.name=Purified Iron Canteen
+item.simpledifficulty:dragon_canteen_broken.name=Broken Dragon Canteen
+item.simpledifficulty:dragon_canteen_empty.name=Empty Dragon Canteen
+item.simpledifficulty:dragon_canteen_normal.name=Water Dragon Canteen
+item.simpledifficulty:dragon_canteen_purified.name=Purified Dragon Canteen

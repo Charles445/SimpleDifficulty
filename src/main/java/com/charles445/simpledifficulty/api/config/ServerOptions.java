@@ -10,7 +10,8 @@ public enum ServerOptions implements IConfigOption
 	/*Boolean*/ TEMPERATURE_ENABLED ("temperatureEnabled"),
 	/*Boolean*/ TEMPERATURE_TE_ENABLED ("temperatureTEEnabled"),
 	/*Integer*/ CANTEEN_DOSES ("canteenDoses"),
-	/*Boolean*/ STRICT_HEATERS ("strictHeaters");
+	/*Boolean*/ STRICT_HEATERS ("strictHeaters"),
+	/*Integer*/ IRON_CANTEEN_DOSES ("ironCanteenDoses");
 	
 	
 	String name;

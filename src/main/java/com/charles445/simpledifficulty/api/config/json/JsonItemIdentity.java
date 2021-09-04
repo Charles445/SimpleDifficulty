@@ -66,7 +66,6 @@ public class JsonItemIdentity
 	
 	public boolean matches(ItemStack stack)
 	{
-		//TODO this gets twice
 		if(stack.hasTagCompound())
 		{
 			return matches(stack.getMetadata(), stack.getTagCompound());

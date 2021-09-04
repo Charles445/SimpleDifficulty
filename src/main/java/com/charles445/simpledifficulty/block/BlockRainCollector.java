@@ -49,15 +49,15 @@ public class BlockRainCollector extends Block
 	//BlockCauldron()
 	public BlockRainCollector()
 	{
-		super(Material.ROCK, MapColor.STONE);
+		super(Material.IRON, MapColor.STONE);
 		setDefaultState(blockState.getBaseState().withProperty(LEVEL, 0));
 		setHardness(2.0f);
-		setSoundType(SoundType.STONE);
+		setSoundType(SoundType.METAL);
 
 		//Serene Seasons Compatibility
 		setTickRandomly(true);
 	}
-	
+		
 	//Serene Seasons Compatibility
 	@Override
 	public void randomTick(World world, BlockPos pos, IBlockState state, Random random)

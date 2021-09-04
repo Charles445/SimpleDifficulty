@@ -1,11 +1,16 @@
 package com.charles445.simpledifficulty.register;
 
 import static com.charles445.simpledifficulty.api.SDItems.*;
+import java.util.Map;
 
 import com.charles445.simpledifficulty.SimpleDifficulty;
 import com.charles445.simpledifficulty.api.SDItems;
+import com.charles445.simpledifficulty.config.JsonConfigInternal;
+import com.charles445.simpledifficulty.config.json.ExtraItem;
 import com.charles445.simpledifficulty.item.ItemArmorTemperature;
 import com.charles445.simpledifficulty.item.ItemCanteen;
+import com.charles445.simpledifficulty.item.ItemDragonCanteen;
+import com.charles445.simpledifficulty.item.ItemIronCanteen;
 import com.charles445.simpledifficulty.item.ItemJuice;
 import com.charles445.simpledifficulty.item.ItemPurifiedWaterBottle;
 import com.charles445.simpledifficulty.item.ItemThermometer;
@@ -15,7 +20,6 @@ import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.util.EnumHelper;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -30,6 +34,8 @@ public class RegisterItems
 		@SubscribeEvent
 		public static void registerItems(RegistryEvent.Register<Item> event)
 		{
+			SimpleDifficulty.logger.info("Registering Items");
+			
 			//Register armor materials first
 			//EnumHelper.addArmorMaterial(name, textureName, durability, reductionAmounts, enchantability, soundOnEquip, toughness)
 			// LEATHER("leather", 5, new int[]{1, 2, 3, 1}, 15, SoundEvents.ITEM_ARMOR_EQUIP_LEATHER, 0.0F),
@@ -47,11 +53,11 @@ public class RegisterItems
 			purifiedWaterBottle = registerAs("purified_water_bottle", new ItemPurifiedWaterBottle(), registry);
 			juice = registerAs("juice", new ItemJuice(), registry);
 			canteen = registerAs("canteen", new ItemCanteen(), registry);
+			ironCanteen = registerAs("iron_canteen", new ItemIronCanteen(), registry);
 			charcoalFilter = registerAs("charcoal_filter", new Item(), registry);
 			
 			ice_chunk = registerAs("ice_chunk", new Item(), registry);
 			magma_chunk = registerAs("magma_chunk", new Item(), registry);
-			ice_rod = registerAs("ice_rod", new Item(), registry);
 			
 			thermometer = registerAs("thermometer", new ItemThermometer(), registry);
 			
@@ -65,7 +71,33 @@ public class RegisterItems
 			ice_leggings = registerAs("ice_leggings", new ItemArmorTemperature(iceArmorMaterial, EntityEquipmentSlot.LEGS), registry);
 			ice_boots = registerAs("ice_boots", new ItemArmorTemperature(iceArmorMaterial, EntityEquipmentSlot.FEET), registry);
 			
+			//Extra Items
 			
+			for(Map.Entry<String, ExtraItem> entry : JsonConfigInternal.extraItems.entrySet())
+			{
+				String name = entry.getKey();
+				ExtraItem extraItem = entry.getValue();
+				
+				if(extraItem.enabled)
+				{
+					switch(name)
+					{
+						case ExtraItemNames.DRAGON_CANTEEN:
+							registerAs(name, new ItemDragonCanteen(extraItem), registry);
+							break;
+						
+						//Generic items
+						case ExtraItemNames.FROST_ROD:
+						case ExtraItemNames.FROST_POWDER:
+							registerAs(name, new Item(), registry);
+							break;
+						
+						default: 
+							SimpleDifficulty.logger.error("Tried to register invalid extra item: "+name);
+							break;
+					}
+				}
+			}
 		}
 		
 		private static Item registerAs(String name, final Item newItem, IForgeRegistry<Item> registry)

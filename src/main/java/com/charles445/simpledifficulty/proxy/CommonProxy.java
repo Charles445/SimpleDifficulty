@@ -1,10 +1,13 @@
 package com.charles445.simpledifficulty.proxy;
 
 import com.charles445.simpledifficulty.SimpleDifficulty;
+import com.charles445.simpledifficulty.api.SDItems;
+import com.charles445.simpledifficulty.api.item.IItemCanteen;
 import com.charles445.simpledifficulty.api.temperature.ITemperatureCapability;
 import com.charles445.simpledifficulty.api.temperature.TemperatureRegistry;
 import com.charles445.simpledifficulty.api.temperature.TemperatureUtil;
 import com.charles445.simpledifficulty.api.thirst.IThirstCapability;
+import com.charles445.simpledifficulty.api.thirst.ThirstEnum;
 import com.charles445.simpledifficulty.api.thirst.ThirstUtil;
 import com.charles445.simpledifficulty.capability.TemperatureCapability;
 import com.charles445.simpledifficulty.capability.TemperatureStorage;
@@ -33,6 +36,9 @@ import com.charles445.simpledifficulty.temperature.ModifierWet;
 import com.charles445.simpledifficulty.util.internal.TemperatureUtilInternal;
 import com.charles445.simpledifficulty.util.internal.ThirstUtilInternal;
 
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.CapabilityManager;
@@ -77,6 +83,10 @@ public abstract class CommonProxy implements IProxy
 		TemperatureRegistry.registerModifier(new ModifierTemporary());
 		TemperatureRegistry.registerModifier(new ModifierTime());
 		TemperatureRegistry.registerModifier(new ModifierWet());
+		
+		//Setup JSON Configurations PreInit
+		JsonConfigInternal.preInit(SimpleDifficulty.jsonDirectory);
+		
 	}
 	
 	@Override
@@ -89,7 +99,7 @@ public abstract class CommonProxy implements IProxy
 	public void postInit()
 	{
 		//Setup JSON Configurations
-		JsonConfigInternal.init(SimpleDifficulty.jsonDirectory);
+		JsonConfigInternal.postInit(SimpleDifficulty.jsonDirectory);
 		
 		//Setup Mod Compatibility
 		CompatController.setupCommonPostInit();

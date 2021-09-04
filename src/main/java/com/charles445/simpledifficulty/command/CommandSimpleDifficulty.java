@@ -799,7 +799,7 @@ public class CommandSimpleDifficulty extends CommandBase
 			JsonConfigInternal.clearContainers();
 			
 			//Reload the json (do the startup routine)
-			JsonConfigInternal.init(SimpleDifficulty.jsonDirectory);
+			JsonConfigInternal.postInit(SimpleDifficulty.jsonDirectory);
 			
 			
 			//JsonConfigInternal.processAllJson(SimpleDifficulty.jsonDirectory);

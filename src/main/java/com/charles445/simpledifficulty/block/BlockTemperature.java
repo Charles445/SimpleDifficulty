@@ -9,6 +9,7 @@ import com.charles445.simpledifficulty.tileentity.TileEntityTemperature;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
+import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyBool;
@@ -33,9 +34,10 @@ public class BlockTemperature extends BlockContainer
 	
 	public BlockTemperature(float temperature)
 	{
-		super(Material.ROCK);
+		super(Material.IRON);
 		setHardness(0.5f);
 		setDefaultState(blockState.getBaseState().withProperty(ENABLED, false));
+		setSoundType(SoundType.METAL);
 		this.temperature = temperature;
 	}
 	
@@ -199,6 +201,15 @@ public class BlockTemperature extends BlockContainer
 		return EnumBlockRenderType.MODEL;
 	}
 	
+	@SideOnly(Side.CLIENT)
+	@Override
+	@SuppressWarnings("deprecation")
+	public int getPackedLightmapCoords(IBlockState state, IBlockAccess source, BlockPos pos)
+	{
+		//Magma Block value
+		return state.getValue(this.ENABLED) ? 15728880 : super.getPackedLightmapCoords(state, source, pos);
+	}
+	
 	//TILE
 	
 	@Override
@@ -260,7 +271,7 @@ public class BlockTemperature extends BlockContainer
 	{
 		if(state.getValue(ENABLED))
 		{
-			return 1;
+			return 7;
 		}
 		else
 		{

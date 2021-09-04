@@ -15,13 +15,13 @@ public class SDItems
 	public static ArmorMaterial iceArmorMaterial;
 	
 	public static Item canteen;
+	public static Item ironCanteen;
 	public static Item charcoalFilter;
 	public static Item juice;
 	public static Item purifiedWaterBottle;
 	
 	public static Item ice_chunk;
 	public static Item magma_chunk;
-	public static Item ice_rod;
 	
 	public static Item thermometer;
 	
@@ -34,6 +34,4 @@ public class SDItems
 	public static Item ice_chestplate;
 	public static Item ice_leggings;
 	public static Item ice_boots;
-	
-
 }

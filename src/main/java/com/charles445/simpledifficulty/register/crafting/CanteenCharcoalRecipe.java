@@ -9,11 +9,9 @@ import com.charles445.simpledifficulty.item.ItemCanteen;
 import com.google.gson.JsonObject;
 
 import net.minecraft.inventory.InventoryCrafting;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.nbt.NBTTagInt;
 import net.minecraft.util.JsonUtils;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
@@ -41,7 +39,7 @@ public class CanteenCharcoalRecipe extends ShapelessOreRecipe
 			for(int i=0;i<invcraft.getSizeInventory();i++)
 			{
 				ItemStack ingredient = invcraft.getStackInSlot(i);
-				if(!ingredient.isEmpty() && ingredient.getItem() == SDItems.canteen)
+				if(!ingredient.isEmpty() && (ingredient.getItem() == SDItems.canteen || ingredient.getItem() == SDItems.ironCanteen))
 				{
 					IItemCanteen canteen = (ItemCanteen)ingredient.getItem();
 					canteen.setDoses(output, ThirstEnum.PURIFIED, canteen.getDoses(ingredient));

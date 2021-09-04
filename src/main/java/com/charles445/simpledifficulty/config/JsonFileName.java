@@ -9,6 +9,7 @@ public enum JsonFileName
 	fluidTemperatures("fluidTemperatures.json"),
 	heldItemTemperatures("heldItemTemperatures.json"),
 	materialTemperature("materialTemperature.json"),
+	extraItems("extraItems.json"),
 	
 	
 	//TODO remove migration
