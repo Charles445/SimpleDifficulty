@@ -106,13 +106,20 @@ public abstract class ItemDrinkBase extends Item
 		this.runSecondaryEffect(player, stack);
 		
 		stack.shrink(1);
+		
+		ItemStack glassBottle = new ItemStack(Items.GLASS_BOTTLE);
+		
 		if(stack.isEmpty())
 		{
-			return new ItemStack(Items.GLASS_BOTTLE);
+			return glassBottle;
 		}
 		else
 		{
-			player.inventory.addItemStackToInventory(new ItemStack(Items.GLASS_BOTTLE));
+			if (!player.inventory.addItemStackToInventory(glassBottle))
+			{
+				player.dropItem(glassBottle, false);
+			}
+			
 			return stack;
 		}
 	}
