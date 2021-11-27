@@ -49,7 +49,7 @@ public class BlockCampfire extends Block implements IBlockStateIgnore
 	public static final PropertyBool BURNING = PropertyBool.create("burning");
 
 	private static final IProperty[] ignoredProperties = new IProperty[]{BURNING};
-	private static final AxisAlignedBB HITBOX = new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.25D, 1.0D);
+	private static final AxisAlignedBB HITBOX = new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.4D, 1.0D); //Old is 0.25D for height
 	
 	public BlockCampfire()
 	{
@@ -325,7 +325,7 @@ public class BlockCampfire extends Block implements IBlockStateIgnore
 
 		
 		
-		world.spawnParticle(EnumParticleTypes.FLAME, xOffset + pos.getX(), yOffset + pos.getY(), zOffset + pos.getZ(), 0.0d, rand.nextDouble() * 0.015d, 0.0d);
+		world.spawnParticle(EnumParticleTypes.FLAME, xOffset + pos.getX(), yOffset + pos.getY(), zOffset + pos.getZ(), 0.0d, (rand.nextDouble() * 0.015d) + 0.005d, 0.0d);
 	}
 	
 	@Override

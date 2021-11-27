@@ -77,7 +77,7 @@ public class TemperatureGui
 	@SubscribeEvent
 	public void onPreRenderGameOverlay(RenderGameOverlayEvent.Pre event)
 	{
-		if(event.getType()==ElementType.EXPERIENCE && QuickConfig.isTemperatureEnabled() && mc.playerController.gameIsSurvivalOrAdventure())
+		if(event.getType()==ElementType.ALL && QuickConfig.isTemperatureEnabled() && mc.playerController.gameIsSurvivalOrAdventure())
 		{
 			//Set the seed to avoid shaking during pausing
 			rand.setSeed((long)(updateCounter * 445));

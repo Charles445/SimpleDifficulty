@@ -4,7 +4,8 @@ List of contributors
 Charles445 - anything not specified below
 
  - Assets - 
-Artsydgy/Artsydy - Temperature HUD Textures, Cloth Armor Item Textures, Cloth Armor Model Textures
+Artsydgy/Artsydy - Temperature HUD Textures, Cloth Armor Item Textures, Cloth Armor Model Textures, Frost Powder/Rod Textures
+fonnymunkey - Campfire Model
 HoontsArt - Dragon Canteen Textures, Iron Canteen Textures, Thermometer Textures
 Shivaxi - Thirst HUD Textures
 tehmadtitaan - Ice Armor Model Textures, Cloth Armor Model Textures

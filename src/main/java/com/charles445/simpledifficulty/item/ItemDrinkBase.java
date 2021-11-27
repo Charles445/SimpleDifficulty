@@ -29,7 +29,7 @@ public abstract class ItemDrinkBase extends Item
 	public ItemDrinkBase()
 	{
 		this.setMaxDamage(0);
-		this.setMaxStackSize(1);
+		this.setMaxStackSize(8);
 	}
 	
 	public void runSecondaryEffect(EntityPlayer player, ItemStack stack)

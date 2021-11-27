@@ -36,12 +36,15 @@ public class MiscHandler
 	}
 	
 	//Prevent canteens from being repaired in the anvil
+	//Canteens don't use damage anymore so this is no longer necessary
+	/*
 	@SubscribeEvent
 	public void onAnvilUpdate(AnvilUpdateEvent event)
 	{
 		if(event.getLeft().getItem() == SDItems.canteen || event.getRight().getItem() == SDItems.canteen)
-			event.setCanceled(true);
+			event.setOutput(ItemStack.EMPTY);
 	}
+	*/
 	
 	
 	

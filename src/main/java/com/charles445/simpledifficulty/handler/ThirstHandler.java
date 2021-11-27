@@ -186,7 +186,7 @@ public class ThirstHandler
 						}
 					}
 				}
-				else if(heldItem.getItem() == SDItems.canteen)
+				else if(heldItem.getItem() instanceof IItemCanteen)
 				{
 					//TODO this is janky and probably not the right place for it anyway
 					
@@ -199,17 +199,14 @@ public class ThirstHandler
 						int level = state.getValue(BlockCauldron.LEVEL);
 						if(level > 0)
 						{
-							if(heldItem.getItem() instanceof IItemCanteen)
-							{
-								IItemCanteen canteen = (IItemCanteen) heldItem.getItem();
+							IItemCanteen canteen = (IItemCanteen) heldItem.getItem();
 								
-								if(canteen.tryAddDose(heldItem,ThirstEnum.NORMAL))
-								{
-									SoundUtil.serverPlayBlockSound(world, pos, SoundEvents.ITEM_BUCKET_FILL);
-									
-									//TODO Auto drink bug is present when using canteens on cauldrons
-									//Not sure how to fix, stop active hand and the scheduled variant don't seem to work
-								}
+							if(canteen.tryAddDose(heldItem,ThirstEnum.NORMAL))
+							{
+								SoundUtil.serverPlayBlockSound(world, pos, SoundEvents.ITEM_BUCKET_FILL);
+								
+								//TODO Auto drink bug is present when using canteens on cauldrons
+								//Not sure how to fix, stop active hand and the scheduled variant don't seem to work
 							}
 						}
 					}
