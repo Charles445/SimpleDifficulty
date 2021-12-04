@@ -16,3 +16,12 @@ ichttt - First Aid Compatibility
  - Translations - 
 lex1975 - Russian (ru_ru.lang)
 WeiAL - Chinese (Simplified) (zh_cn.lang)
+
+ - Design / Concepts -
+Artsydgy/Artsydy - Cloth Armor, Temperature HUD
+fonnymunkey - Campfire
+Glitchfiend Team - Created Tough as Nails (which this entire mod is based on)
+HoontsArt - Cloth Armor, Dragon Canteen, Iron Canteen, Thermometer
+ItsBlueGator - Rain Collector
+Shivaxi - Campfire, Chiller and Heater, Dragon Canteen, Frost Powder, Frost Rod, Iron Canteen, Temperature HUD, Thirst HUD, Game Mechanic Ideas and Consultation
+tehmadtitaan - Cloth Armor, Ice Armor
