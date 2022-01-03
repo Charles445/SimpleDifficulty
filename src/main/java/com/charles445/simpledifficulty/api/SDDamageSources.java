@@ -8,4 +8,7 @@ public class SDDamageSources
 	public static final DamageSource HYPERTHERMIA = (new DamageSource("hyperthermia")).setDamageBypassesArmor();
 	public static final DamageSource HYPOTHERMIA = (new DamageSource("hypothermia")).setDamageBypassesArmor();
 	public static final DamageSource PARASITES = (new DamageSource("parasites")).setDamageBypassesArmor().setMagicDamage();
+
+	//Inspirations
+	public static final DamageSource INSPIRATIONS_CAULDRON_BURN = (new DamageSource("inspirationscauldronburn")).setDamageBypassesArmor().setFireDamage();
 }

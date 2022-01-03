@@ -60,10 +60,12 @@ public class WorldUtil
 			//WorldClient don't care
 			return true;
 		}
-		else
+		else if(world instanceof WorldServer) //Fix for Advanced Rocketry's dummy world
 		{
 			//WorldServer
 			return ((WorldServer)world).getChunkProvider().chunkExists(pos.getX() >> 4, pos.getZ() >> 4);
 		}
+		
+		return false;
 	}
 }

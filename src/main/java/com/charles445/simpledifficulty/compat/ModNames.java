@@ -8,6 +8,7 @@ public class ModNames
 	public static final String FIRSTAID = "firstaid";
 	public static final String HARVESTCRAFT = "harvestcraft";
 	public static final String HARVESTFESTIVAL = "harvestfestival";
+	public static final String INSPIRATIONS = "inspirations";
 	public static final String LYCANITESMOBS = "lycanitesmobs";
 	public static final String OREEXCAVATION = "oreexcavation";
 	public static final String PYROTECH = "pyrotech";

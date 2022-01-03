@@ -37,6 +37,7 @@ public class CompatController
 		Object baublesModifier = newCompatObject(ModNames.BAUBLES, compatMod + "BaublesModifier");
 		Object firstAidCompat = newCompatObject(ModNames.FIRSTAID, compatMod + "FirstAidCompat");
 		Object harvestFestivalModifier = newCompatObject(ModNames.HARVESTFESTIVAL, compatMod + "HarvestFestivalModifier");
+		Object inspirationsHandler = newCompatObject(ModNames.INSPIRATIONS, compatMod + "InspirationsHandler");
 		Object oreExcavationHandler = newCompatObject(ModNames.OREEXCAVATION, compatMod + "OreExcavationHandler");
 		Object sereneSeasonsModifier = newCompatObject(ModNames.SERENESEASONS, compatMod + "SereneSeasonsModifier");
 		
@@ -58,6 +59,11 @@ public class CompatController
 		{
 			SimpleDifficulty.logger.info("Harvest Festival Modifier Enabled");
 			TemperatureRegistry.registerModifier((ITemperatureModifier)harvestFestivalModifier);
+		}
+		
+		if(inspirationsHandler != null)
+		{
+			SimpleDifficulty.logger.info("Inspirations Handler Enabled");
 		}
 		
 		if(oreExcavationHandler != null)

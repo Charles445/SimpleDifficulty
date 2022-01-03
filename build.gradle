@@ -10,7 +10,7 @@ buildscript {
 apply plugin: 'net.minecraftforge.gradle.forge'
 
 
-version = "1.12.2-0.3.7"
+version = "1.12.2-0.3.8"
 group = "com.charles445.simpledifficulty" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "SimpleDifficulty"
 
@@ -56,4 +56,12 @@ task apiJar(type: Jar){
 
 artifacts {
 	archives apiJar
+}
+
+jar {
+    manifest 
+	{
+        attributes "FMLCorePlugin": "com.charles445.simpledifficulty.asm.CoreLoader"
+		attributes "FMLCorePluginContainsFMLMod": "com.charles445.simpledifficulty.SimpleDifficulty"
+    }
 }

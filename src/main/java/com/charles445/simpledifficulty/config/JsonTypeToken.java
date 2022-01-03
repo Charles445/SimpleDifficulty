@@ -46,6 +46,7 @@ public class JsonTypeToken
 			case blockTemperatures: 	return new TypeToken<Map<String, List<JsonPropertyTemperature>>>(){}.getType();
 			case consumableTemperature: return new TypeToken<Map<String, List<JsonConsumableTemperature>>>(){}.getType();
 			case consumableThirst: 		return new TypeToken<Map<String, List<JsonConsumableThirst>>>(){}.getType();
+			case dimensionTemperature: 	return new TypeToken<Map<String, JsonTemperature>>(){}.getType();
 			case fluidTemperatures: 	return new TypeToken<Map<String, JsonTemperature>>(){}.getType();
 			case heldItemTemperatures:	return new TypeToken<Map<String, List<JsonTemperatureIdentity>>>(){}.getType();
 			case materialTemperature: 	return new TypeToken<MaterialTemperature>(){}.getType();

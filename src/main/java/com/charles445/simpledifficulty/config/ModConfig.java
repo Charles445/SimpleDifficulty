@@ -267,6 +267,10 @@ public class ModConfig
 			@Config.RangeDouble(min=0, max=50)
 			public double heaterMaxRange = 32.0d;
 			
+			@Config.Comment("Blocks Tiles Separate - Whether blocks and tile entities should have temperature calculated separately, for example, if this is set to true heaters and campfires will both add their heat individually")
+			@Config.Name("BlocksTilesSeparate")
+			public boolean blocksTilesSeparate = true;
+			
 			@Config.Comment("Stacking Temperature - Whether multiple blocks in a vicinity should combine their effect")
 			@Config.Name("StackingTemperature")
 			public boolean stackingTemperature = true;

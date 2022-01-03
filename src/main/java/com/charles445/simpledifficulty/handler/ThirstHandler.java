@@ -3,15 +3,14 @@ package com.charles445.simpledifficulty.handler;
 import java.util.List;
 
 import com.charles445.simpledifficulty.api.SDCapabilities;
-import com.charles445.simpledifficulty.api.SDItems;
 import com.charles445.simpledifficulty.api.SDPotions;
 import com.charles445.simpledifficulty.api.config.JsonConfig;
 import com.charles445.simpledifficulty.api.config.QuickConfig;
 import com.charles445.simpledifficulty.api.config.json.JsonConsumableThirst;
-import com.charles445.simpledifficulty.api.item.IItemCanteen;
 import com.charles445.simpledifficulty.api.thirst.IThirstCapability;
 import com.charles445.simpledifficulty.api.thirst.ThirstEnum;
 import com.charles445.simpledifficulty.api.thirst.ThirstUtil;
+import com.charles445.simpledifficulty.compat.CompatRightClick;
 import com.charles445.simpledifficulty.compat.ModNames;
 import com.charles445.simpledifficulty.config.ModConfig;
 import com.charles445.simpledifficulty.network.MessageDrinkWater;
@@ -19,7 +18,6 @@ import com.charles445.simpledifficulty.network.PacketHandler;
 import com.charles445.simpledifficulty.util.SoundUtil;
 import com.charles445.simpledifficulty.util.internal.ThirstUtilInternal;
 
-import net.minecraft.block.BlockCauldron;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -167,49 +165,13 @@ public class ThirstHandler
 			EnumHand hand = event.getHand();
 			if(hand==EnumHand.MAIN_HAND)
 			{
-				ItemStack heldItem = player.getHeldItemMainhand();
-				if(heldItem.isEmpty() && player.isSneaking())
+				World world = event.getWorld();
+				BlockPos pos = event.getPos();
+				IBlockState state = world.getBlockState(pos);
+				
+				if(state.getBlock() == Blocks.CAULDRON)
 				{
-					World world = event.getWorld();
-					BlockPos pos = event.getPos();
-					IBlockState state = world.getBlockState(pos);
-						
-					if(state.getBlock() == Blocks.CAULDRON && SDCapabilities.getThirstData(player).isThirsty())
-					{
-	
-						//Sneak-right clicking on a cauldron with an empty hand, with a thirsty player
-						int level = state.getValue(BlockCauldron.LEVEL);
-						if(level > 0)
-						{
-							ThirstUtil.takeDrink(player, ThirstEnum.NORMAL);
-							SoundUtil.serverPlayBlockSound(world, pos, SoundEvents.ENTITY_GENERIC_DRINK);
-						}
-					}
-				}
-				else if(heldItem.getItem() instanceof IItemCanteen)
-				{
-					//TODO this is janky and probably not the right place for it anyway
-					
-					World world = event.getWorld();
-					BlockPos pos = event.getPos();
-					IBlockState state = world.getBlockState(pos);
-						
-					if(state.getBlock() == Blocks.CAULDRON)
-					{
-						int level = state.getValue(BlockCauldron.LEVEL);
-						if(level > 0)
-						{
-							IItemCanteen canteen = (IItemCanteen) heldItem.getItem();
-								
-							if(canteen.tryAddDose(heldItem,ThirstEnum.NORMAL))
-							{
-								SoundUtil.serverPlayBlockSound(world, pos, SoundEvents.ITEM_BUCKET_FILL);
-								
-								//TODO Auto drink bug is present when using canteens on cauldrons
-								//Not sure how to fix, stop active hand and the scheduled variant don't seem to work
-							}
-						}
-					}
+					CompatRightClick.cauldronHandler.process(event, world, pos, state, player);
 				}
 			}
 		}	

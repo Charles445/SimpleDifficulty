@@ -9,24 +9,19 @@ import javax.annotation.Nullable;
 
 import com.charles445.simpledifficulty.SimpleDifficulty;
 import com.charles445.simpledifficulty.api.SDCapabilities;
-import com.charles445.simpledifficulty.api.SDCompatibility;
 import com.charles445.simpledifficulty.api.config.JsonConfig;
 import com.charles445.simpledifficulty.api.config.json.JsonItemIdentity;
-import com.charles445.simpledifficulty.api.config.json.JsonPropertyTemperature;
 import com.charles445.simpledifficulty.api.temperature.ITemperatureCapability;
 import com.charles445.simpledifficulty.api.thirst.IThirstCapability;
-import com.charles445.simpledifficulty.compat.JsonCompatDefaults;
 import com.charles445.simpledifficulty.config.JsonConfigInternal;
 import com.charles445.simpledifficulty.config.JsonFileName;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
-import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.MinecraftServer;
@@ -35,9 +30,9 @@ import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.event.ClickEvent;
 import net.minecraft.util.text.event.HoverEvent;
+import net.minecraft.world.World;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
-import net.minecraftforge.fml.common.Loader;
 
 public class CommandSimpleDifficulty extends CommandBase
 {
@@ -49,6 +44,7 @@ public class CommandSimpleDifficulty extends CommandBase
 			"addBlock",
 			"addConsumableTemperature",
 			"addConsumableThirst",
+			"addDimension",
 			"addFluid",
 			"addHeldItem",
 			//"loadDefaultModConfig",
@@ -68,6 +64,7 @@ public class CommandSimpleDifficulty extends CommandBase
 			+ "   addBlock <temperature>\n"
 			+ "   addConsumableTemperature <group> <temperature> <duration>\n"
 			+ "   addConsumableThirst <amount> <saturation> <thirstyChance>\n"
+			+ "   addDimension <temperature>\n"
 			+ "   addFluid <temperature>\n"
 			+ "   addHeldItem <temperature>\n"
 			//+ "   loadDefaultModConfig <modid>\n"
@@ -140,6 +137,7 @@ public class CommandSimpleDifficulty extends CommandBase
 			case "addblock": addBlock(server, sender, args); break;
 			case "addconsumabletemperature": addConsumableTemperature(server, sender, args); break;
 			case "addconsumablethirst": addConsumableThirst(server, sender, args); break;
+			case "adddimension": addDimension(server, sender, args); break;
 			case "addfluid": addFluid(server, sender, args); break;
 			case "addhelditem": addHeldItem(server, sender, args); break;
 			
@@ -217,6 +215,10 @@ public class CommandSimpleDifficulty extends CommandBase
 					+ "\n(replenishes thirst when consumed)"
 					+ "\nAdd argument --nbt to include NBT tag"
 					+ "\nAdd argument --clear to remove the item from JSON first (ignores metadata and nbt)");
+					return;
+					
+			case "adddimension":message(sender,
+					"Adds the dimension the player is in to the dimensionTemperature JSON");
 					return;
 			
 			case "addfluid":message(sender, 
@@ -472,6 +474,42 @@ public class CommandSimpleDifficulty extends CommandBase
 				message(sender, warn_invalidArgs + " <temperature>");
 				return;
 			}
+		}
+		else
+		{
+			message(sender, warn_notPlayerAdmin);
+		}
+	}
+	
+	private void addDimension(MinecraftServer server, ICommandSender sender, String[] args)
+	{
+		if(isAdminPlayer(sender))
+		{
+			if(args.length<2)
+			{
+				message(sender, warn_invalidArgs + " <temperature>");
+				return;
+			}
+			
+			try
+			{
+				float temperature = Float.parseFloat(args[1]);
+				
+				EntityPlayer player = (EntityPlayer)sender.getCommandSenderEntity();
+				
+				World world = player.world;
+				if(world == null)
+					return;
+				
+				JsonConfig.registerDimensionTemperature(world.provider.getDimension(), temperature);
+				message(sender, "Added dimension to "+JsonFileName.dimensionTemperature+"!\n"+exportJsonReminder);
+			}
+			catch(NumberFormatException e)
+			{
+				message(sender, warn_invalidArgs + " <temperature>");
+				return;
+			}
+			
 		}
 		else
 		{

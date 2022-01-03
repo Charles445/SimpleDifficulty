@@ -6,6 +6,7 @@ public enum JsonFileName
 	blockTemperatures("blockTemperatures.json"),
 	consumableTemperature("consumableTemperature.json"),
 	consumableThirst("consumableThirst.json"),
+	dimensionTemperature("dimensionTemperature.json"),
 	fluidTemperatures("fluidTemperatures.json"),
 	heldItemTemperatures("heldItemTemperatures.json"),
 	materialTemperature("materialTemperature.json"),

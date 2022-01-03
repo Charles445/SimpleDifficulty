@@ -105,7 +105,8 @@ public class BlockCampfire extends Block implements IBlockStateIgnore
 			if(age > AGE_MIN)
 			{
 				//Do logs
-				heldItemStack.shrink(1);
+				if(!player.capabilities.isCreativeMode)
+					heldItemStack.shrink(1);
 				//Give it a little bit of a bump if it's all gone...
 				int refuelAmount = (LOG_REFUEL + (age == AGE_MAX? 1 : 0));
 				world.setBlockState(pos, state.withProperty(AGE, Math.max(AGE_MIN, age - refuelAmount)), 2);
@@ -119,7 +120,8 @@ public class BlockCampfire extends Block implements IBlockStateIgnore
 			if(OreDictUtil.isOre(OreDictUtil.stick, heldItemStack) || heldItem == Items.STICK)
 			{
 				//Do stick
-				heldItemStack.shrink(1);
+				if(!player.capabilities.isCreativeMode)
+					heldItemStack.shrink(1);
 				if(world.rand.nextInt(ModConfig.server.miscellaneous.campfireStickIgniteChance)==0)
 				{
 					world.setBlockState(pos, state.withProperty(BURNING, true), 2);

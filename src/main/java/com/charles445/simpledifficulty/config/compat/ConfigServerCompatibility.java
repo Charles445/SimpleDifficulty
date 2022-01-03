@@ -36,6 +36,10 @@ public class ConfigServerCompatibility
 		@Config.Name("EnableHarvestFestival")
 		public boolean harvestFestival = true;
 		
+		@Config.Comment("Enable Inspirations - Built-In Compatibility")
+		@Config.Name("EnableInspirations")
+		public boolean inspirations = true;
+		
 		@Config.Comment("Enable OreExcavation - Built-In Compatibility")
 		@Config.Name("EnableOreExcavation")
 		public boolean oreExcavation = true;

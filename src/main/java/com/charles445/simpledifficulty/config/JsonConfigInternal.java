@@ -99,6 +99,8 @@ public class JsonConfigInternal
 		
 		JsonConfig.registerConsumableThirst(new ItemStack(Items.MILK_BUCKET), 4, 1.0f, 0.2f);
 		
+		JsonConfig.registerDimensionTemperature(0, 0.0f); //Token listing as an example
+		
 		JsonConfig.registerHeldItem(new ItemStack(Blocks.MAGMA), 3.0f);
 		JsonConfig.registerHeldItem(new ItemStack(Blocks.TORCH), 1.0f);
 		//materialTemperature is not a Map
@@ -120,6 +122,7 @@ public class JsonConfigInternal
 		JsonConfig.blockTemperatures.clear();
 		JsonConfig.consumableTemperature.clear();
 		JsonConfig.consumableThirst.clear();
+		JsonConfig.dimensionTemperature.clear();
 		JsonConfig.fluidTemperatures.clear();
 		JsonConfig.heldItemTemperatures.clear();
 	}
@@ -413,6 +416,26 @@ public class JsonConfigInternal
 			}
 		}
 		
+		//Dimension Temperatures
+		jsonFileName = JsonFileName.dimensionTemperature.get();
+		Map<String, JsonTemperature> jsonDimensionTemperature = processJson(JsonFileName.dimensionTemperature, JsonConfig.dimensionTemperature, jsonDirectory, true);
+		if(jsonDimensionTemperature!=null)
+		{
+			for(Map.Entry<String, JsonTemperature> entry : jsonDimensionTemperature.entrySet())
+			{
+				JsonConfig.registerDimensionTemperature(entry.getKey(), entry.getValue().temperature);
+			}
+			
+			try
+			{
+				manuallyWriteToJson(JsonFileName.dimensionTemperature, JsonConfig.dimensionTemperature, jsonDirectory);
+			}
+			catch (Exception e)
+			{
+				logMerge(jsonFileName,e);
+			}
+		}
+		
 		//Fluid Temperatures
 		jsonFileName = JsonFileName.fluidTemperatures.get();
 		Map<String, JsonTemperature> jsonFluidTemperatures = processJson(JsonFileName.fluidTemperatures, JsonConfig.fluidTemperatures, jsonDirectory, true);
@@ -532,6 +555,7 @@ public class JsonConfigInternal
 			manuallyWriteToJson(JsonFileName.blockTemperatures, JsonConfig.blockTemperatures, jsonDirectory);
 			manuallyWriteToJson(JsonFileName.consumableTemperature, JsonConfig.consumableTemperature, jsonDirectory);
 			manuallyWriteToJson(JsonFileName.consumableThirst, JsonConfig.consumableThirst, jsonDirectory);
+			manuallyWriteToJson(JsonFileName.dimensionTemperature, JsonConfig.dimensionTemperature, jsonDirectory);
 			manuallyWriteToJson(JsonFileName.fluidTemperatures, JsonConfig.fluidTemperatures, jsonDirectory);
 			manuallyWriteToJson(JsonFileName.heldItemTemperatures, JsonConfig.heldItemTemperatures, jsonDirectory);
 			manuallyWriteToJson(JsonFileName.materialTemperature, materialTemperature, jsonDirectory);

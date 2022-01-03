@@ -8,7 +8,6 @@ import com.charles445.simpledifficulty.api.config.ServerConfig;
 import com.charles445.simpledifficulty.api.config.ServerOptions;
 import com.charles445.simpledifficulty.api.config.json.JsonPropertyTemperature;
 import com.charles445.simpledifficulty.api.temperature.ITemperatureTileEntity;
-import com.charles445.simpledifficulty.api.temperature.TemperatureEnum;
 import com.charles445.simpledifficulty.config.JsonConfigInternal;
 import com.charles445.simpledifficulty.config.ModConfig;
 import com.charles445.simpledifficulty.util.WorldUtil;
@@ -18,9 +17,8 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.ChunkCache;
 import net.minecraft.world.World;
-import net.minecraft.world.WorldServer;
 import net.minecraft.world.chunk.Chunk;
 
 public class ModifierBlocksTiles extends ModifierBase
@@ -53,54 +51,22 @@ public class ModifierBlocksTiles extends ModifierBase
 		//7 x 5 x 7 (245) (-3, 3, -3, 1, -3, 3)
 		//9 x 5 x 9 (405) (-4, 4, -3, 1, -4, 4)
 		
-		coldestValue = 0.0f;
-		hottestValue = 0.0f;
-		
-		coldestResultValue = 0.0f;
-		hottestResultValue = 0.0f;
-		
-		hotTotal = 0.0f;
-		coldTotal = 0.0f;
+		resetHeat();
 		
 		doBlocksRoutine(world, pos);
 		
-		doTileEntitiesRoutine(world,pos);
-		
-		if(!ModConfig.server.temperature.stackingTemperature)
+		if(ModConfig.server.temperature.blocksTilesSeparate)
 		{
-			//If not diminishing returns, end here
-			return hottestValue + coldestValue;
-		}
-		
-		//Attempt 3 or so
-		
-		//Remove hottest/coldest from totals
-		hotTotal -= hottestValue;
-		coldTotal -= coldestValue;
-		
-		float hotLogValue = hottestValue * (float)Math.sqrt(easyLog(hotTotal));
-		float coldLogValue = coldestValue * (float)Math.sqrt(easyLog(coldTotal));
-		
-		float result = hotLogValue + coldLogValue;
-		
-		if(result > hottestValue)
-		{
-			//Hotter than hottestValue, clamp
-			return Math.min(hottestValue + (float)ModConfig.server.temperature.stackingTemperatureLimit, result);
-		}
-		else if(result < coldestValue)
-		{
-			//Colder than coldestValue, clamp
-			return Math.max(coldestValue - (float)ModConfig.server.temperature.stackingTemperatureLimit, result);
+			float result = consolidateHeat();
+			resetHeat();
+			doTileEntitiesRoutine(world,pos);
+			return result + consolidateHeat();	
 		}
 		else
 		{
-			//Within bounds, no need to clamp
-			return result;
+			doTileEntitiesRoutine(world,pos);
+			return consolidateHeat();
 		}
-		
-		
-		
 		
 		// diminishing returns
 		
@@ -136,11 +102,61 @@ public class ModifierBlocksTiles extends ModifierBase
 		
 		// diminishing returns would be nice but so far the attempts have had lackluster results
 		
-	}		
+	}
+	
+	private void resetHeat()
+	{
+		coldestValue = 0.0f;
+		hottestValue = 0.0f;
+		
+		coldestResultValue = 0.0f;
+		hottestResultValue = 0.0f;
+		
+		hotTotal = 0.0f;
+		coldTotal = 0.0f;
+	}
+	
+	private float consolidateHeat()
+	{
+		if(!ModConfig.server.temperature.stackingTemperature)
+		{
+			//If not diminishing returns, end here
+			return hottestValue + coldestValue;
+		}
+		
+		//Attempt 3 or so
+		
+		//Remove hottest/coldest from totals
+		hotTotal -= hottestValue;
+		coldTotal -= coldestValue;
+		
+		float hotLogValue = hottestValue * (float)Math.sqrt(easyLog(hotTotal));
+		float coldLogValue = coldestValue * (float)Math.sqrt(easyLog(coldTotal));
+		
+		float result = hotLogValue + coldLogValue;
+		
+		if(result > hottestValue)
+		{
+			//Hotter than hottestValue, clamp
+			return Math.min(hottestValue + (float)ModConfig.server.temperature.stackingTemperatureLimit, result);
+		}
+		else if(result < coldestValue)
+		{
+			//Colder than coldestValue, clamp
+			return Math.max(coldestValue - (float)ModConfig.server.temperature.stackingTemperatureLimit, result);
+		}
+		else
+		{
+			//Within bounds, no need to clamp
+			return result;
+		}
+	}
 	
 	@SuppressWarnings("deprecation")
 	private void doBlocksRoutine(World world, BlockPos pos)
 	{
+		ChunkCache cache = new ChunkCache(world, pos.add(-4, -3, -4), pos.add(4, 1, 4), 0);
+		
 		for(int x = -4; x <= 4; x++)
 		{
 			for(int y = -3; y <= 1; y++)
@@ -148,7 +164,7 @@ public class ModifierBlocksTiles extends ModifierBase
 				for (int z = -4; z <= 4; z++)
 				{
 					final BlockPos blockpos = pos.add(x, y, z);
-					final IBlockState blockstate = world.getBlockState(blockpos);
+					final IBlockState blockstate = cache.getBlockState(blockpos);
 					final Block block = blockstate.getBlock();
 					
 					//JsonPropertyTemperature tempInfo = JsonConfigInternal.blockTemperatures.get(block.getRegistryName().toString());
@@ -163,7 +179,7 @@ public class ModifierBlocksTiles extends ModifierBase
 						//so there shouldn't be a significant performance hit
 						
 						//Why is this deprecated, anyway? This seems really important...
-						final IBlockState actualBlockState = block.getActualState(blockstate, world, blockpos);
+						final IBlockState actualBlockState = block.getActualState(blockstate, cache, blockpos);
 						
 						for(JsonPropertyTemperature tempInfo : tempInfoList)
 						{

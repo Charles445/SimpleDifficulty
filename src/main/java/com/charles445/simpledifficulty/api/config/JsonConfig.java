@@ -22,6 +22,7 @@ public class JsonConfig
 	public static Map<String, List<JsonPropertyTemperature>> blockTemperatures = new HashMap<>();
 	public static Map<String, List<JsonConsumableTemperature>> consumableTemperature = new HashMap<>();
 	public static Map<String, List<JsonConsumableThirst>> consumableThirst = new HashMap<>();
+	public static Map<String, JsonTemperature> dimensionTemperature = new HashMap<>();
 	public static Map<String, JsonTemperature> fluidTemperatures = new HashMap<>();
 	public static Map<String, List<JsonTemperatureIdentity>> heldItemTemperatures = new HashMap<>();
 	
@@ -237,5 +238,17 @@ public class JsonConfig
 		}
 		
 		currentList.add(result);
+	}
+	
+	//Dimension
+	
+	public static void registerDimensionTemperature(int dimension, float temperature)
+	{
+		registerDimensionTemperature(""+dimension, temperature);
+	}
+	
+	public static void registerDimensionTemperature(String dimensionNumber, float temperature)
+	{
+		dimensionTemperature.put(dimensionNumber, new JsonTemperature(temperature));
 	}
 }

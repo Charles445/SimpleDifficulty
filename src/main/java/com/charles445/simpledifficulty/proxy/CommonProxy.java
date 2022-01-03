@@ -1,13 +1,10 @@
 package com.charles445.simpledifficulty.proxy;
 
 import com.charles445.simpledifficulty.SimpleDifficulty;
-import com.charles445.simpledifficulty.api.SDItems;
-import com.charles445.simpledifficulty.api.item.IItemCanteen;
 import com.charles445.simpledifficulty.api.temperature.ITemperatureCapability;
 import com.charles445.simpledifficulty.api.temperature.TemperatureRegistry;
 import com.charles445.simpledifficulty.api.temperature.TemperatureUtil;
 import com.charles445.simpledifficulty.api.thirst.IThirstCapability;
-import com.charles445.simpledifficulty.api.thirst.ThirstEnum;
 import com.charles445.simpledifficulty.api.thirst.ThirstUtil;
 import com.charles445.simpledifficulty.capability.TemperatureCapability;
 import com.charles445.simpledifficulty.capability.TemperatureStorage;
@@ -27,6 +24,7 @@ import com.charles445.simpledifficulty.temperature.ModifierArmor;
 import com.charles445.simpledifficulty.temperature.ModifierBiome;
 import com.charles445.simpledifficulty.temperature.ModifierBlocksTiles;
 import com.charles445.simpledifficulty.temperature.ModifierDefault;
+import com.charles445.simpledifficulty.temperature.ModifierDimension;
 import com.charles445.simpledifficulty.temperature.ModifierHeldItems;
 import com.charles445.simpledifficulty.temperature.ModifierSnow;
 import com.charles445.simpledifficulty.temperature.ModifierSprint;
@@ -36,9 +34,6 @@ import com.charles445.simpledifficulty.temperature.ModifierWet;
 import com.charles445.simpledifficulty.util.internal.TemperatureUtilInternal;
 import com.charles445.simpledifficulty.util.internal.ThirstUtilInternal;
 
-import net.minecraft.init.Items;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.CapabilityManager;
@@ -77,6 +72,7 @@ public abstract class CommonProxy implements IProxy
 		TemperatureRegistry.registerModifier(new ModifierArmor());
 		TemperatureRegistry.registerModifier(new ModifierBiome());
 		TemperatureRegistry.registerModifier(new ModifierBlocksTiles());
+		TemperatureRegistry.registerModifier(new ModifierDimension());
 		TemperatureRegistry.registerModifier(new ModifierHeldItems());
 		TemperatureRegistry.registerModifier(new ModifierSnow());
 		TemperatureRegistry.registerModifier(new ModifierSprint());
