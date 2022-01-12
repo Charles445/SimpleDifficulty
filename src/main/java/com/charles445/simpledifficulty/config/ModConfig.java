@@ -153,6 +153,11 @@ public class ModConfig
 			@Config.RangeInt(min=1)
 			public int rainCollectorFillChance = 6;
 			
+			@Config.Comment("Whether to register the cooling and heating enchantments")
+			@Config.Name("RegisterEnchantments")
+			@Config.RequiresMcRestart
+			public boolean registerEnchantments = true;
+			
 			@Config.Comment("Duration of short heat/cold resistance potions, in ticks")
 			@Config.Name("ResistancePotionDurationShort")
 			@Config.RequiresMcRestart

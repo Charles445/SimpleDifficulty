@@ -3,6 +3,7 @@ package com.charles445.simpledifficulty.register;
 import static com.charles445.simpledifficulty.api.SDEnchantments.*;
 
 import com.charles445.simpledifficulty.SimpleDifficulty;
+import com.charles445.simpledifficulty.config.ModConfig;
 import com.charles445.simpledifficulty.enchantment.EnchantmentArmorTemperature;
 
 import net.minecraft.enchantment.Enchantment;
@@ -30,7 +31,9 @@ public class RegisterEnchantments
 		{
 			newEnchantment.setName(name);
 			newEnchantment.setRegistryName(SimpleDifficulty.MODID,name);
-			registry.register(newEnchantment);
+			
+			if(ModConfig.server.miscellaneous.registerEnchantments)
+				registry.register(newEnchantment);
 			
 			//Add to map
 			enchantments.put(name, newEnchantment);

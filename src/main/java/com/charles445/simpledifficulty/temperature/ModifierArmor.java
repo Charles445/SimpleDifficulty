@@ -41,13 +41,16 @@ public class ModifierArmor extends ModifierBase
 		float sum = 0.0f;
 		
 		//Enchantments
-		if(EnchantmentHelper.getEnchantmentLevel(SDEnchantments.chilling, stack) > 0)
+		if(ModConfig.server.miscellaneous.registerEnchantments)
 		{
-			sum -= ModConfig.server.temperature.enchantmentTemperature;
-		}
-		else if(EnchantmentHelper.getEnchantmentLevel(SDEnchantments.heating, stack) > 0)
-		{
-			sum += ModConfig.server.temperature.enchantmentTemperature;
+			if(EnchantmentHelper.getEnchantmentLevel(SDEnchantments.chilling, stack) > 0)
+			{
+				sum -= ModConfig.server.temperature.enchantmentTemperature;
+			}
+			else if(EnchantmentHelper.getEnchantmentLevel(SDEnchantments.heating, stack) > 0)
+			{
+				sum += ModConfig.server.temperature.enchantmentTemperature;
+			}
 		}
 		
 		//Process JSON

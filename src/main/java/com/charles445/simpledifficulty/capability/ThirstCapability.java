@@ -23,7 +23,7 @@ public class ThirstCapability implements IThirstCapability
 {
 	private float exhaustion = 0.0f;
 	private int thirst = 20;
-	private float saturation = 0.0f;
+	private float saturation = 5.0f;
 	private int ticktimer = 0;
 	private int damagecounter = 0;
 	
