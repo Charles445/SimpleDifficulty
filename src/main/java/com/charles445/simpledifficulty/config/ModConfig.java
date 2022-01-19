@@ -1,10 +1,6 @@
 package com.charles445.simpledifficulty.config;
 
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-
 import com.charles445.simpledifficulty.SimpleDifficulty;
 import com.charles445.simpledifficulty.api.config.ClientConfig;
 import com.charles445.simpledifficulty.api.config.ClientOptions;
@@ -96,6 +92,10 @@ public class ModConfig
 		@Config.Name("IronCanteenDoses")
 		@Config.RangeInt(min=1)
 		public int ironCanteenDoses = 8;
+		
+		@Config.Comment("Whether purified water blocks are infinite")
+		@Config.Name("Infinite Purified Water")
+		public boolean infinitePurifiedWater = false;
 		
 		@Config.Comment("Spams chat with debug messages, do not enable this unless you are testing!")
 		@Config.Name("DebugMode")
@@ -528,6 +528,7 @@ public class ModConfig
 		ServerConfig.instance.put(ServerOptions.CANTEEN_DOSES, server.canteenDoses);
 		ServerConfig.instance.put(ServerOptions.STRICT_HEATERS, server.strictHeaters);
 		ServerConfig.instance.put(ServerOptions.IRON_CANTEEN_DOSES, server.ironCanteenDoses);
+		ServerConfig.instance.put(ServerOptions.INFINITE_PURIFIED_WATER, server.infinitePurifiedWater);
 	}
 	
 	private static MessageUpdateConfig getNewConfigMessage()
@@ -544,6 +545,7 @@ public class ModConfig
 		compound.setString(ServerOptions.CANTEEN_DOSES.getName(), ""+server.canteenDoses);
 		compound.setString(ServerOptions.STRICT_HEATERS.getName(), ""+server.strictHeaters);
 		compound.setString(ServerOptions.IRON_CANTEEN_DOSES.getName(), ""+server.ironCanteenDoses);
+		compound.setString(ServerOptions.INFINITE_PURIFIED_WATER.getName(), ""+server.infinitePurifiedWater);
 		
 		return new MessageUpdateConfig(compound);
 	}

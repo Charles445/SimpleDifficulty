@@ -16,6 +16,8 @@ public class InspirationsShadow
 		
 		SoundEvent getSound(ItemStack stack, boolean boiling, int level, CauldronState state);
 		
+		ItemStack transformInput(ItemStack stack, boolean boiling, int level, CauldronState state);
+		
 		int getLevel(int level);
 		
 		public class CauldronState

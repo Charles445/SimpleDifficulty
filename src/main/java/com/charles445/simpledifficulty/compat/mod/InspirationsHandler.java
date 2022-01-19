@@ -297,5 +297,11 @@ public class InspirationsHandler
 		{
 			return SoundEvents.ITEM_BUCKET_FILL;
 		}
+		
+		@Override
+		public ItemStack transformInput(ItemStack stack, boolean boiling, int level, CauldronState state)
+		{
+			return stack;
+		}
 	}
 }
