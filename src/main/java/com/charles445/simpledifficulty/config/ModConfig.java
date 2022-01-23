@@ -96,7 +96,11 @@ public class ModConfig
 		@Config.Comment("Whether purified water blocks are infinite")
 		@Config.Name("Infinite Purified Water")
 		public boolean infinitePurifiedWater = false;
-		
+
+		@Config.Comment("Make Purified Water only reduce light level by 1 per Y-level, instead of 3.")
+		@Config.Name("Brighter Purified Water")
+		public boolean purifiedWaterOpacity = false;
+
 		@Config.Comment("Spams chat with debug messages, do not enable this unless you are testing!")
 		@Config.Name("DebugMode")
 		public boolean debug = false;
@@ -529,6 +533,7 @@ public class ModConfig
 		ServerConfig.instance.put(ServerOptions.STRICT_HEATERS, server.strictHeaters);
 		ServerConfig.instance.put(ServerOptions.IRON_CANTEEN_DOSES, server.ironCanteenDoses);
 		ServerConfig.instance.put(ServerOptions.INFINITE_PURIFIED_WATER, server.infinitePurifiedWater);
+		ServerConfig.instance.put(ServerOptions.PURIFIED_WATER_OPACITY, server.purifiedWaterOpacity);
 	}
 	
 	private static MessageUpdateConfig getNewConfigMessage()
@@ -546,6 +551,8 @@ public class ModConfig
 		compound.setString(ServerOptions.STRICT_HEATERS.getName(), ""+server.strictHeaters);
 		compound.setString(ServerOptions.IRON_CANTEEN_DOSES.getName(), ""+server.ironCanteenDoses);
 		compound.setString(ServerOptions.INFINITE_PURIFIED_WATER.getName(), ""+server.infinitePurifiedWater);
+		compound.setString(ServerOptions.PURIFIED_WATER_OPACITY.getName(), ""+server.purifiedWaterOpacity);
+
 		
 		return new MessageUpdateConfig(compound);
 	}
