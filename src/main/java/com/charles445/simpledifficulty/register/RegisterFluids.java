@@ -33,7 +33,7 @@ public class RegisterFluids
 					"purifiedwater",
 					"purifiedwater_still",
 					"purifiedwater_flow",
-					0xFFFFFFFF);
+					0xFF44AFF5);
 			
 			//Fluids register themselves
 			
