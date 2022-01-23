@@ -27,15 +27,17 @@ public class BlockFluidBasic extends BlockFluidClassic
 		SDFluids.fluidBlocks.put(fluid.getName(), this);
 
 		if (Loader.isModLoaded("backportedflora")) {
-			displacements.putAll(defaultDisplacements);
+			displacements.putAll(customDisplacements);
 		}
 	}
 
-	protected final static Map<Block, Boolean> defaultDisplacements = Maps.newHashMap();
+	protected final static Map<Block, Boolean> customDisplacements = Maps.newHashMap();
 	static
 	{
-		defaultDisplacements.put(REGISTRY.getObject(new ResourceLocation("backportedflora", "rivergrass")), false);
-		defaultDisplacements.put(Blocks.WATER, false);
+		customDisplacements.put(REGISTRY.getObject(new ResourceLocation("backportedflora", "rivergrass")), false);
+		customDisplacements.put(REGISTRY.getObject(new ResourceLocation("backportedflora", "seagrass")), false);
+		customDisplacements.put(REGISTRY.getObject(new ResourceLocation("backportedflora", "kelp")), false);
+		customDisplacements.put(Blocks.WATER, false);
 	}
 
 	@Override
