@@ -1,15 +1,21 @@
 package com.charles445.simpledifficulty.block;
 
-import javax.annotation.Nonnull;
-
 import com.charles445.simpledifficulty.api.SDFluids;
 
+import com.charles445.simpledifficulty.api.config.ServerConfig;
+import com.charles445.simpledifficulty.api.config.ServerOptions;
+
+import com.google.common.collect.Maps;
+import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockAccess;
+import net.minecraft.init.Blocks;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.BlockFluidClassic;
 import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fml.common.Loader;
+
+import java.util.Map;
 
 public class BlockFluidBasic extends BlockFluidClassic
 {
@@ -19,17 +25,26 @@ public class BlockFluidBasic extends BlockFluidClassic
 		setRegistryName(fluid.getName());
 		setUnlocalizedName(this.getRegistryName().toString());
 		SDFluids.fluidBlocks.put(fluid.getName(), this);
+
+		if (Loader.isModLoaded("backportedflora")) {
+			displacements.putAll(defaultDisplacements);
+		}
 	}
-	
-	@Override
-	public int getLightValue(@Nonnull IBlockState state, @Nonnull IBlockAccess world, @Nonnull BlockPos pos)
+
+	protected final static Map<Block, Boolean> defaultDisplacements = Maps.newHashMap();
+	static
 	{
-		return 1;
+		defaultDisplacements.put(REGISTRY.getObject(new ResourceLocation("backportedflora", "rivergrass")), false);
+		defaultDisplacements.put(Blocks.WATER, false);
 	}
-	
+
 	@Override
-	public int getLightValue(IBlockState state)
-	{
-		return 1;
+	@SuppressWarnings("deprecation")
+	public int getLightOpacity(IBlockState state) {
+		if (ServerConfig.instance.getBoolean(ServerOptions.PURIFIED_WATER_OPACITY)) {
+			return 1;
+		} else {
+			return 3;
+		}
 	}
 }
