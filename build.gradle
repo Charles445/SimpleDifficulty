@@ -27,8 +27,14 @@ minecraft {
 }
 
 dependencies {
-    
+    //fluidlogged api
+    deobfCompile 'com.github.jbredwards:fluidlogged-api:b896736552'
+    compile 'org.spongepowered:mixin:0.8'
+}
 
+repositories {
+    //fluidlogged api
+    maven { url 'https://jitpack.io' }
 }
 
 processResources{
